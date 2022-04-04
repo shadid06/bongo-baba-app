@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "905119924166",
+    "firebase_url": "https://bongobaba-7a1fd-default-rtdb.firebaseio.com",
+    "project_id": "bongobaba-7a1fd",
+    "storage_bucket": "bongobaba-7a1fd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:905119924166:android:aba1d17cfaf78c47237cc7",
+        "android_client_info": {
+          "package_name": "com.bongobaba.androidapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "905119924166-ntnaqng6ns60h1tkssvk9953ial4t7qv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bongobaba.androidapp",
+            "certificate_hash": "a82d9d10c0641dc6875f8fc6eede7029d09d3552"
+          }
+        },
+        {
+          "client_id": "905119924166-hou1hgheah59nab7d91vru6b56tvj7vl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDvw50RXRaGM_ISbZpZDj8GEv5SBFavCdQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "905119924166-hou1hgheah59nab7d91vru6b56tvj7vl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
