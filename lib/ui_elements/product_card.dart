@@ -67,7 +67,7 @@ class _ProductCardState extends State<ProductCard> {
                             color: MyTheme.font_grey,
                             fontSize: 14,
                             height: 1.2,
-                            fontWeight: FontWeight.w400),
+                            fontWeight: FontWeight.w600),
                       ),
                     ),
                     Padding(

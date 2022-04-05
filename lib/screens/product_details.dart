@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:active_ecommerce_flutter/screens/cart.dart';
 import 'package:active_ecommerce_flutter/screens/common_webview_screen.dart';
 import 'package:active_ecommerce_flutter/screens/product_reviews.dart';
@@ -30,6 +32,7 @@ import 'package:photo_view/photo_view.dart';
 import 'package:active_ecommerce_flutter/screens/brand_products.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:http/http.dart' as http;
 
 class ProductDetails extends StatefulWidget {
   int id;
@@ -41,6 +44,38 @@ class ProductDetails extends StatefulWidget {
 }
 
 class _ProductDetailsState extends State<ProductDetails> {
+  // getdata() async {
+  //   try {
+  //     var url = 'http://192.168.31.29/bongobaba/api/v2/products/255';
+  //     http.Response response = await http.get(Uri.parse(url));
+  //     var data = jsonDecode(response.body)['data'];
+  //     //  print(data);
+  //     return data;
+  //   } catch (err) {
+  //     print(err.toString());
+  //   }
+  // }
+
+  // // var mylist = [
+  // //   {'name': 'Abdur Rahim', 'email': 'rahimsr983@gmail.com'},
+  // //   {'name': 'xbdur Korim', 'email': 'rahimsr983@gmail.com'},
+  // //   {'name': 'Zbdur Selem', 'email': 'rahimsr983@gmail.com'},
+  // // ];
+  // var mylist = [];
+  // // @override
+  // // void initState() {
+  // //   // TODO: implement initState
+  // //   getsdata();
+  // // }
+
+  // getsdata() async {
+  //   var _mylist = await getdata();
+  //   setState(() {
+  //     mylist = _mylist;
+  //     print(mylist);
+  //   });
+  // }
+
   ScrollController _scrollController;
   bool _showCopied = false;
   String _appbarPriceString = ". . .";
@@ -77,6 +112,7 @@ class _ProductDetailsState extends State<ProductDetails> {
   void initState() {
     fetchAll();
     super.initState();
+    // getsdata();
   }
 
   @override
@@ -89,7 +125,8 @@ class _ProductDetailsState extends State<ProductDetails> {
   }
 
   fetchAll() {
-    fetchProductDetails();
+    fetchProductDetails() ;
+    fetchProductShortDetails();
     if (is_logged_in.$ == true) {
       fetchWishListCheckInfo();
     }
@@ -97,7 +134,21 @@ class _ProductDetailsState extends State<ProductDetails> {
     fetchTopProducts();
   }
 
-  fetchProductDetails() async {
+  fetchProductShortDetails() async {
+    var productDetailsResponse =
+        await ProductRepository().getProductShortDetails(id: widget.id);
+
+    if (productDetailsResponse.detailed_products.length > 0) {
+      _productDetails = productDetailsResponse.detailed_products[0];
+      sellerChatTitleController.text =
+          productDetailsResponse.detailed_products[0].name;
+    }
+
+    setProductDetailValues();
+
+    setState(() {});
+  }
+ fetchProductDetails() async {
     var productDetailsResponse =
         await ProductRepository().getProductDetails(id: widget.id);
 
@@ -111,7 +162,6 @@ class _ProductDetailsState extends State<ProductDetails> {
 
     setState(() {});
   }
-
   fetchRelatedProducts() async {
     var relatedProductResponse =
         await ProductRepository().getRelatedProducts(id: widget.id);
@@ -909,6 +959,110 @@ class _ProductDetailsState extends State<ProductDetails> {
                     Divider(
                       height: 24,
                     ),
+
+                    // ListView.separated(
+                    //     // padding: EdgeInsets.all(16),
+                    //     separatorBuilder: (context, index) => Divider(
+                    //           color: index.isEven ? Colors.amber : Colors.blue,
+                    //         ),
+                    //     shrinkWrap: true,
+                    //     itemCount: mylist.length,
+                    //     itemBuilder: (context, index) {
+                    //       var list = mylist[index];
+                    //       // Padding(padding: EdgeInsets.all(16));
+                    //       return Container(
+                    //           child: Column(
+                    //         children: [
+
+                    //       list["is_short_description"] != null
+                    //           ?
+                    //           //  ExpansionTile(
+                    //           //     title: Text('Short Description'),
+                    //           //     children: [
+                    //           //         ListTile(
+                    //           //             title: Wrap(children: [
+                    //           //           Text(
+                    //           //             '${list['short_description']}',
+                    //           //           )
+                    //           //         ]))
+                    //           //       ])
+                    //           // : Container(),
+                              
+                    //           ExpandableNotifier(
+                    //               child: ScrollOnExpand(
+                    //               child: Column(
+                    //                 crossAxisAlignment:
+                    //                     CrossAxisAlignment.start,
+                    //                 children: <Widget>[
+                    //                   Container(
+                    //                     padding: EdgeInsets.only(left: 14),
+                    //                     child: Text('Short description :',style: TextStyle(fontSize: 18),)),
+                    //                   Expandable(
+                    //                     collapsed: Container(
+                    //                         height: 20,
+                    //                         child: Html(
+                    //                           data:
+                    //                               '${list['short_description']}',
+                    //                         )),
+                    //                     expanded: Container(
+                    //                         child: Html(
+                    //                             data:
+                    //                                 '${list['short_description']}')),
+                    //                   ),
+                    //                   Row(
+                    //                     mainAxisAlignment:
+                    //                         MainAxisAlignment.end,
+                    //                     children: <Widget>[
+                    //                       Builder(
+                    //                         builder: (context) {
+                    //                           var controller =
+                    //                               ExpandableController.of(
+                    //                                   context);
+                    //                           return FlatButton(
+                    //                             child: Text(
+                    //                               !controller.expanded
+                    //                                   ? 'View More'
+                    //                                   : 'View Less',
+                    //                               style: TextStyle(
+                    //                                   color: Colors.blue,
+                    //                                   fontSize: 15),
+                    //                             ),
+                    //                             onPressed: () {
+                    //                               controller.toggle();
+                    //                             },
+                    //                           );
+                    //                         },
+                    //                       ),
+                    //                     ],
+                    //                   ),
+                    //                 ],
+                    //               ),
+                    //             ))
+                    //           : Container()
+
+
+                    //         ],
+                    //       ));
+
+                    //       // ListTile(
+                    //       //   // trailing: Image(image: NetworkImage('${list['urlToImage']}')),
+                    //       //     title: Text(
+                    //       //       '${list[ "short_description"]}',
+                    //       //       style: TextStyle(
+                    //       //           color: index.isEven ? Colors.pink : Colors.purple),
+                    //       //     ));
+                    //       // subtitle: Text(
+                    //       //   '${list['source']['name']}',
+                    //       //   style: TextStyle(
+                    //       //       color: index.isOdd ? Colors.pink : Colors.purple),
+                    //       // ),
+                    //       // leading: Container(
+                    //       //     child: Text('${list['author'].toString()[0]}')));
+                    //     }),
+                           Divider(
+                      height: 24,
+                    ),
+
                     // Container(margin: EdgeInsets.only(left: 16),
                     //   child: Text(
                     //     'Shorts Description : ',
@@ -919,9 +1073,44 @@ class _ProductDetailsState extends State<ProductDetails> {
                     //   height: 24,
                     // ),
                   ])),
-                  SliverList(
+                SliverList(
                     delegate: SliverChildListDelegate([
+                      _productDetails != null?  Padding(
+                        padding: const EdgeInsets.fromLTRB(
+                          16.0,
+                          0.0,
+                          16.0,
+                          0.0,
+                        ),
+                        child: Text(
+                          // AppLocalizations.of(context)
+                          //     .product_details_screen_description,
+                          'Short Description',
+                          style: TextStyle(
+                              color: MyTheme.font_grey,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600),
+                        ),
+                      ):Container(),
                       Padding(
+                        padding: const EdgeInsets.fromLTRB(
+                          8.0,
+                          0.0,
+                          8.0,
+                          8.0,
+                        ),
+                        child: _productDetails != null
+                            ?buildExpandableShortDescription()
+                            
+                            
+                            : Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8.0, vertical: 8.0),
+                                child: ShimmerHelper().buildBasicShimmer(
+                                  height: 60.0,
+                                )),
+                      ),
+ Padding(
                         padding: const EdgeInsets.fromLTRB(
                           16.0,
                           0.0,
@@ -945,7 +1134,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                           8.0,
                         ),
                         child: _productDetails != null
-                            ? buildExpandableDescription()
+                            ?buildExpandableDescription()
+                            
+                            
                             : Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 8.0, vertical: 8.0),
@@ -1982,6 +2173,42 @@ class _ProductDetailsState extends State<ProductDetails> {
         : Container();
   }
 
+  ExpandableNotifier buildExpandableShortDescription() {
+    return ExpandableNotifier(
+        child: ScrollOnExpand(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Expandable(
+            collapsed: Container(
+                height: 30, child: Html(data: _productDetails.short_description)),
+            expanded: Container(child: Html(data: _productDetails.short_description)),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              Builder(
+                builder: (context) {
+                  var controller = ExpandableController.of(context);
+                  return FlatButton(
+                    child: Text(
+                      !controller.expanded
+                          ? AppLocalizations.of(context).common_view_more
+                          : AppLocalizations.of(context).common_show_less,
+                      style: TextStyle(color: MyTheme.font_grey, fontSize: 16),
+                    ),
+                    onPressed: () {
+                      controller.toggle();
+                    },
+                  );
+                },
+              ),
+            ],
+          ),
+        ],
+      ),
+    ));
+  }
   ExpandableNotifier buildExpandableDescription() {
     return ExpandableNotifier(
         child: ScrollOnExpand(
@@ -1990,7 +2217,7 @@ class _ProductDetailsState extends State<ProductDetails> {
         children: <Widget>[
           Expandable(
             collapsed: Container(
-                height: 50, child: Html(data: _productDetails.description)),
+                height: 30, child: Html(data: _productDetails.description)),
             expanded: Container(child: Html(data: _productDetails.description)),
           ),
           Row(
@@ -2004,7 +2231,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                       !controller.expanded
                           ? AppLocalizations.of(context).common_view_more
                           : AppLocalizations.of(context).common_show_less,
-                      style: TextStyle(color: MyTheme.font_grey, fontSize: 11),
+                      style: TextStyle(color: MyTheme.font_grey, fontSize: 16),
                     ),
                     onPressed: () {
                       controller.toggle();

@@ -58,6 +58,7 @@ class DetailedProduct {
     this.rating_count,
     this.earn_point,
     this.description,
+    this.short_description,
     this.video_link,
     this.link,
     this.brand
@@ -87,6 +88,7 @@ class DetailedProduct {
   int rating_count;
   int earn_point;
   String description;
+  String short_description;
   String video_link;
   String link;
   Brand brand;
@@ -116,7 +118,8 @@ class DetailedProduct {
     rating_count: json["rating_count"],
     earn_point: json["earn_point"].toInt(),
     description: json["description"] == null || json["description"] == "" ? "No Description is available" : json['description'],
-    video_link: json["video_link"],
+    short_description: json["short_description"]//== null || json["short_description"] == "" ? "No Short_Description is available" : json['short_description'],
+   , video_link: json["video_link"],
     link: json["link"],
     brand: Brand.fromJson(json["brand"]),
   );
@@ -146,6 +149,7 @@ class DetailedProduct {
     "rating_count": rating_count,
     "earn_point": earn_point,
     "description": description,
+    'short_description':short_description,
     "video_link": video_link,
     "link": link,
     "brand": brand.toJson(),

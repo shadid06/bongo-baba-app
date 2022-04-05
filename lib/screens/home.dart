@@ -531,7 +531,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Color.fromRGBO(132, 132, 132, 1),
-                        fontWeight: FontWeight.w300),
+                        fontWeight: FontWeight.w600),
                   ),
                 )
               ],
@@ -568,7 +568,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             color: Color.fromRGBO(132, 132, 132, 1),
-                            fontWeight: FontWeight.w300))),
+                            fontWeight: FontWeight.w600))),
               ],
             ),
           ),
@@ -603,7 +603,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             color: Color.fromRGBO(132, 132, 132, 1),
-                            fontWeight: FontWeight.w300))),
+                            fontWeight: FontWeight.w600))),
               ],
             ),
           ),
@@ -637,7 +637,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             color: Color.fromRGBO(132, 132, 132, 1),
-                            fontWeight: FontWeight.w300))),
+                            fontWeight: FontWeight.w600))),
               ],
             ),
           ),
@@ -671,7 +671,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             color: Color.fromRGBO(132, 132, 132, 1),
-                            fontWeight: FontWeight.w300))),
+                            fontWeight: FontWeight.w600))),
               ],
             ),
           ),

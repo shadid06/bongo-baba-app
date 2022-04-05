@@ -119,11 +119,11 @@ class _RegistrationState extends State<Registration> {
         backgroundColor: Colors.white,
         body: Stack(
           children: [
-            Container(
-              width: _screen_width * (3 / 4),
-              child: Image.asset(
-                  "assets/splash_login_registration_background_image.png"),
-            ),
+            // Container(
+            //   width: _screen_width * (3 / 4),
+            //   child: Image.asset(
+            //       "assets/splash_login_registration_background_image.png"),
+            // ),
             Container(
               width: double.infinity,
               child: SingleChildScrollView(
@@ -385,7 +385,7 @@ class _RegistrationState extends State<Registration> {
                             child: FlatButton(
                               minWidth: MediaQuery.of(context).size.width,
                               //height: 50,
-                              color: MyTheme.golden,
+                              color: MyTheme.blue_color,
                               shape: RoundedRectangleBorder(
                                   borderRadius: const BorderRadius.all(
                                       Radius.circular(12.0))),

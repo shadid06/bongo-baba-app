@@ -32,14 +32,16 @@ class _MiniProductCardState extends State<MiniProductCard> {
           side: new BorderSide(color: MyTheme.light_grey, width: 1.0),
           borderRadius: BorderRadius.circular(16.0),
         ),
-        elevation: 0.0,
+        elevation: 5.0,
         child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Container(
                   width: double.infinity,
-                  height: (MediaQuery.of(context).size.width - 36) / 3.5,
+                  height: (MediaQuery.of(context).size.width - 36) / 3.3,
+                  // height: 200,
+                  
                   child: ClipRRect(
                       borderRadius: BorderRadius.vertical(
                           top: Radius.circular(16), bottom: Radius.zero),
@@ -47,6 +49,7 @@ class _MiniProductCardState extends State<MiniProductCard> {
                         placeholder: 'assets/placeholder.png',
                         image: AppConfig.BASE_PATH + widget.image,
                         fit: BoxFit.cover,
+                        width: double.infinity,
                       ))),
               Padding(
                 padding: EdgeInsets.fromLTRB(8, 4, 8, 0),

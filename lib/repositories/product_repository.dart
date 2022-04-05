@@ -102,6 +102,17 @@ class ProductRepository {
     print(response.body.toString());
     return productDetailsResponseFromJson(response.body);
   }
+  Future<ProductDetailsResponse> getProductShortDetails(
+      {@required int id = 0}) async {
+    Uri url = Uri.parse("${AppConfig.BASE_URL}/products/" + id.toString());
+    
+    print(url.toString());
+    final response = await http.get(url, headers: {
+      "App-Language": app_language.$,
+    });
+    print(response.body.toString());
+    return productDetailsResponseFromJson(response.body);
+  }
 
   Future<ProductMiniResponse> getRelatedProducts({@required int id = 0}) async {
     Uri url =
