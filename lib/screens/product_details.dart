@@ -125,7 +125,7 @@ class _ProductDetailsState extends State<ProductDetails> {
   }
 
   fetchAll() {
-    fetchProductDetails() ;
+    fetchProductDetails();
     fetchProductShortDetails();
     if (is_logged_in.$ == true) {
       fetchWishListCheckInfo();
@@ -148,7 +148,8 @@ class _ProductDetailsState extends State<ProductDetails> {
 
     setState(() {});
   }
- fetchProductDetails() async {
+
+  fetchProductDetails() async {
     var productDetailsResponse =
         await ProductRepository().getProductDetails(id: widget.id);
 
@@ -162,6 +163,7 @@ class _ProductDetailsState extends State<ProductDetails> {
 
     setState(() {});
   }
+
   fetchRelatedProducts() async {
     var relatedProductResponse =
         await ProductRepository().getRelatedProducts(id: widget.id);
@@ -987,7 +989,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                     //           //         ]))
                     //           //       ])
                     //           // : Container(),
-                              
+
                     //           ExpandableNotifier(
                     //               child: ScrollOnExpand(
                     //               child: Column(
@@ -1040,7 +1042,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                     //             ))
                     //           : Container()
 
-
                     //         ],
                     //       ));
 
@@ -1059,9 +1060,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                     //       // leading: Container(
                     //       //     child: Text('${list['author'].toString()[0]}')));
                     //     }),
-                           Divider(
-                      height: 24,
-                    ),
+                    // Divider(
+                    //   height: 24,
+                    // ),
 
                     // Container(margin: EdgeInsets.only(left: 16),
                     //   child: Text(
@@ -1073,25 +1074,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                     //   height: 24,
                     // ),
                   ])),
-                SliverList(
+                  SliverList(
                     delegate: SliverChildListDelegate([
-                      _productDetails != null?  Padding(
-                        padding: const EdgeInsets.fromLTRB(
-                          16.0,
-                          0.0,
-                          16.0,
-                          0.0,
-                        ),
-                        child: Text(
-                          // AppLocalizations.of(context)
-                          //     .product_details_screen_description,
-                          'Short Description',
-                          style: TextStyle(
-                              color: MyTheme.font_grey,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600),
-                        ),
-                      ):Container(),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(
                           8.0,
@@ -1100,9 +1084,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                           8.0,
                         ),
                         child: _productDetails != null
-                            ?buildExpandableShortDescription()
-                            
-                            
+                            ? buildExpandableShortDescription()
                             : Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 8.0, vertical: 8.0),
@@ -1110,7 +1092,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                   height: 60.0,
                                 )),
                       ),
- Padding(
+                      Padding(
                         padding: const EdgeInsets.fromLTRB(
                           16.0,
                           0.0,
@@ -1134,9 +1116,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                           8.0,
                         ),
                         child: _productDetails != null
-                            ?buildExpandableDescription()
-                            
-                            
+                            ? buildExpandableDescription()
                             : Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 8.0, vertical: 8.0),
@@ -2181,34 +2161,37 @@ class _ProductDetailsState extends State<ProductDetails> {
         children: <Widget>[
           Expandable(
             collapsed: Container(
-                height: 30, child: Html(data: _productDetails.short_description)),
-            expanded: Container(child: Html(data: _productDetails.short_description)),
+                height: 30,
+                child: Html(data: _productDetails.short_description)),
+            expanded:
+                Container(child: Html(data: _productDetails.short_description)),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              Builder(
-                builder: (context) {
-                  var controller = ExpandableController.of(context);
-                  return FlatButton(
-                    child: Text(
-                      !controller.expanded
-                          ? AppLocalizations.of(context).common_view_more
-                          : AppLocalizations.of(context).common_show_less,
-                      style: TextStyle(color: MyTheme.font_grey, fontSize: 16),
-                    ),
-                    onPressed: () {
-                      controller.toggle();
-                    },
-                  );
-                },
-              ),
-            ],
-          ),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.end,
+          //   children: <Widget>[
+          //     Builder(
+          //       builder: (context) {
+          //         var controller = ExpandableController.of(context);
+          //         return FlatButton(
+          //           child: Text(
+          //             !controller.expanded
+          //                 ? AppLocalizations.of(context).common_view_more
+          //                 : AppLocalizations.of(context).common_show_less,
+          //             style: TextStyle(color: MyTheme.font_grey, fontSize: 16),
+          //           ),
+          //           onPressed: () {
+          //             controller.toggle();
+          //           },
+          //         );
+          //       },
+          //     ),
+          //   ],
+          // ),
         ],
       ),
     ));
   }
+
   ExpandableNotifier buildExpandableDescription() {
     return ExpandableNotifier(
         child: ScrollOnExpand(

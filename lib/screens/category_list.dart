@@ -66,7 +66,7 @@ class _CategoryListState extends State<CategoryList> {
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.green,
       centerTitle: true,
       leading: widget.is_base_category
           ? GestureDetector(

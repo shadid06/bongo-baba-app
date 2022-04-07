@@ -39,7 +39,8 @@ class _MiniProductCardState extends State<MiniProductCard> {
             children: <Widget>[
               Container(
                   width: double.infinity,
-                  height: (MediaQuery.of(context).size.width - 36) / 3.3,
+                  //height: (MediaQuery.of(context).size.width - 36) / 3.5,
+                   height: (MediaQuery.of(context).size.width - 36) / 3.7,
                   // height: 200,
                   
                   child: ClipRRect(
