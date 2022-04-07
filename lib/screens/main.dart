@@ -115,14 +115,14 @@ class _MainState extends State<Main> {
                 currentIndex: _currentIndex,
                 backgroundColor: Colors.white.withOpacity(0.8),
                 // fixedColor: Theme.of(context).accentColor,
-                     fixedColor: Colors.green,
+                     fixedColor: MyTheme.red_color,
                 unselectedItemColor: Color.fromRGBO(153, 153, 153, 1),
                 items: [
                   BottomNavigationBarItem(
                       icon: Image.asset(
                         "assets/home.png",
                         color: _currentIndex == 0
-                            ? Colors.green
+                            ? MyTheme.red_color
                             : Color.fromRGBO(153, 153, 153, 1),
                         height: 20,
                       ),
@@ -138,7 +138,7 @@ class _MainState extends State<Main> {
                       icon: Image.asset(
                         "assets/categories.png",
                         color: _currentIndex == 1
-                            ?Colors.green
+                            ?MyTheme.red_color
                             : Color.fromRGBO(153, 153, 153, 1),
                         height: 20,
                       ),
@@ -161,7 +161,7 @@ class _MainState extends State<Main> {
                       icon: Image.asset(
                         "assets/cart.png",
                         color: _currentIndex == 3
-                            ? Colors.green
+                            ? MyTheme.red_color
                             : Color.fromRGBO(153, 153, 153, 1),
                         height: 20,
                       ),
@@ -177,7 +177,7 @@ class _MainState extends State<Main> {
                       icon: Image.asset(
                         "assets/profile.png",
                         color: _currentIndex == 4
-                            ? Colors.green
+                            ? MyTheme.red_color
                             : Color.fromRGBO(153, 153, 153, 1),
                         height: 20,
                       ),

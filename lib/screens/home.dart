@@ -183,8 +183,10 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             app_language_rtl.$ ? TextDirection.rtl : TextDirection.ltr,
         child: Scaffold(
             key: _scaffoldKey,
-            backgroundColor: Colors.white38,
-            appBar: buildAppBar(statusBarHeight, context),
+            backgroundColor: Color(0xffeafbf0),
+            appBar: buildAppBar
+            
+            (statusBarHeight, context),
             drawer: MainDrawer(),
             body: Stack(
               children: [
@@ -203,9 +205,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           AppConfig.purchase_code == ""
                               ? Padding(
                                   padding: const EdgeInsets.fromLTRB(
-                                    8.0,
+                                    0.0,
                                     16.0,
-                                    8.0,
+                                    0.0,
                                     0.0,
                                   ),
                                   child: Container(
@@ -248,18 +250,18 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                               : Container(),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(
-                              8.0,
                               0.0,
-                              8.0,
+                              0.0,
+                              0.0,
                               0.0,
                             ),
                             child: buildHomeCarouselSlider(context),
                           ),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(
-                              8.0,
                               0.0,
-                              8.0,
+                              0.0,
+                              0.0,
                               0.0,
                             ),
                             child: buildHomeMenuRow(context),
@@ -271,7 +273,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           Padding(
                             padding: const EdgeInsets.fromLTRB(
                               16.0,
-                              16.0,
+                              5.0,
                               16.0,
                               0.0,
                             ),
@@ -294,7 +296,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(
                             16.0,
-                            16.0,
+                            5.0,
                             0.0,
                             0.0,
                           ),
@@ -309,7 +311,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           Padding(
                             padding: const EdgeInsets.fromLTRB(
                               16.0,
-                              16.0,
+                              0.0,
                               16.0,
                               0.0,
                             ),
@@ -330,7 +332,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                 Padding(
                                   padding: const EdgeInsets.fromLTRB(
                                     4.0,
-                                    16.0,
+                                    0.0,
                                     8.0,
                                     0.0,
                                   ),
@@ -371,8 +373,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
         controller: _featuredProductScrollController,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 10,
+            crossAxisSpacing: 1,
+            mainAxisSpacing: 1,
             childAspectRatio: 0.618),
         padding: EdgeInsets.all(8),
         physics: NeverScrollableScrollPhysics(),
@@ -426,7 +428,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           itemExtent: 120,
           itemBuilder: (context, index) {
             return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 3),
+              padding: const EdgeInsets.symmetric(horizontal: 0),
               child: GestureDetector(
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
@@ -497,7 +499,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
   buildHomeMenuRow(BuildContext context) {
     return Container(
-      color: Colors.black,
+      //color:MyTheme. blue_color,
+      color:Colors.green[900],
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -513,7 +516,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             child: Container(
               height: 100,
               width: MediaQuery.of(context).size.width / 5 - 4,
-              child: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              child: Column(mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
                       height: 57,
@@ -527,13 +530,14 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                         child: Image.asset("assets/top_categories.png"),
                       )),
                   Padding(
-                    padding: const EdgeInsets.only(top: 8),
+                    padding: const EdgeInsets.only(top: 3),
                     child: Text(
                       // AppLocalizations.of(context).home_screen_top_categories,
                       'Depertment',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          color: Color.fromRGBO(132, 132, 132, 1),
+                         // color: Color.fromRGBO(132, 132, 132, 1),
+                         color: Colors.white,
                           fontWeight: FontWeight.w600),
                     ),
                   )
@@ -552,7 +556,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             child: Container(
               height: 100,
               width: MediaQuery.of(context).size.width / 5 - 4,
-              child: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              child: Column(mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
                       height: 57,
@@ -566,11 +570,12 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                         child: Image.asset("assets/brands.png"),
                       )),
                   Padding(
-                      padding: const EdgeInsets.only(top: 8),
+                      padding: const EdgeInsets.only(top: 3),
                       child: Text(AppLocalizations.of(context).home_screen_brands,
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                              color: Color.fromRGBO(132, 132, 132, 1),
+                              //color: Color.fromRGBO(132, 132, 132, 1),
+                              color: Colors.white,
                               fontWeight: FontWeight.w600))),
                 ],
               ),
@@ -585,7 +590,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             child: Container(
               height: 100,
               width: MediaQuery.of(context).size.width / 5 - 4,
-              child: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              child: Column(mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
                       height: 57,
@@ -599,13 +604,14 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                         child: Image.asset("assets/top_sellers.png"),
                       )),
                   Padding(
-                      padding: const EdgeInsets.only(top: 8),
+                      padding: const EdgeInsets.only(top: 3),
                       child: Text(
                           // AppLocalizations.of(context).home_screen_top_sellers,
                           'Top Selling',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                              color: Color.fromRGBO(132, 132, 132, 1),
+                             // color: Color.fromRGBO(132, 132, 132, 1),
+                              color: Colors.white,
                               fontWeight: FontWeight.w600))),
                 ],
               ),
@@ -620,7 +626,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             child: Container(
               height: 100,
               width: MediaQuery.of(context).size.width / 5 - 4,
-              child: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              child: Column(mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
                       height: 57,
@@ -634,12 +640,13 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                         child: Image.asset("assets/todays_deal.png"),
                       )),
                   Padding(
-                      padding: const EdgeInsets.only(top: 8),
+                      padding: const EdgeInsets.only(top: 3),
                       child: Text(
                           AppLocalizations.of(context).home_screen_todays_deal,
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                              color: Color.fromRGBO(132, 132, 132, 1),
+                             // color: Color.fromRGBO(132, 132, 132, 1),
+                              color: Colors.white,
                               fontWeight: FontWeight.w600))),
                 ],
               ),
@@ -654,7 +661,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             child: Container(
               height: 100,
               width: MediaQuery.of(context).size.width / 5 - 4,
-              child: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              child: Column(mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
                       height: 57,
@@ -668,12 +675,13 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                         child: Image.asset("assets/flash_deal.png"),
                       )),
                   Padding(
-                      padding: const EdgeInsets.only(top: 8),
+                      padding: const EdgeInsets.only(top: 3),
                       child: Text(
                           AppLocalizations.of(context).home_screen_flash_deal,
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                              color: Color.fromRGBO(132, 132, 132, 1),
+                             // color: Color.fromRGBO(132, 132, 132, 1),
+                              color: Colors.white,
                               fontWeight: FontWeight.w600))),
                 ],
               ),
@@ -686,7 +694,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
   buildHomeCarouselSlider(context) {
     if (_isCarouselInitial && _carouselImageList.length == 0) {
-      return Container(color: Colors.cyanAccent,
+      return Container(color: Colors.black,
         child: Padding(
           padding: const EdgeInsets.only(left: 5.0, right: 5.0),
           child: Shimmer.fromColors(
@@ -695,21 +703,25 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             child: Container(
               height: 120,
               width: double.infinity,
-              color: Colors.white,
+              color: Colors.black,
             ),
           ),
         ),
       );
     } else if (_carouselImageList.length > 0) {
       return Container(
+        padding: const EdgeInsets.only(left: 3.0, right: 3.0,top: 3,bottom: 3),
+        //color: Color(0xffeafbf0),
+          color:Colors.green[200],
         child: Column(mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             CarouselSlider(
               options: CarouselOptions(
-                  aspectRatio: 2.67,
+                  aspectRatio: 2.5,
                   viewportFraction: 1.5,
                   initialPage: 0,
+                
                   enableInfiniteScroll: true,
                   reverse: false,
                   autoPlay: true,
@@ -730,13 +742,15 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                       children: <Widget>[
                         Container(
                             width: double.infinity,
-                            margin: EdgeInsets.symmetric(horizontal: 5.0),
+                           // margin: EdgeInsets.symmetric(horizontal: 10.0,vertical: 0),
+                           
                             child: ClipRRect(
-                                borderRadius: BorderRadius.all(Radius.circular(8)),
+                              borderRadius: BorderRadius.circular(10),
+                               // borderRadius: BorderRadius.all(Radius.circular(10)),
                                 child: FadeInImage.assetNetwork(
                                   placeholder: 'assets/placeholder_rectangle.png',
                                   image: AppConfig.BASE_PATH + i,
-                                  fit: BoxFit.fill,
+                                  fit: BoxFit.cover,
                                 ))),
                         // Align(
                         //   alignment: Alignment.bottomCenter,
@@ -786,7 +800,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
   AppBar buildAppBar(double statusBarHeight, BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.green,
+      backgroundColor: MyTheme.blue_color,
+     //backgroundColor:   Colors.green[900],
       leading: GestureDetector(
         onTap: () {
           _scaffoldKey.currentState.openDrawer();
@@ -810,8 +825,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                     child: Image.asset(
                       'assets/hamburger.png',
                       height: 16,
+                      color: MyTheme.white,
                       //color: MyTheme.dark_grey,
-                      color: MyTheme.dark_grey,
                     ),
                   ),
                 ),

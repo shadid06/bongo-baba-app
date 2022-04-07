@@ -36,10 +36,13 @@ class MyTheme{
   /*configurable colors stars*/
 
   static Color blue_color=Color.fromRGBO(0, 147, 68, 1);
-   static Color black_color=Color.fromRGBO(0, 0, 0, 1);
-  static Color accent_colors = Color.fromRGBO(230,46,4, 1);
-    static Color accent_color = Color.fromRGBO(0,0,0, 1);
+   static Color black_color=Color.fromRGBO(00, 00, 0,1);
+  
+  static Color accent_color = Color.fromRGBO(230,46,4, 1);
+   // static Color accent_color = Color.fromRGBO(46, 218, 203, 1);
     static Color accents_color = Color.fromRGBO(200,150,0, 1);
+      static Color red_color = Color.fromRGBO(255,0,0,1);
+      static Color green_color = Color.fromRGBO(1,188,113,1);
   static Color soft_accent_color = Color.fromRGBO(247,189,168, 1);
   //static Color splash_screen_color = Color.fromRGBO(230,46,4, 1); // if not sure , use the same color as accent color
   /*configurable colors ends*/

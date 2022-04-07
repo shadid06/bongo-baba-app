@@ -38,7 +38,7 @@ class _CategoryListState extends State<CategoryList> {
       child: Scaffold(
           key: _scaffoldKey,
           drawer: MainDrawer(),
-          backgroundColor: Colors.white,
+          backgroundColor: Color(0xfff1eafb),
           appBar: buildAppBar(context),
           body: Stack(children: [
             CustomScrollView(
@@ -66,7 +66,7 @@ class _CategoryListState extends State<CategoryList> {
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.green,
+      backgroundColor: Color(0xffd5f8f2),
       centerTitle: true,
       leading: widget.is_base_category
           ? GestureDetector(
@@ -95,7 +95,7 @@ class _CategoryListState extends State<CategoryList> {
             ),
       title: Text(
         getAppBarTitle(),
-        style: TextStyle(fontSize: 16, color: MyTheme.accent_color),
+        style: TextStyle(fontSize: 20, color: MyTheme.accent_color),
       ),
       elevation: 0.0,
       titleSpacing: 0,

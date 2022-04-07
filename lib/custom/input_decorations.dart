@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:active_ecommerce_flutter/my_theme.dart';
 
 class InputDecorations {
-  static InputDecoration buildInputDecoration_1({hint_text = ""}) {
+  static InputDecoration buildInputDecoration_1({hint_text = "",prefixicon,sufix}) {
     return InputDecoration(
         hintText: hint_text,
+        prefixIcon: sufix,
+        suffixIcon: prefixicon,
         hintStyle: TextStyle(fontSize: 12.0, color: MyTheme.textfield_grey),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(color: MyTheme.textfield_grey, width: 0.5),

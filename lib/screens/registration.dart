@@ -20,6 +20,8 @@ class Registration extends StatefulWidget {
 }
 
 class _RegistrationState extends State<Registration> {
+  bool password=true;
+  bool conformpassword=true;
   String _register_by = "email"; //phone or email
   // String initialCountry = 'US';
   // PhoneNumber phoneCode = PhoneNumber(isoCode: 'US', dialCode: "+1");
@@ -116,7 +118,7 @@ class _RegistrationState extends State<Registration> {
     return Directionality(
       textDirection: app_language_rtl.$ ? TextDirection.rtl : TextDirection.ltr,
       child: Scaffold(
-        backgroundColor: Colors.white,
+            backgroundColor: Color(0xffeafbf0),
         body: Stack(
           children: [
             // Container(
@@ -294,11 +296,14 @@ class _RegistrationState extends State<Registration> {
                                 child: TextField(
                                   controller: _passwordController,
                                   autofocus: false,
-                                  obscureText: true,
+                                  obscureText: password,
                                   enableSuggestions: false,
                                   autocorrect: false,
                                   decoration:
                                       InputDecorations.buildInputDecoration_1(
+                                         prefixicon:InkWell(
+                                          onTap: showpassword,
+                                       child: Icon(password?Icons.visibility:Icons.visibility_off), ),
                                           hint_text: "• • • • • • • •"),
                                 ),
                               ),
@@ -327,10 +332,14 @@ class _RegistrationState extends State<Registration> {
                             child: TextField(
                               controller: _passwordConfirmController,
                               autofocus: false,
-                              obscureText: true,
+                              obscureText: conformpassword,
                               enableSuggestions: false,
                               autocorrect: false,
                               decoration: InputDecorations.buildInputDecoration_1(
+                             
+                                 prefixicon:InkWell(
+                                          onTap:    confirmshowpassword,
+                                       child: Icon(conformpassword?Icons.visibility:Icons.visibility_off), ),
                                   hint_text: "• • • • • • • •"),
                             ),
                           ),
@@ -347,7 +356,8 @@ class _RegistrationState extends State<Registration> {
                             child: FlatButton(
                               minWidth: MediaQuery.of(context).size.width,
                               //height: 50,
-                              color: MyTheme.accent_color,
+                             // color: MyTheme.accent_color,
+                             color: Colors.red,
                               shape: RoundedRectangleBorder(
                                   borderRadius: const BorderRadius.all(
                                       Radius.circular(12.0))),
@@ -415,5 +425,18 @@ class _RegistrationState extends State<Registration> {
         ),
       ),
     );
+  }
+
+  void showpassword() {
+    setState(() {
+     password=!password; 
+    });
+  }
+
+  void confirmshowpassword() {
+    setState(() {
+      conformpassword=!conformpassword;
+     
+    });
   }
 }

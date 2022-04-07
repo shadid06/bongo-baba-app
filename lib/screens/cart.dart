@@ -427,7 +427,7 @@ class _CartState extends State<Cart> {
                     child: FlatButton(
                       minWidth: MediaQuery.of(context).size.width,
                       //height: 50,
-                      color: MyTheme.accent_colors,
+                      color: MyTheme.accent_color,
                       shape: app_language_rtl.$ ?
                       RoundedRectangleBorder(
                           borderRadius: const BorderRadius.only(

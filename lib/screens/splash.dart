@@ -296,6 +296,7 @@ class _CustomSplashScreenState extends State<CustomSplashScreen> {
     return Directionality(
       textDirection: app_language_rtl.$ ? TextDirection.rtl : TextDirection.ltr,
       child: Scaffold(
+             backgroundColor: Color(0xffeafbf0),
         body: InkWell(
           onTap: widget.onClick,
           child: Stack(

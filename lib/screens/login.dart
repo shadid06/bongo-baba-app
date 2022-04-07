@@ -28,6 +28,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  bool password=true;
   String _login_by = "email"; //phone or email
   // String initialCountry = 'US';
   // PhoneNumber phoneCode = PhoneNumber(isoCode: 'US', dialCode: "+1");
@@ -265,7 +266,7 @@ class _LoginState extends State<Login> {
     return Directionality(
       textDirection: app_language_rtl.$ ? TextDirection.rtl : TextDirection.ltr,
       child: Scaffold(
-        backgroundColor: Colors.white,
+      backgroundColor:MyTheme.white,
         body: Stack(
           children: [
             // Container(
@@ -424,12 +425,18 @@ class _LoginState extends State<Login> {
                                 child: TextField(
                                   controller: _passwordController,
                                   autofocus: false,
-                                  obscureText: true,
+                                  obscureText: password,
                                   enableSuggestions: false,
                                   autocorrect: false,
                                   decoration:
                                       InputDecorations.buildInputDecoration_1(
-                                          hint_text: "• • • • • • • •"),
+                                        prefixicon:InkWell(
+                                          onTap: showpassword,
+                                       child: Icon(password?Icons.visibility:Icons.visibility_off), ),
+                                        
+                                        
+                                          hint_text: "• • • • • • • •",
+                                          ),
                                 ),
                               ),
                               GestureDetector(
@@ -462,7 +469,7 @@ class _LoginState extends State<Login> {
                             child: FlatButton(
                               minWidth: MediaQuery.of(context).size.width,
                               //height: 50,
-                              color: MyTheme.blue_color,
+                             color: MyTheme.blue_color,
                               shape: RoundedRectangleBorder(
                                   borderRadius: const BorderRadius.all(
                                       Radius.circular(12.0))),
@@ -500,7 +507,7 @@ class _LoginState extends State<Login> {
                             child: FlatButton(
                               minWidth: MediaQuery.of(context).size.width,
                               //height: 50,
-                              color: MyTheme.accent_colors,
+                              color: MyTheme.accent_color,
                               shape: RoundedRectangleBorder(
                                   borderRadius: const BorderRadius.all(
                                       Radius.circular(12.0))),
@@ -597,5 +604,11 @@ class _LoginState extends State<Login> {
         ),
       ),
     );
+  }
+
+  void showpassword() {
+    setState(() {
+      password=!password;
+    });
   }
 }
