@@ -49,6 +49,7 @@ class ProductRepository {
     final response = await http.get(url, headers: {
       "App-Language": app_language.$,
     });
+    print(response.body);
     return productMiniResponseFromJson(response.body);
   }
 

@@ -418,16 +418,28 @@ class _FilterState extends State<Filter> {
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
+    
         backgroundColor: Colors.white.withOpacity(0.95),
         automaticallyImplyLeading: false,
         actions: [
           new Container(),
+          
         ],
         centerTitle: false,
-        flexibleSpace: Padding(
-          padding: const EdgeInsets.fromLTRB(0.0, 16.0, 0.0, 0.0),
-          child: Column(
-            children: [buildTopAppbar(context), buildBottomAppBar(context)],
+        flexibleSpace: Container( decoration: BoxDecoration(
+            gradient: LinearGradient(colors: [
+              // Color(0xff0fc744),
+              // Color(0xff3fcad2)
+              Color.fromRGBO(206, 35, 43, 1),
+              Color.fromRGBO(237, 101, 85, 1),
+            ]),
+            borderRadius: BorderRadius.horizontal(
+                left: Radius.circular(20), right: Radius.circular(20))),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(0.0, 16.0, 0.0, 0.0),
+            child: Column(
+              children: [buildTopAppbar(context), buildBottomAppBar(context)],
+            ),
           ),
         ));
   }
@@ -479,7 +491,7 @@ class _FilterState extends State<Filter> {
                     context,
                     gravity: Toast.CENTER,
                     duration: Toast.LENGTH_LONG);
-            ;
+            
           },
           child: Container(
             decoration: BoxDecoration(
@@ -690,8 +702,19 @@ class _FilterState extends State<Filter> {
   Row buildTopAppbar(BuildContext context) {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <
         Widget>[
+           Container(
+        decoration: BoxDecoration(
+            gradient: LinearGradient(colors: [
+              // Color(0xff0fc744),
+              // Color(0xff3fcad2)
+              Color.fromRGBO(206, 35, 43, 1),
+              Color.fromRGBO(237, 101, 85, 1),
+            ]),
+            borderRadius: BorderRadius.horizontal(
+                left: Radius.circular(20), right: Radius.circular(20))),
+      ),
       IconButton(
-        icon: Icon(Icons.arrow_back, color: MyTheme.dark_grey),
+        icon: Icon(Icons.arrow_back, color: MyTheme.white),
         onPressed: () => Navigator.of(context).pop(),
       ),
       Container(
@@ -749,10 +772,10 @@ class _FilterState extends State<Filter> {
                     setState(() {});
                     _onSearchSubmit();
                   },
-                  decoration: InputDecoration(
+                  decoration: InputDecoration(filled: true,fillColor: MyTheme.white,
                       hintText: AppLocalizations.of(context).filter_screen_search_here,
                       hintStyle: TextStyle(
-                          fontSize: 12.0, color: MyTheme.textfield_grey),
+                          fontSize: 12.0, color: MyTheme.black_color),
                       enabledBorder: OutlineInputBorder(
                         borderSide:
                             BorderSide(color: MyTheme.white, width: 0.0),
@@ -761,13 +784,13 @@ class _FilterState extends State<Filter> {
                         borderSide:
                             BorderSide(color: MyTheme.white, width: 0.0),
                       ),
-                      contentPadding: EdgeInsets.all(0.0)),
+                      contentPadding: EdgeInsets.only(left: 10)),
                 ),
               )),
         ),
       ),
       IconButton(
-          icon: Icon(Icons.search, color: MyTheme.dark_grey),
+          icon: Icon(Icons.search, color: MyTheme.white),
           onPressed: () {
             _searchKey = _searchController.text.toString();
             setState(() {});
@@ -803,22 +826,25 @@ class _FilterState extends State<Filter> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
+                            padding: const EdgeInsets.only(left: 8.0),
                             child: Container(
                               height: 30,
                               width: 100,
                               child: TextField(
+                                
                                 controller: _minPriceController,
                                 keyboardType: TextInputType.number,
                                 inputFormatters: [_amountValidator],
                                 decoration: InputDecoration(
+                                  filled: true,
+                                  fillColor: Colors.white,
                                     hintText: AppLocalizations.of(context).filter_screen_minimum,
                                     hintStyle: TextStyle(
                                         fontSize: 12.0,
                                         color: MyTheme.textfield_grey),
                                     enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                          color: MyTheme.textfield_grey,
+                                          color: MyTheme.white,
                                           width: 1.0),
                                       borderRadius: const BorderRadius.all(
                                         const Radius.circular(4.0),

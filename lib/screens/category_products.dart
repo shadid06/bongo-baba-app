@@ -84,7 +84,7 @@ class _CategoryProductsState extends State<CategoryProducts> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-            backgroundColor: Color(0xffeafbf0),
+        backgroundColor: Color(0xffeafbf0),
         appBar: buildAppBar(context),
         body: Stack(
           children: [
@@ -111,8 +111,24 @@ class _CategoryProductsState extends State<CategoryProducts> {
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.white,
-      toolbarHeight: 75,
+      // backgroundColor: Colors.white,
+      shape: OutlineInputBorder(
+          borderSide: BorderSide.none,
+          borderRadius: BorderRadius.horizontal(
+              right: Radius.circular(15), left: Radius.circular(15))),
+      flexibleSpace: Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.horizontal(
+                right: Radius.circular(15), left: Radius.circular(15)),
+            gradient: LinearGradient(colors: [
+              // Color(0xff0fc744),
+              // Color(0xff3fcad2)
+              Color.fromRGBO(0, 145, 76, 1),
+              Color.fromRGBO(70, 183, 121, 1),
+            ])),
+      ),
+      // backgroundColor: MyTheme.blue_color,
+      // toolbarHeight: 75,
       /*bottom: PreferredSize(
           child: Container(
             color: MyTheme.textfield_grey,
@@ -121,12 +137,13 @@ class _CategoryProductsState extends State<CategoryProducts> {
           preferredSize: Size.fromHeight(4.0)),*/
       leading: Builder(
         builder: (context) => IconButton(
-          icon: Icon(Icons.arrow_back, color: MyTheme.dark_grey),
+          icon: Icon(Icons.arrow_back, color: MyTheme.white),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
       title: Container(
-          width: 250,
+          margin: EdgeInsets.only(top: 5, bottom: 5),
+          width: 290,
           child: TextField(
             controller: _searchController,
             onTap: () {},
@@ -142,26 +159,30 @@ class _CategoryProductsState extends State<CategoryProducts> {
             },
             autofocus: false,
             decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.white,
                 hintText:
                     "${AppLocalizations.of(context).category_products_screen_search_products_from} : " +
                         widget.category_name,
-                hintStyle:
-                    TextStyle(fontSize: 14.0, color: MyTheme.textfield_grey),
+                hintStyle: TextStyle(
+                  fontSize: 14.0,
+                  color: MyTheme.textfield_grey,
+                ),
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: MyTheme.white, width: 0.0),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: MyTheme.white, width: 0.0),
                 ),
-                contentPadding: EdgeInsets.all(0.0)),
+                contentPadding: EdgeInsets.only(left: 10)),
           )),
-      elevation: 0.0,
+      elevation: 0.0, 
       titleSpacing: 0,
       actions: <Widget>[
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
           child: IconButton(
-            icon: Icon(Icons.search, color: MyTheme.dark_grey),
+            icon: Icon(Icons.search, color: MyTheme.white),
             onPressed: () {
               _searchKey = _searchController.text.toString();
               reset();

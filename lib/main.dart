@@ -21,6 +21,7 @@ import 'package:provider/provider.dart';
 import 'package:active_ecommerce_flutter/providers/locale_provider.dart';
 import 'lang_config.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -88,16 +89,17 @@ class _MyAppState extends State<MyApp> {
               primaryColor: MyTheme.white,
               visualDensity: VisualDensity.adaptivePlatformDensity,
               accentColor: MyTheme.accent_color,
+            
               /*textTheme: TextTheme(
               bodyText1: TextStyle(),
               bodyText2: TextStyle(fontSize: 12.0),
             )*/
               //
               // the below code is getting fonts from http
-              textTheme: GoogleFonts.sourceSansProTextTheme(textTheme).copyWith(
+              textTheme: GoogleFonts.latoTextTheme(textTheme).copyWith(
                 bodyText1:
                     GoogleFonts.sourceSansPro(textStyle: textTheme.bodyText1),
-                bodyText2: GoogleFonts.sourceSansPro(
+                bodyText2: GoogleFonts.lato(
                     textStyle: textTheme.bodyText2, fontSize: 12),
               ),
             ),

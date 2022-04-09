@@ -33,12 +33,13 @@ class _CategoryListState extends State<CategoryList> {
 
   @override
   Widget build(BuildContext context) {
-     return Directionality(
+    return Directionality(
       textDirection: app_language_rtl.$ ? TextDirection.rtl : TextDirection.ltr,
       child: Scaffold(
+          backgroundColor: Color(0xffeafbf0),
           key: _scaffoldKey,
           drawer: MainDrawer(),
-          backgroundColor: Color(0xfff1eafb),
+          // backgroundColor: Color(0xfff1eafb),
           appBar: buildAppBar(context),
           body: Stack(children: [
             CustomScrollView(
@@ -66,8 +67,25 @@ class _CategoryListState extends State<CategoryList> {
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
-      backgroundColor: Color(0xffd5f8f2),
+       backgroundColor: Color(0xffd5f8f2),
+    
       centerTitle: true,
+      flexibleSpace: Container(
+        decoration: BoxDecoration(
+            gradient: LinearGradient(colors: [
+              // Color(0xff0fc744),
+              // Color(0xff3fcad2)
+              Color.fromRGBO(206, 35, 43, 1),
+              Color.fromRGBO(237, 101, 85, 1),
+            ]),
+            borderRadius: BorderRadius.horizontal(
+                left: Radius.circular(20), right: Radius.circular(20))),
+      ),
+      // shape: OutlineInputBorder(
+
+      // borderSide: BorderSide.none,
+      //   borderRadius: BorderRadius.horizontal(
+      //       right: Radius.circular(15), left: Radius.circular(15))),
       leading: widget.is_base_category
           ? GestureDetector(
               onTap: () {
@@ -81,7 +99,7 @@ class _CategoryListState extends State<CategoryList> {
                     child: Image.asset(
                       'assets/hamburger.png',
                       height: 16,
-                      color: MyTheme.dark_grey,
+                      color: MyTheme.white,
                     ),
                   ),
                 ),
@@ -95,7 +113,7 @@ class _CategoryListState extends State<CategoryList> {
             ),
       title: Text(
         getAppBarTitle(),
-        style: TextStyle(fontSize: 20, color: MyTheme.accent_color),
+        style: TextStyle(fontSize: 20, color: MyTheme.white),
       ),
       elevation: 0.0,
       titleSpacing: 0,
@@ -104,7 +122,9 @@ class _CategoryListState extends State<CategoryList> {
 
   String getAppBarTitle() {
     String name = widget.parent_category_name == ""
-        ? (widget.is_top_category ? AppLocalizations.of(context).category_list_screen_top_categories : AppLocalizations.of(context).category_list_screen_categories)
+        ? (widget.is_top_category
+            ? AppLocalizations.of(context).category_list_screen_top_categories
+            : AppLocalizations.of(context).category_list_screen_categories)
         : widget.parent_category_name;
 
     return name;
@@ -137,7 +157,7 @@ class _CategoryListState extends State<CategoryList> {
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: const EdgeInsets.only(
-                        top: 4.0, bottom: 4.0, left: 16.0, right: 16.0),
+                        top: 0.0, bottom: 0.0, left: 10.0, right: 10.0),
                     child: buildCategoryItemCard(categoryResponse, index),
                   );
                 },
@@ -210,9 +230,9 @@ class _CategoryListState extends State<CategoryList> {
     return Card(
       shape: RoundedRectangleBorder(
         side: new BorderSide(color: MyTheme.light_grey, width: 1.0),
-        borderRadius: BorderRadius.circular(16.0),
+        borderRadius: BorderRadius.circular(10.0),
       ),
-      elevation: 0.0,
+      elevation: 3.0,
       child: Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
         Container(
             width: 80,
@@ -248,7 +268,7 @@ class _CategoryListState extends State<CategoryList> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.fromLTRB(32, 8, 8, 4),
+                padding: EdgeInsets.fromLTRB(16, 8, 8, 4),
                 child: Row(
                   children: [
                     GestureDetector(
@@ -267,23 +287,32 @@ class _CategoryListState extends State<CategoryList> {
                           }));
                         } else {
                           ToastComponent.showDialog(
-                              AppLocalizations.of(context).category_list_screen_no_subcategories, context,
+                              AppLocalizations.of(context)
+                                  .category_list_screen_no_subcategories,
+                              context,
                               gravity: Toast.CENTER,
                               duration: Toast.LENGTH_LONG);
                         }
                       },
-                      child: Text(
-                        AppLocalizations.of(context).category_list_screen_view_subcategories,
-                        textAlign: TextAlign.left,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        style: TextStyle(
-                            color: categoryResponse
-                                        .categories[index].number_of_children >
-                                    0
-                                ? MyTheme.medium_grey
-                                : MyTheme.light_grey,
-                            decoration: TextDecoration.underline),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            AppLocalizations.of(context)
+                                .category_list_screen_view_subcategories,
+                            textAlign: TextAlign.left,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            style: TextStyle(
+                                color: categoryResponse.categories[index]
+                                            .number_of_children >
+                                        0
+                                    ? MyTheme.medium_grey
+                                    : MyTheme.light_grey,
+                                decoration: TextDecoration.underline),
+                          ),
+                        ],
                       ),
                     ),
                     Text(
@@ -305,7 +334,8 @@ class _CategoryListState extends State<CategoryList> {
                         }));
                       },
                       child: Text(
-                        AppLocalizations.of(context).category_list_screen_view_products,
+                        AppLocalizations.of(context)
+                            .category_list_screen_view_products,
                         textAlign: TextAlign.left,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
@@ -349,7 +379,10 @@ class _CategoryListState extends State<CategoryList> {
                       borderRadius:
                           const BorderRadius.all(Radius.circular(8.0))),
                   child: Text(
-                    AppLocalizations.of(context).category_list_screen_all_products_of + " " + widget.parent_category_name,
+                    AppLocalizations.of(context)
+                            .category_list_screen_all_products_of +
+                        " " +
+                        widget.parent_category_name,
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 13,

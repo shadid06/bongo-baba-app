@@ -467,6 +467,17 @@ class _CartState extends State<Cart> {
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
 backgroundColor: Colors.white,
+ flexibleSpace: Container(
+        decoration: BoxDecoration(
+            gradient: LinearGradient(colors: [
+              // Color(0xff0fc744),
+              // Color(0xff3fcad2)
+              Color.fromRGBO(206, 35, 43, 1),
+              Color.fromRGBO(237, 101, 85, 1),
+            ]),
+            borderRadius: BorderRadius.horizontal(
+                left: Radius.circular(20), right: Radius.circular(20))),
+      ),
       centerTitle: true,
       leading: GestureDetector(
         onTap: () {
@@ -480,7 +491,7 @@ backgroundColor: Colors.white,
               child: Image.asset(
                 'assets/hamburger.png',
                 height: 16,
-                color: MyTheme.dark_grey,
+                color: MyTheme.white,
               ),
             ),
           ),
@@ -488,7 +499,7 @@ backgroundColor: Colors.white,
       ),
       title: Text(
         AppLocalizations.of(context).cart_screen_shopping_cart,
-        style: TextStyle(fontSize: 16, color: MyTheme.accent_color),
+        style: TextStyle(fontSize: 16, color: MyTheme.white),
       ),
       elevation: 0.0,
       titleSpacing: 0,
