@@ -268,9 +268,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                         delegate: SliverChildListDelegate([
                           Padding(
                             padding: const EdgeInsets.fromLTRB(
-                              16.0,
+                              5.0,
                               9.0,
-                              16.0,
+                              5.0,
                               0.0,
                             ),
                             child: Column(
@@ -291,8 +291,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                       SliverToBoxAdapter(
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(
-                            16.0,
                             5.0,
+                            9.0,
                             0.0,
                             0.0,
                           ),
@@ -306,9 +306,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                         delegate: SliverChildListDelegate([
                           Padding(
                             padding: const EdgeInsets.fromLTRB(
-                              16.0,
-                              0.0,
-                              16.0,
+                              5.0,
+                              9.0,
+                              5.0,
                               0.0,
                             ),
                             child: Column(
@@ -327,9 +327,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.fromLTRB(
-                                    4.0,
-                                    0.0,
-                                    8.0,
+                                    5.0,
+                                    9.0,
+                                    5.0,
                                     0.0,
                                   ),
                                   child: buildHomeFeaturedProducts(context),
@@ -369,10 +369,10 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
         controller: _featuredProductScrollController,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
-            crossAxisSpacing: 1,
-            mainAxisSpacing: 1,
+            crossAxisSpacing: 0,
+            mainAxisSpacing: 0,
             childAspectRatio: 0.618),
-        padding: EdgeInsets.all(8),
+        // padding: EdgeInsets.all(8),
         physics: NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         itemBuilder: (context, index) {
@@ -494,7 +494,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   }
 
   buildHomeMenuRow(BuildContext context) {
-    return Container(height: 85,
+    return Container(height: 100,
       //color:MyTheme. blue_color,
       //color:Colors.green[900],
       decoration: BoxDecoration(
@@ -561,7 +561,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
                 return Filter(
-                  selected_filter: "products",
+                  selected_filter: "Brands",
                 );
               }));
             },
@@ -719,7 +719,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             baseColor: MyTheme.shimmer_base,
             highlightColor: MyTheme.shimmer_highlighted,
             child: Container(
-              height: 120,
+              height: 100,
               width: double.infinity,
               color: Colors.black,
             ),
@@ -744,6 +744,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                   enableInfiniteScroll: true,
                   reverse: false,
                   autoPlay: true,
+                  en
                   autoPlayInterval: Duration(seconds: 5),
                   autoPlayAnimationDuration: Duration(milliseconds: 1000),
                   autoPlayCurve: Curves.easeInCubic,
@@ -931,53 +932,53 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       ),
     );
 
-    TextFormField(
-      onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return Filter();
-        }));
-      },
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.all(5),
-          prefixIcon: Icon(Icons.search),
-          hintText: 'Search ',
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20))),
-    );
+    // TextFormField(
+    //   onTap: () {
+    //     Navigator.push(context, MaterialPageRoute(builder: (context) {
+    //       return Filter();
+    //     }));
+    //   },
+    //   decoration: InputDecoration(
+    //       contentPadding: EdgeInsets.all(5),
+    //       prefixIcon: Icon(Icons.search),
+    //       hintText: 'Search ',
+    //       border: OutlineInputBorder(borderRadius: BorderRadius.circular(20))),
+    // );
 
-    TextField(
-      onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return Filter();
-        }));
-      },
-      autofocus: false,
-      decoration: InputDecoration(
-          filled: true,
-          fillColor: Colors.white,
-          hintText: AppLocalizations.of(context).home_screen_search,
-          hintStyle: TextStyle(fontSize: 12.0, color: MyTheme.textfield_grey),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: MyTheme.textfield_grey, width: 0.5),
-            borderRadius: const BorderRadius.all(
-              const Radius.circular(16.0),
-            ),
-          ),
-          // focusedBorder: OutlineInputBorder(
-          //   borderSide: BorderSide(color: MyTheme.textfield_grey, width: 1.0),
-          //   borderRadius: const BorderRadius.all(
-          //     const Radius.circular(16.0),
-          //   ),
-          // ),
-          prefixIcon: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Icon(
-              Icons.search,
-              color: MyTheme.textfield_grey,
-              size: 20,
-            ),
-          ),
-          contentPadding: EdgeInsets.only(top: 10)),
-    );
+    // TextField(
+    //   onTap: () {
+    //     Navigator.push(context, MaterialPageRoute(builder: (context) {
+    //       return Filter();
+    //     }));
+    //   },
+    //   autofocus: false,
+    //   decoration: InputDecoration(
+    //       filled: true,
+    //       fillColor: Colors.white,
+    //       hintText: AppLocalizations.of(context).home_screen_search,
+    //       hintStyle: TextStyle(fontSize: 12.0, color: MyTheme.textfield_grey),
+    //       enabledBorder: OutlineInputBorder(
+    //         borderSide: BorderSide(color: MyTheme.textfield_grey, width: 0.5),
+    //         borderRadius: const BorderRadius.all(
+    //           const Radius.circular(16.0),
+    //         ),
+    //       ),
+    //       // focusedBorder: OutlineInputBorder(
+    //       //   borderSide: BorderSide(color: MyTheme.textfield_grey, width: 1.0),
+    //       //   borderRadius: const BorderRadius.all(
+    //       //     const Radius.circular(16.0),
+    //       //   ),
+    //       // ),
+    //       prefixIcon: Padding(
+    //         padding: const EdgeInsets.all(8.0),
+    //         child: Icon(
+    //           Icons.search,
+    //           color: MyTheme.textfield_grey,
+    //           size: 20,
+    //         ),
+    //       ),
+    //       contentPadding: EdgeInsets.only(top: 10)),
+    // );
   }
 
   Container buildProductLoadingContainer() {

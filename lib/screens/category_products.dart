@@ -8,6 +8,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class CategoryProducts extends StatefulWidget {
   CategoryProducts({Key key, this.category_name, this.category_id})
       : super(key: key);
+      
   final String category_name;
   final int category_id;
 
@@ -123,8 +124,10 @@ class _CategoryProductsState extends State<CategoryProducts> {
             gradient: LinearGradient(colors: [
               // Color(0xff0fc744),
               // Color(0xff3fcad2)
-              Color.fromRGBO(0, 145, 76, 1),
-              Color.fromRGBO(70, 183, 121, 1),
+              // Color.fromRGBO(0, 145, 76, 1),
+              // Color.fromRGBO(70, 183, 121, 1),
+              Color.fromRGBO(206, 35, 43, 1),
+              Color.fromRGBO(237, 101, 85, 1),
             ])),
       ),
       // backgroundColor: MyTheme.blue_color,
@@ -176,7 +179,7 @@ class _CategoryProductsState extends State<CategoryProducts> {
                 ),
                 contentPadding: EdgeInsets.only(left: 10)),
           )),
-      elevation: 0.0, 
+      elevation: 0.0,
       titleSpacing: 0,
       actions: <Widget>[
         Padding(

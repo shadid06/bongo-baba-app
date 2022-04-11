@@ -2153,43 +2153,8 @@ class _ProductDetailsState extends State<ProductDetails> {
         : Container();
   }
 
-  ExpandableNotifier buildExpandableShortDescription() {
-    return ExpandableNotifier(
-        child: ScrollOnExpand(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Expandable(
-            collapsed: Container(
-                height: 30,
-                child: Html(data: _productDetails.short_description)),
-            expanded:
-                Container(child: Html(data: _productDetails.short_description)),
-          ),
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.end,
-          //   children: <Widget>[
-          //     Builder(
-          //       builder: (context) {
-          //         var controller = ExpandableController.of(context);
-          //         return FlatButton(
-          //           child: Text(
-          //             !controller.expanded
-          //                 ? AppLocalizations.of(context).common_view_more
-          //                 : AppLocalizations.of(context).common_show_less,
-          //             style: TextStyle(color: MyTheme.font_grey, fontSize: 16),
-          //           ),
-          //           onPressed: () {
-          //             controller.toggle();
-          //           },
-          //         );
-          //       },
-          //     ),
-          //   ],
-          // ),
-        ],
-      ),
-    ));
+  buildExpandableShortDescription() {
+    return Container(child: Html(data: _productDetails.short_description));
   }
 
   ExpandableNotifier buildExpandableDescription() {

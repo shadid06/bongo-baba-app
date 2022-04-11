@@ -31,7 +31,7 @@ class _ProductCardState extends State<ProductCard> {
          //clipBehavior: Clip.antiAliasWithSaveLayer,
         shape: RoundedRectangleBorder(
           side: new BorderSide(color: MyTheme.light_grey, width: 1.0),
-          borderRadius: BorderRadius.circular(16.0),
+          borderRadius: BorderRadius.circular(10.0),
         ),
         elevation: 1.0,
         child: Column(

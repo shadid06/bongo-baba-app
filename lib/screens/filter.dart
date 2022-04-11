@@ -26,9 +26,10 @@ class WhichFilter {
 
   static List<WhichFilter> getWhichFilterList() {
     return <WhichFilter>[
+        WhichFilter('brands', AppLocalizations.of(OneContext().context).filter_screen_brands),
       WhichFilter('product', AppLocalizations.of(OneContext().context).filter_screen_product),
       // WhichFilter('sellers', AppLocalizations.of(OneContext().context).filter_screen_sellers),
-      WhichFilter('brands', AppLocalizations.of(OneContext().context).filter_screen_brands),
+    
     ];
   }
 }

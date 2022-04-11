@@ -7,7 +7,6 @@ import 'package:active_ecommerce_flutter/helpers/string_helper.dart';
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
 class FlashDealProducts extends StatefulWidget {
   FlashDealProducts({Key key, this.flash_deal_id, this.flash_deal_name})
       : super(key: key);
@@ -19,6 +18,16 @@ class FlashDealProducts extends StatefulWidget {
 }
 
 class _FlashDealProductsState extends State<FlashDealProducts> {
+   var _page = 1;
+  bool _isInitial = true;
+  ScrollController _xcrollController = ScrollController();
+  bool _showLoadingContainer = false;
+  int _totalData = 0;
+  List<dynamic> _productList = [];
+  int _totalProductData = 0;
+  int _productPage = 1;
+  bool _isProductInitial = true; String _searchKey = "";
+
   TextEditingController _searchController = new TextEditingController();
 
   Future<dynamic> _future;
@@ -64,10 +73,17 @@ class _FlashDealProductsState extends State<FlashDealProducts> {
     return Directionality(
       textDirection: app_language_rtl.$ ? TextDirection.rtl : TextDirection.ltr,
       child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: buildAppBar(context),
-        body: buildProductList(context),
-      ),
+          // backgroundColor: Colors.white,
+          backgroundColor: Color(0xffeafbf0),
+          appBar: buildAppBar(context),
+          body: Stack(
+            children: [
+              buildProductList(context),
+              Align(
+                  alignment: Alignment.bottomCenter,
+                  child: buildLoadingContainer())
+            ],
+          )),
     );
   }
 
@@ -80,7 +96,18 @@ class _FlashDealProductsState extends State<FlashDealProducts> {
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
-backgroundColor: Colors.white,
+      backgroundColor: Color(0xffeafbf0),
+      flexibleSpace: Container(
+          decoration: BoxDecoration(
+        gradient: LinearGradient(colors: [
+          // Color(0xff0fc744),
+          // Color(0xff3fcad2)
+          Color.fromRGBO(206, 35, 43, 1),
+          Color.fromRGBO(237, 101, 85, 1),
+        ]),
+        borderRadius: BorderRadius.horizontal(
+            left: Radius.circular(16), right: Radius.circular(16)),
+      )),
       toolbarHeight: 75,
       /*bottom: PreferredSize(
           child: Container(
@@ -90,7 +117,7 @@ backgroundColor: Colors.white,
           preferredSize: Size.fromHeight(4.0)),*/
       leading: Builder(
         builder: (context) => IconButton(
-          icon: Icon(Icons.arrow_back, color: MyTheme.dark_grey),
+          icon: Icon(Icons.arrow_back, color: MyTheme.white),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
@@ -107,16 +134,17 @@ backgroundColor: Colors.white,
             onTap: () {},
             autofocus: true,
             decoration: InputDecoration(
-                hintText: "${AppLocalizations.of(context).flash_deal_products_screen_search_products_from} : " + widget.flash_deal_name,
-                hintStyle:
-                    TextStyle(fontSize: 14.0, color: MyTheme.textfield_grey),
+                hintText:
+                    "${AppLocalizations.of(context).flash_deal_products_screen_search_products_from} : " +
+                        widget.flash_deal_name,
+                hintStyle: TextStyle(fontSize: 14.0, color: MyTheme.white),
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: MyTheme.white, width: 0.0),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: MyTheme.white, width: 0.0),
                 ),
-                contentPadding: EdgeInsets.all(0.0)),
+                contentPadding: EdgeInsets.only(left: 5)),
           )),
       elevation: 0.0,
       titleSpacing: 0,
@@ -124,7 +152,7 @@ backgroundColor: Colors.white,
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
           child: IconButton(
-            icon: Icon(Icons.search, color: MyTheme.dark_grey),
+            icon: Icon(Icons.search, color: MyTheme.white),
             onPressed: () {},
           ),
         ),
@@ -152,17 +180,20 @@ backgroundColor: Colors.white,
             //print('called');
 
             return SingleChildScrollView(
+              controller: _xcrollController,
+              physics: const BouncingScrollPhysics(
+                  parent: AlwaysScrollableScrollPhysics()),
               child: GridView.builder(
                 // 2
                 //addAutomaticKeepAlives: true,
-                itemCount: _searchList.length,
+                itemCount: _fullList.length,
                 controller: _scrollController,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
+                    crossAxisSpacing: 0,
+                    mainAxisSpacing: 0,
                     childAspectRatio: 0.618),
-                padding: EdgeInsets.all(16),
+                padding: EdgeInsets.all(5),
                 physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
@@ -182,5 +213,42 @@ backgroundColor: Colors.white,
                 .buildProductGridShimmer(scontroller: _scrollController);
           }
         });
+  }
+
+  buildLoadingContainer() {
+    return Container(
+      height: _showLoadingContainer ? 36 : 0,
+      width: double.infinity,
+      color: Colors.white,
+      child: Center(
+        child: Text(_totalData == _productList.length
+            ? AppLocalizations.of(context).common_no_more_products
+            : AppLocalizations.of(context).common_loading_more_products),
+      ),
+    );
+  }
+
+  Future<void> _onRefresh() {
+    // reset();
+    // fetchData();
+  }
+
+  reset() {
+    _productList.clear();
+    _isInitial = true;
+    _totalData = 0;
+    _page = 1;
+    _showLoadingContainer = false;
+    setState(() {});
+  }
+
+  fetchData() async {
+    var productResponse = await ProductRepository().getCategoryProducts(
+        id: widget.flash_deal_id, page: _page, name: _searchKey);
+    _productList.addAll(productResponse.products);
+    _isInitial = false;
+    _totalData = productResponse.meta.total;
+    _showLoadingContainer = false;
+    setState(() {});
   }
 }
