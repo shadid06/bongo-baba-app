@@ -442,7 +442,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                   ),
                   elevation: 3.0,
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
                       Container(
                           //width: 100,
@@ -455,19 +455,22 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                 placeholder: 'assets/placeholder.png',
                                 image: AppConfig.BASE_PATH +
                                     _featuredCategoryList[index].banner,
-                                fit: BoxFit.cover,
+                                fit: BoxFit.contain,
+
                               ))),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(8, 8, 8, 4),
-                        child: Container(
-                          height: 32,
-                          child: Text(
-                            _featuredCategoryList[index].name,
-                            textAlign: TextAlign.center,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 2,
-                            style: TextStyle(
-                                fontSize: 13, color: MyTheme.font_grey),
+                      Expanded(
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(8, 0, 8, 4),
+                          child: Container(
+                            // height: 32,
+                            child: Text(
+                              _featuredCategoryList[index].name,
+                              textAlign: TextAlign.center,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
+                              style: TextStyle(
+                                  fontSize: 13, color: MyTheme.font_grey),
+                            ),
                           ),
                         ),
                       ),
@@ -728,79 +731,74 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       );
     } else if (_carouselImageList.length > 0) {
       return Container(
+        height: 150,
         padding:
             const EdgeInsets.only(left: 0.0, right: 0.0, top: 0, bottom: 0),
         //color: Color(0xffeafbf0),
         color: Colors.green[200],
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            CarouselSlider(
-              options: CarouselOptions(
-                  aspectRatio: 2.5,
-                  viewportFraction: 1.5,
-                  initialPage: 0,
-                  enableInfiniteScroll: true,
-                  reverse: false,
-                  autoPlay: true,
-                  en
-                  autoPlayInterval: Duration(seconds: 5),
-                  autoPlayAnimationDuration: Duration(milliseconds: 1000),
-                  autoPlayCurve: Curves.easeInCubic,
-                  enlargeCenterPage: true,
-                  scrollDirection: Axis.horizontal,
-                  onPageChanged: (index, reason) {
-                    setState(() {
-                      _current_slider = index;
-                    });
-                  }),
-              items: _carouselImageList.map((i) {
-                return Builder(
-                  builder: (BuildContext context) {
-                    return Stack(
-                      children: <Widget>[
-                        Container(
-                            width: double.infinity,
-                            // margin: EdgeInsets.symmetric(horizontal: 10.0,vertical: 0),
+        child: CarouselSlider(
+          options: CarouselOptions(height: 150,
+              
+              viewportFraction: 1.2,
+              initialPage: 0,
+              enableInfiniteScroll: true,
+              reverse: false,
+              autoPlay: true,
+              
+              autoPlayInterval: Duration(seconds: 5),
+              autoPlayAnimationDuration: Duration(milliseconds: 1000),
+              autoPlayCurve: Curves.easeInCubic,
+              enlargeCenterPage: true,
+              scrollDirection: Axis.horizontal,
+              onPageChanged: (index, reason) {
+                setState(() {
+                  _current_slider = index;
+                });
+              }),
+          items: _carouselImageList.map((i) {
+            return Builder(
+              builder: (BuildContext context) {
+                return Stack(
+                  children: <Widget>[
+                    Container(
+                      height: 150,
+                        width: double.infinity,
+                        // margin: EdgeInsets.symmetric(horizontal: 10.0,vertical: 0),
 
-                            child: ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                // borderRadius: BorderRadius.all(Radius.circular(10)),
-                                child: FadeInImage.assetNetwork(
-                                  placeholder:
-                                      'assets/placeholder_rectangle.png',
-                                  image: AppConfig.BASE_PATH + i,
-                                  fit: BoxFit.cover,
-                                ))),
-                        // Align(
-                        //   alignment: Alignment.bottomCenter,
-                        //   child: Row(
-                        //     mainAxisAlignment: MainAxisAlignment.center,
-                        //     children: _carouselImageList.map((url) {
-                        //       int index = _carouselImageList.indexOf(url);
-                        //       return Container(
-                        //         width: 7.0,
-                        //         height: 7.0,
-                        //         margin: EdgeInsets.symmetric(
-                        //             vertical: 10.0, horizontal: 4.0),
-                        //         decoration: BoxDecoration(
-                        //           shape: BoxShape.circle,
-                        //           color: _current_slider == index
-                        //               ? MyTheme.white
-                        //               : Color.fromRGBO(112, 112, 112, .3),
-                        //         ),
-                        //       );
-                        //     }).toList(),
-                        //   ),
-                        // ),
-                      ],
-                    );
-                  },
+                        child: FadeInImage.assetNetwork(
+                          placeholder:
+                              'assets/placeholder_rectangle.png',
+                          image: AppConfig.BASE_PATH + i,
+                          // fit: BoxFit.contain,
+                          // height: double.infinity,
+                          width:double.infinity ,
+                        )),
+                    // Align(
+                    //   alignment: Alignment.bottomCenter,
+                    //   child: Row(
+                    //     mainAxisAlignment: MainAxisAlignment.center,
+                    //     children: _carouselImageList.map((url) {
+                    //       int index = _carouselImageList.indexOf(url);
+                    //       return Container(
+                    //         width: 7.0,
+                    //         height: 7.0,
+                    //         margin: EdgeInsets.symmetric(
+                    //             vertical: 10.0, horizontal: 4.0),
+                    //         decoration: BoxDecoration(
+                    //           shape: BoxShape.circle,
+                    //           color: _current_slider == index
+                    //               ? MyTheme.white
+                    //               : Color.fromRGBO(112, 112, 112, .3),
+                    //         ),
+                    //       );
+                    //     }).toList(),
+                    //   ),
+                    // ),
+                  ],
                 );
-              }).toList(),
-            ),
-          ],
+              },
+            );
+          }).toList(),
         ),
       );
     } else if (!_isCarouselInitial && _carouselImageList.length == 0) {

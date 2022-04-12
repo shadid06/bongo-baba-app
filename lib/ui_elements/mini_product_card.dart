@@ -11,7 +11,14 @@ class MiniProductCard extends StatefulWidget {
   String stroked_price;
   bool has_discount;
 
-  MiniProductCard({Key key, this.id, this.image, this.name, this.main_price,this.stroked_price,this.has_discount})
+  MiniProductCard(
+      {Key key,
+      this.id,
+      this.image,
+      this.name,
+      this.main_price,
+      this.stroked_price,
+      this.has_discount})
       : super(key: key);
 
   @override
@@ -37,61 +44,69 @@ class _MiniProductCardState extends State<MiniProductCard> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Container(
-                  width: double.infinity,
-                  //height: (MediaQuery.of(context).size.width - 36) / 3.5,
-                   height: (MediaQuery.of(context).size.width - 36) / 3.7,
-                  // height: 200,
-                  
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(16), bottom: Radius.zero),
-                      child: FadeInImage.assetNetwork(
-                        placeholder: 'assets/placeholder.png',
-                        image: AppConfig.BASE_PATH + widget.image,
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                      ))),
-              Padding(
-                padding: EdgeInsets.fromLTRB(8, 4, 8, 0),
-                child: Text(
-                  widget.name,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 2,
-                  style: TextStyle(
-                      color: MyTheme.font_grey,
-                      fontSize: 11,
-                      height: 1.2,
-                      fontWeight: FontWeight.w400),
-                ),
+              Expanded(
+                child: Container(
+                    width: double.infinity,
+                    //height: (MediaQuery.of(context).size.width - 36) / 3.5,
+                    height: (MediaQuery.of(context).size.width - 36) / 3.8,
+                    // height: 200,
+
+                    child: ClipRRect(
+                        borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(10), bottom: Radius.zero),
+                        child: FadeInImage.assetNetwork(
+                          placeholder: 'assets/placeholder.png',
+                          image: AppConfig.BASE_PATH + widget.image,
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                        ))),
               ),
-              Padding(
-                padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
-                child: Text(
-                  widget.main_price,
-                  textAlign: TextAlign.left,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                  style: TextStyle(
-                      color: MyTheme.accent_color,
-                      fontSize: 11,
-                      fontWeight: FontWeight.w600),
-                ),
-              ),
-              widget.has_discount ? Padding(
-                padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
-                child: Text(
-                  widget.stroked_price,
-                  textAlign: TextAlign.left,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                  style: TextStyle(
-                      decoration:TextDecoration.lineThrough,
-                      color: MyTheme.medium_grey,
-                      fontSize: 9,
-                      fontWeight: FontWeight.w600),
-                ),
-              ):Container(),
+              Column(crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(3, 4, 8, 0),
+                    child: Text(
+                      widget.name,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                      style: TextStyle(
+                          color: MyTheme.black_color,
+                          fontSize: 11,
+                          height: 1.2,
+                          fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+                    child: Text(
+                      widget.main_price,
+                      textAlign: TextAlign.left,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      style: TextStyle(
+                          color: MyTheme.accent_color,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                  widget.has_discount
+                      ? Padding(
+                          padding: EdgeInsets.fromLTRB(8, 0, 8, 3),
+                          child: Text(
+                            widget.stroked_price,
+                            textAlign: TextAlign.left,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            style: TextStyle(
+                                decoration: TextDecoration.lineThrough,
+                                color: MyTheme.medium_grey,
+                                fontSize: 9,
+                                fontWeight: FontWeight.w600),
+                          ),
+                        )
+                      : Container(),
+                ],
+              )
             ]),
       ),
     );

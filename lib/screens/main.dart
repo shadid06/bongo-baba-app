@@ -4,6 +4,7 @@ import 'package:active_ecommerce_flutter/custom/CommonFunctoins.dart';
 import 'package:active_ecommerce_flutter/my_theme.dart';
 import 'package:active_ecommerce_flutter/screens/cart.dart';
 import 'package:active_ecommerce_flutter/screens/category_list.dart';
+import 'package:active_ecommerce_flutter/screens/filter2.dart';
 import 'package:active_ecommerce_flutter/screens/home.dart';
 import 'package:active_ecommerce_flutter/screens/login.dart';
 import 'package:active_ecommerce_flutter/screens/profile.dart';
@@ -94,8 +95,8 @@ class _MainState extends State<Main> {
                       onPressed: () {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
-                          return Filter(
-                            selected_filter: "sellers",
+                          return Filter2(
+                            selected_filter: "Products",
                           );
                         }));
                       })),

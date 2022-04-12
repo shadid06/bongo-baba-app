@@ -26,16 +26,17 @@ class WhichFilter {
 
   static List<WhichFilter> getWhichFilterList() {
     return <WhichFilter>[
-        WhichFilter('brands', AppLocalizations.of(OneContext().context).filter_screen_brands),
-      WhichFilter('product', AppLocalizations.of(OneContext().context).filter_screen_product),
+      WhichFilter('product',
+          AppLocalizations.of(OneContext().context).filter_screen_product),
+      WhichFilter('brands',
+          AppLocalizations.of(OneContext().context).filter_screen_brands),
       // WhichFilter('sellers', AppLocalizations.of(OneContext().context).filter_screen_sellers),
-    
     ];
   }
 }
 
-class Filter extends StatefulWidget {
-  Filter({
+class Filter2 extends StatefulWidget {
+  Filter2({
     Key key,
     this.selected_filter = "product",
   }) : super(key: key);
@@ -43,10 +44,10 @@ class Filter extends StatefulWidget {
   final String selected_filter;
 
   @override
-  _FilterState createState() => _FilterState();
+  _FilterState2 createState() => _FilterState2();
 }
 
-class _FilterState extends State<Filter> {
+class _FilterState2 extends State<Filter2> {
   final _amountValidator = RegExInputFormatter.withRegex(
       '^\$|^(0|([1-9][0-9]{0,}))(\\.[0-9]{0,})?\$');
 
@@ -147,9 +148,6 @@ class _FilterState extends State<Filter> {
 
     fetchFilteredCategories();
     fetchFilteredBrands();
-
-
-
 
     if (_selectedFilter.option_key == "sellers") {
       fetchShopData();
@@ -339,8 +337,6 @@ class _FilterState extends State<Filter> {
     return items;
   }
 
-
-
   Container buildProductLoadingContainer() {
     return Container(
       height: _showProductLoadingContainer ? 36 : 0,
@@ -419,23 +415,22 @@ class _FilterState extends State<Filter> {
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
-    
         backgroundColor: Colors.white.withOpacity(0.95),
         automaticallyImplyLeading: false,
         actions: [
           new Container(),
-          
         ],
         centerTitle: false,
-        flexibleSpace: Container( decoration: BoxDecoration(
-            gradient: LinearGradient(colors: [
-              // Color(0xff0fc744),
-              // Color(0xff3fcad2)
-              Color.fromRGBO(206, 35, 43, 1),
-              Color.fromRGBO(237, 101, 85, 1),
-            ]),
-            borderRadius: BorderRadius.horizontal(
-                left: Radius.circular(20), right: Radius.circular(20))),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+              gradient: LinearGradient(colors: [
+                // Color(0xff0fc744),
+                // Color(0xff3fcad2)
+                Color.fromRGBO(206, 35, 43, 1),
+                Color.fromRGBO(237, 101, 85, 1),
+              ]),
+              borderRadius: BorderRadius.horizontal(
+                  left: Radius.circular(20), right: Radius.circular(20))),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(0.0, 16.0, 0.0, 0.0),
             child: Column(
@@ -460,7 +455,9 @@ class _FilterState extends State<Filter> {
           width: MediaQuery.of(context).size.width * .33,
           child: new DropdownButton<WhichFilter>(
             icon: Padding(
-              padding: app_language_rtl.$ ? const EdgeInsets.only(right: 16.0) :  const EdgeInsets.only(left: 16.0),
+              padding: app_language_rtl.$
+                  ? const EdgeInsets.only(right: 16.0)
+                  : const EdgeInsets.only(left: 16.0),
               child: Icon(Icons.expand_more, color: Colors.black54),
             ),
             hint: Text(
@@ -488,11 +485,10 @@ class _FilterState extends State<Filter> {
             _selectedFilter.option_key == "product"
                 ? _scaffoldKey.currentState.openEndDrawer()
                 : ToastComponent.showDialog(
-                AppLocalizations.of(context).filter_screen_sort_warning,
+                    AppLocalizations.of(context).filter_screen_sort_warning,
                     context,
                     gravity: Toast.CENTER,
                     duration: Toast.LENGTH_LONG);
-            
           },
           child: Container(
             decoration: BoxDecoration(
@@ -531,8 +527,10 @@ class _FilterState extends State<Filter> {
                 ? showDialog(
                     context: context,
                     builder: (_) => Directionality(
-                      textDirection: app_language_rtl.$ ? TextDirection.rtl : TextDirection.ltr,
-                      child: AlertDialog(
+                          textDirection: app_language_rtl.$
+                              ? TextDirection.rtl
+                              : TextDirection.ltr,
+                          child: AlertDialog(
                             contentPadding: EdgeInsets.only(
                                 top: 16.0, left: 2.0, right: 2.0, bottom: 2.0),
                             content: StatefulBuilder(builder:
@@ -542,9 +540,11 @@ class _FilterState extends State<Filter> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 24.0),
                                       child: Text(
-                                        AppLocalizations.of(context).filter_screen_sort_products_by,
+                                        AppLocalizations.of(context)
+                                            .filter_screen_sort_products_by,
                                       )),
                                   RadioListTile(
                                     dense: true,
@@ -553,7 +553,8 @@ class _FilterState extends State<Filter> {
                                     activeColor: MyTheme.font_grey,
                                     controlAffinity:
                                         ListTileControlAffinity.leading,
-                                    title:  Text(AppLocalizations.of(context).filter_screen_default),
+                                    title: Text(AppLocalizations.of(context)
+                                        .filter_screen_default),
                                     onChanged: (value) {
                                       setState(() {
                                         _selectedSort = value;
@@ -569,7 +570,8 @@ class _FilterState extends State<Filter> {
                                     activeColor: MyTheme.font_grey,
                                     controlAffinity:
                                         ListTileControlAffinity.leading,
-                                    title:  Text(AppLocalizations.of(context).filter_screen_price_high_to_low),
+                                    title: Text(AppLocalizations.of(context)
+                                        .filter_screen_price_high_to_low),
                                     onChanged: (value) {
                                       setState(() {
                                         _selectedSort = value;
@@ -585,7 +587,8 @@ class _FilterState extends State<Filter> {
                                     activeColor: MyTheme.font_grey,
                                     controlAffinity:
                                         ListTileControlAffinity.leading,
-                                    title:  Text(AppLocalizations.of(context).filter_screen_price_low_to_high),
+                                    title: Text(AppLocalizations.of(context)
+                                        .filter_screen_price_low_to_high),
                                     onChanged: (value) {
                                       setState(() {
                                         _selectedSort = value;
@@ -601,7 +604,8 @@ class _FilterState extends State<Filter> {
                                     activeColor: MyTheme.font_grey,
                                     controlAffinity:
                                         ListTileControlAffinity.leading,
-                                    title:  Text(AppLocalizations.of(context).filter_screen_price_new_arrival),
+                                    title: Text(AppLocalizations.of(context)
+                                        .filter_screen_price_new_arrival),
                                     onChanged: (value) {
                                       setState(() {
                                         _selectedSort = value;
@@ -617,7 +621,8 @@ class _FilterState extends State<Filter> {
                                     activeColor: MyTheme.font_grey,
                                     controlAffinity:
                                         ListTileControlAffinity.leading,
-                                    title:  Text(AppLocalizations.of(context).filter_screen_popularity),
+                                    title: Text(AppLocalizations.of(context)
+                                        .filter_screen_popularity),
                                     onChanged: (value) {
                                       setState(() {
                                         _selectedSort = value;
@@ -633,7 +638,8 @@ class _FilterState extends State<Filter> {
                                     activeColor: MyTheme.font_grey,
                                     controlAffinity:
                                         ListTileControlAffinity.leading,
-                                    title: Text(AppLocalizations.of(context).filter_screen_top_rated),
+                                    title: Text(AppLocalizations.of(context)
+                                        .filter_screen_top_rated),
                                     onChanged: (value) {
                                       setState(() {
                                         _selectedSort = value;
@@ -648,7 +654,8 @@ class _FilterState extends State<Filter> {
                             actions: [
                               FlatButton(
                                 child: Text(
-                                  AppLocalizations.of(context).common_close_in_all_capital,
+                                  AppLocalizations.of(context)
+                                      .common_close_in_all_capital,
                                   style: TextStyle(color: MyTheme.medium_grey),
                                 ),
                                 onPressed: () {
@@ -658,9 +665,9 @@ class _FilterState extends State<Filter> {
                               ),
                             ],
                           ),
-                    ))
+                        ))
                 : ToastComponent.showDialog(
-                AppLocalizations.of(context).filter_screen_filter_warning,
+                    AppLocalizations.of(context).filter_screen_filter_warning,
                     context,
                     gravity: Toast.CENTER,
                     duration: Toast.LENGTH_LONG);
@@ -703,7 +710,7 @@ class _FilterState extends State<Filter> {
   Row buildTopAppbar(BuildContext context) {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <
         Widget>[
-           Container(
+      Container(
         decoration: BoxDecoration(
             gradient: LinearGradient(colors: [
               // Color(0xff0fc744),
@@ -729,33 +736,54 @@ class _FilterState extends State<Filter> {
               child: TypeAheadField(
                 suggestionsCallback: (pattern) async {
                   //return await BackendService.getSuggestions(pattern);
-                  var suggestions =  await SearchRepository()
-                      .getSearchSuggestionListResponse(query_key: pattern,type: _selectedFilter.option_key);
+                  var suggestions = await SearchRepository()
+                      .getSearchSuggestionListResponse(
+                          query_key: pattern, type: _selectedFilter.option_key);
                   //print(suggestions.toString());
                   return suggestions;
                 },
-                loadingBuilder: (context){
+                loadingBuilder: (context) {
                   return Container(
                     height: 50,
-                    child: Center(child: Text(AppLocalizations.of(context).filter_screen_loading_suggestions,style:TextStyle(color: MyTheme.medium_grey))),
+                    child: Center(
+                        child: Text(
+                            AppLocalizations.of(context)
+                                .filter_screen_loading_suggestions,
+                            style: TextStyle(color: MyTheme.medium_grey))),
                   );
                 },
                 itemBuilder: (context, suggestion) {
                   //print(suggestion.toString());
-                  var subtitle = "${AppLocalizations.of(context).filter_screen_searched_for} ${suggestion.count} ${AppLocalizations.of(context).filter_screen_times}";
-                  if(suggestion.type != "search"){
-                    subtitle = "${suggestion.type_string} ${AppLocalizations.of(context).filter_screen_found}";
+                  var subtitle =
+                      "${AppLocalizations.of(context).filter_screen_searched_for} ${suggestion.count} ${AppLocalizations.of(context).filter_screen_times}";
+                  if (suggestion.type != "search") {
+                    subtitle =
+                        "${suggestion.type_string} ${AppLocalizations.of(context).filter_screen_found}";
                   }
                   return ListTile(
                     dense: true,
-                    title: Text(suggestion.query,style: TextStyle(color:  suggestion.type != "search" ? MyTheme.accent_color : MyTheme.font_grey),),
-                    subtitle: Text(subtitle,style:TextStyle(color: suggestion.type != "search" ? MyTheme.font_grey: MyTheme.medium_grey)),
+                    title: Text(
+                      suggestion.query,
+                      style: TextStyle(
+                          color: suggestion.type != "search"
+                              ? MyTheme.accent_color
+                              : MyTheme.font_grey),
+                    ),
+                    subtitle: Text(subtitle,
+                        style: TextStyle(
+                            color: suggestion.type != "search"
+                                ? MyTheme.font_grey
+                                : MyTheme.medium_grey)),
                   );
                 },
-                noItemsFoundBuilder: (context){
+                noItemsFoundBuilder: (context) {
                   return Container(
                     height: 50,
-                    child: Center(child: Text(AppLocalizations.of(context).filter_screen_no_suggestion_available,style:TextStyle(color: MyTheme.medium_grey))),
+                    child: Center(
+                        child: Text(
+                            AppLocalizations.of(context)
+                                .filter_screen_no_suggestion_available,
+                            style: TextStyle(color: MyTheme.medium_grey))),
                   );
                 },
                 onSuggestionSelected: (suggestion) {
@@ -773,10 +801,13 @@ class _FilterState extends State<Filter> {
                     setState(() {});
                     _onSearchSubmit();
                   },
-                  decoration: InputDecoration(filled: true,fillColor: MyTheme.white,
-                      hintText: AppLocalizations.of(context).filter_screen_search_here,
-                      hintStyle: TextStyle(
-                          fontSize: 12.0, color: MyTheme.black_color),
+                  decoration: InputDecoration(
+                      filled: true,
+                      fillColor: MyTheme.white,
+                      hintText: AppLocalizations.of(context)
+                          .filter_screen_search_here,
+                      hintStyle:
+                          TextStyle(fontSize: 12.0, color: MyTheme.black_color),
                       enabledBorder: OutlineInputBorder(
                         borderSide:
                             BorderSide(color: MyTheme.white, width: 0.0),
@@ -800,7 +831,7 @@ class _FilterState extends State<Filter> {
     ]);
   }
 
-   buildFilterDrawer() {
+  buildFilterDrawer() {
     return Directionality(
       textDirection: app_language_rtl.$ ? TextDirection.rtl : TextDirection.ltr,
       child: Drawer(
@@ -818,7 +849,8 @@ class _FilterState extends State<Filter> {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 8.0),
                         child: Text(
-                          AppLocalizations.of(context).filter_screen_price_range,
+                          AppLocalizations.of(context)
+                              .filter_screen_price_range,
                           style: TextStyle(
                               fontSize: 14, fontWeight: FontWeight.bold),
                         ),
@@ -832,21 +864,20 @@ class _FilterState extends State<Filter> {
                               height: 30,
                               width: 100,
                               child: TextField(
-                                
                                 controller: _minPriceController,
                                 keyboardType: TextInputType.number,
                                 inputFormatters: [_amountValidator],
                                 decoration: InputDecoration(
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                    hintText: AppLocalizations.of(context).filter_screen_minimum,
+                                    filled: true,
+                                    fillColor: Colors.white,
+                                    hintText: AppLocalizations.of(context)
+                                        .filter_screen_minimum,
                                     hintStyle: TextStyle(
                                         fontSize: 12.0,
                                         color: MyTheme.textfield_grey),
                                     enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                          color: MyTheme.white,
-                                          width: 1.0),
+                                          color: MyTheme.white, width: 1.0),
                                       borderRadius: const BorderRadius.all(
                                         const Radius.circular(4.0),
                                       ),
@@ -874,7 +905,8 @@ class _FilterState extends State<Filter> {
                                 keyboardType: TextInputType.number,
                                 inputFormatters: [_amountValidator],
                                 decoration: InputDecoration(
-                                    hintText: AppLocalizations.of(context).filter_screen_maximum,
+                                    hintText: AppLocalizations.of(context)
+                                        .filter_screen_maximum,
                                     hintStyle: TextStyle(
                                         fontSize: 12.0,
                                         color: MyTheme.textfield_grey),
@@ -921,7 +953,8 @@ class _FilterState extends State<Filter> {
                               height: 100,
                               child: Center(
                                 child: Text(
-                                  AppLocalizations.of(context).common_no_category_is_available,
+                                  AppLocalizations.of(context)
+                                      .common_no_category_is_available,
                                   style: TextStyle(color: MyTheme.font_grey),
                                 ),
                               ),
@@ -942,7 +975,8 @@ class _FilterState extends State<Filter> {
                               height: 100,
                               child: Center(
                                 child: Text(
-                                  AppLocalizations.of(context).common_no_brand_is_available,
+                                  AppLocalizations.of(context)
+                                      .common_no_brand_is_available,
                                   style: TextStyle(color: MyTheme.font_grey),
                                 ),
                               ),
@@ -962,12 +996,13 @@ class _FilterState extends State<Filter> {
                     FlatButton(
                       color: Color.fromRGBO(234, 67, 53, 1),
                       shape: RoundedRectangleBorder(
-                        side:
-                            new BorderSide(color: MyTheme.light_grey, width: 2.0),
+                        side: new BorderSide(
+                            color: MyTheme.light_grey, width: 2.0),
                         borderRadius: BorderRadius.circular(4.0),
                       ),
                       child: Text(
-                        AppLocalizations.of(context).common_clear_in_all_capital,
+                        AppLocalizations.of(context)
+                            .common_clear_in_all_capital,
                         style: TextStyle(color: Colors.white),
                       ),
                       onPressed: () {
@@ -992,7 +1027,8 @@ class _FilterState extends State<Filter> {
                         if (min != "" && max != "") {
                           if (max.compareTo(min) < 0) {
                             ToastComponent.showDialog(
-                                AppLocalizations.of(context).filter_screen_min_max_warning,
+                                AppLocalizations.of(context)
+                                    .filter_screen_min_max_warning,
                                 context,
                                 gravity: Toast.CENTER,
                                 duration: Toast.LENGTH_LONG);
@@ -1140,7 +1176,9 @@ class _FilterState extends State<Filter> {
         ),
       );
     } else if (_totalProductData == 0) {
-      return Center(child: Text( AppLocalizations.of(context).common_no_product_is_available));
+      return Center(
+          child: Text(
+              AppLocalizations.of(context).common_no_product_is_available));
     } else {
       return Container(); // should never be happening
     }
@@ -1206,7 +1244,9 @@ class _FilterState extends State<Filter> {
         ),
       );
     } else if (_totalBrandData == 0) {
-      return Center(child: Text(AppLocalizations.of(context).common_no_brand_is_available));
+      return Center(
+          child:
+              Text(AppLocalizations.of(context).common_no_brand_is_available));
     } else {
       return Container(); // should never be happening
     }
@@ -1241,7 +1281,6 @@ class _FilterState extends State<Filter> {
               parent: AlwaysScrollableScrollPhysics()),
           child: Column(
             children: [
-
               SizedBox(
                   height:
                       MediaQuery.of(context).viewPadding.top > 40 ? 180 : 135
@@ -1254,8 +1293,8 @@ class _FilterState extends State<Filter> {
                 controller: _scrollController,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
-                    crossAxisSpacing: 0,
-                    mainAxisSpacing: 0,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
                     childAspectRatio: 1),
                 padding: EdgeInsets.all(8),
                 physics: NeverScrollableScrollPhysics(),
@@ -1282,7 +1321,9 @@ class _FilterState extends State<Filter> {
         ),
       );
     } else if (_totalShopData == 0) {
-      return Center(child: Text(AppLocalizations.of(context).common_no_shop_is_available));
+      return Center(
+          child:
+              Text(AppLocalizations.of(context).common_no_shop_is_available));
     } else {
       return Container(); // should never be happening
     }

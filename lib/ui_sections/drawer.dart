@@ -15,6 +15,7 @@ import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 import 'package:active_ecommerce_flutter/app_config.dart';
 import 'package:active_ecommerce_flutter/helpers/auth_helper.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class MainDrawer extends StatefulWidget {
   const MainDrawer({
@@ -48,16 +49,12 @@ class _MainDrawerState extends State<MainDrawer> {
   Widget build(BuildContext context) {
     return Drawer(
       child: Container(
-        decoration: BoxDecoration(
-            gradient: LinearGradient(colors: [
-          Colors.red[50].withOpacity(1),
-          Colors.green[50].withOpacity(1),
-        ], begin: Alignment.topCenter)),
+        decoration: BoxDecoration(color: Colors.green[100]),
         child: Directionality(
           textDirection:
               app_language_rtl.$ ? TextDirection.rtl : TextDirection.ltr,
           child: Container(
-            padding: EdgeInsets.only(top: 50),
+            // padding: EdgeInsets.only(top: 50),
             child: SingleChildScrollView(
               child: Column(
                 children: <Widget>[
@@ -85,71 +82,106 @@ class _MainDrawerState extends State<MainDrawer> {
                       //         color: Color.fromRGBO(153, 153, 153, 1),
                       //         fontSize: 14)
                       // ),
-                      Card(
-                          elevation: 10,
-                          shadowColor: Colors.black,
-                          shape: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide:
-                                  BorderSide(color: Colors.red[50], width: .5)),
-                          child: Row(
+
+                      Container(
+                          height: 140,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10)),
+                            gradient: LinearGradient(
+                                colors: [
+                                  // Color(0xff0fc744),
+                                  // Color(0xff3fcad2)
+                                  // Color.fromRGBO(206, 35, 43, 2),
+                                  // Color.fromRGBO(237, 101, 85, 1),
+                                  Colors.red[100],
+                                  Colors.green[100]
+                                ],
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter),
+                          ),
+                          child: Column(
                             children: [
                               Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 16.0, bottom: 8.0, left: 20),
-                                child: Container(
-                                  width: 80,
-                                  height: 80,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(100),
-                                    border: Border.all(
-                                        color:
-                                            Color.fromRGBO(112, 112, 112, .3),
-                                        width: 2),
-                                    //shape: BoxShape.rectangle,
-                                  ),
-                                  child: ClipRRect(
-                                      clipBehavior: Clip.hardEdge,
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(100.0)),
-                                      child: FadeInImage.assetNetwork(
-                                        placeholder: 'assets/placeholder.png',
-                                        image: AppConfig.BASE_PATH +
-                                            "${avatar_original.$}",
-                                        fit: BoxFit.fill,
-                                      )),
+                                padding: const EdgeInsets.only(top: 50),
+                                child: Row(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 16.0, bottom: 8.0, left: 15),
+                                      child: Container(
+                                        width: 60,
+                                        height: 60,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(100),
+                                          border: Border.all(
+                                              color: Color.fromRGBO(
+                                                  112, 112, 112, .3),
+                                              width: 2),
+                                          //shape: BoxShape.rectangle,
+                                        ),
+                                        child: ClipRRect(
+                                            clipBehavior: Clip.hardEdge,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(100.0)),
+                                            child: FadeInImage.assetNetwork(
+                                              placeholder:
+                                                  'assets/placeholder.png',
+                                              image: AppConfig.BASE_PATH +
+                                                  "${avatar_original.$}",
+                                              fit: BoxFit.fill,
+                                            )),
+                                      ),
+                                    ),
+                                    Column(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              top: 8.0, left: 10),
+                                          child: Text(
+                                            "${user_name.$}",
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color: MyTheme.font_grey,
+                                                fontWeight: FontWeight.w600),
+                                          ),
+                                        ),
+                                        Padding(
+                                            padding: const EdgeInsets.only(
+                                                top: 4.0, left: 10),
+                                            child: Text(
+                                              //if user email is not available then check user phone if user phone is not available use empty string
+                                              "${user_email.$ != "" && user_email.$ != null ? user_email.$ : user_phone.$ != "" && user_phone.$ != null ? user_phone.$ : ''}",
+                                              style: TextStyle(
+                                                color: MyTheme.medium_grey,
+                                              ),
+                                            )),
+                                      ],
+                                    )
+                                  ],
                                 ),
                               ),
-                              Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 8.0, left: 10),
-                                    child: Text(
-                                      "${user_name.$}",
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          color: MyTheme.font_grey,
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                  ),
-                                  Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: 4.0, left: 10),
-                                      child: Text(
-                                        //if user email is not available then check user phone if user phone is not available use empty string
-                                        "${user_email.$ != "" && user_email.$ != null ? user_email.$ : user_phone.$ != "" && user_phone.$ != null ? user_phone.$ : ''}",
-                                        style: TextStyle(
-                                          color: MyTheme.medium_grey,
-                                        ),
-                                      )),
-                                ],
-                              )
                             ],
                           ),
                         )
-                      : Container(),
-                  Divider(),
+                      : Padding(
+                          padding: const EdgeInsets.only(top: 70),
+                          child: Text(
+                              AppLocalizations.of(context)
+                                  .main_drawer_not_logged_in,
+                              style: TextStyle(
+                                  color: Colors.red,
+
+                                  //color: Color.fromRGBO(153, 153, 153, 1),
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600)),
+                        ),
+                  // Divider(
+                  //   height: 5,
+                  //   color: Colors.red,
+                  // ),
                   ListTile(
                       visualDensity:
                           VisualDensity(horizontal: -4, vertical: -4),
@@ -167,7 +199,7 @@ class _MainDrawerState extends State<MainDrawer> {
                               color: Colors.black,
 
                               // color: Color.fromRGBO(153, 153, 153, 1),
-                              fontSize: 17,
+                              fontSize: 14,
                               fontWeight: FontWeight.w600)),
                       onTap: () {
                         Navigator.push(context,
@@ -188,7 +220,7 @@ class _MainDrawerState extends State<MainDrawer> {
                           style: TextStyle(
                               color: Colors.black,
                               //color: Color.fromRGBO(153, 153, 153, 1),
-                              fontSize: 17,
+                              fontSize: 14,
                               fontWeight: FontWeight.w600)),
                       onTap: () {
                         Navigator.push(context,
@@ -212,7 +244,7 @@ class _MainDrawerState extends State<MainDrawer> {
                               style: TextStyle(
                                   color: Colors.black,
                                   //color: Color.fromRGBO(153, 153, 153, 1),
-                                  fontSize: 17,
+                                  fontSize: 14,
                                   fontWeight: FontWeight.w600)),
                           onTap: () {
                             Navigator.push(context,
@@ -236,7 +268,7 @@ class _MainDrawerState extends State<MainDrawer> {
                               style: TextStyle(
                                   color: Colors.black,
                                   //color: Color.fromRGBO(153, 153, 153, 1),
-                                  fontSize: 17,
+                                  fontSize: 14,
                                   fontWeight: FontWeight.w600)),
                           onTap: () {
                             Navigator.push(context,
@@ -261,7 +293,7 @@ class _MainDrawerState extends State<MainDrawer> {
                               style: TextStyle(
                                   color: Colors.black,
                                   // color: Color.fromRGBO(153, 153, 153, 1),
-                                  fontSize: 17,
+                                  fontSize: 14,
                                   fontWeight: FontWeight.w600)),
                           onTap: () {
                             Navigator.push(context,
@@ -285,7 +317,7 @@ class _MainDrawerState extends State<MainDrawer> {
                               style: TextStyle(
                                   color: Colors.black,
                                   //color: Color.fromRGBO(153, 153, 153, 1),
-                                  fontSize: 17,
+                                  fontSize: 14,
                                   fontWeight: FontWeight.w600)),
                           onTap: () {
                             Navigator.push(context,
@@ -309,7 +341,7 @@ class _MainDrawerState extends State<MainDrawer> {
                               style: TextStyle(
                                   color: Colors.black,
                                   //color: Color.fromRGBO(153, 153, 153, 1),
-                                  fontSize: 17,
+                                  fontSize: 14,
                                   fontWeight: FontWeight.w600)),
                           onTap: () {
                             Navigator.push(context,
@@ -318,7 +350,119 @@ class _MainDrawerState extends State<MainDrawer> {
                             }));
                           })
                       : Container(),
-                  Divider(height: 24),
+                  Divider(height: 5,color: Colors.cyan,),
+                  ListTile(
+                      visualDensity:
+                          VisualDensity(horizontal: -4, vertical: -4),
+                      leading: Icon(Icons.privacy_tip)
+                      // Image.asset(
+                      //   "assets/wallet.png",
+                      //   height: 18,
+                      //   //  color: Color.fromRGBO(153, 153, 153, 1),
+                      //   color: Colors.brown,
+                      // )
+                      ,
+                      title: Text(
+                          // AppLocalizations.of(context).main_drawer_wallet,
+                          'Privacy Policy',
+                          style: TextStyle(
+                              color: Colors.black,
+                              //color: Color.fromRGBO(153, 153, 153, 1),
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600)),
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return Wallet();
+                        }));
+                      }),
+                  ListTile(
+                      visualDensity:
+                          VisualDensity(horizontal: -4, vertical: -4),
+                      leading: Image.asset(
+                        "assets/product-return.png",
+                        height: 22,
+                        //  color: Color.fromRGBO(153, 153, 153, 1),
+                        color: Colors.brown,
+                      ),
+                      title: Text(
+                          // AppLocalizations.of(context).main_drawer_wallet,
+                          'Return Policy',
+                          style: TextStyle(
+                              color: Colors.black,
+                              //color: Color.fromRGBO(153, 153, 153, 1),
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600)),
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return WebView(
+                              initialUrl: 'https://bongobaba.com/return-policy',
+                              javascriptMode: JavascriptMode.unrestricted,
+                            );
+
+                        }));
+                      }),
+                  ListTile(
+                      visualDensity:
+                          VisualDensity(horizontal: -4, vertical: -4),
+                      leading: Image.asset(
+                        "assets/condition.png",
+                        height: 22,
+                        //  color: Color.fromRGBO(153, 153, 153, 1),
+                        color: Colors.brown,
+                      ),
+                      title: Text(
+                          // AppLocalizations.of(context).main_drawer_wallet,
+                          'Terms & Condition',
+                          style: TextStyle(
+                              color: Colors.black,
+                              //color: Color.fromRGBO(153, 153, 153, 1),
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600)),
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                       return WebView(
+                              initialUrl: 'https://bongobaba.com/terms',
+                              javascriptMode: JavascriptMode.unrestricted,
+                            );
+                        }));
+                      }),
+                  ListTile(
+                      visualDensity:
+                          VisualDensity(horizontal: -4, vertical: -4),
+                      leading: Icon(
+                        Icons.support_agent,
+                        color: Colors.green,
+                      )
+
+                      // Image.asset(
+                      //   "assets/wallet.png",
+                      //   height: 18,
+                      //   //  color: Color.fromRGBO(153, 153, 153, 1),
+                      //   color: Colors.brown,
+                      // )
+                      ,
+                      title: Text(
+                          // AppLocalizations.of(context).main_drawer_wallet,
+                          'Support Policy',
+                          style: TextStyle(
+                              color: Colors.black,
+                              //color: Color.fromRGBO(153, 153, 153, 1),
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600)),
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                         return WebView(
+                              initialUrl:
+                                  'https://bongobaba.com/support-policy',
+                              javascriptMode: JavascriptMode.unrestricted,
+                            );
+                        }));
+                      }),
+                  // Divider(height: 24),
                   is_logged_in.$ == false
                       ? ListTile(
                           visualDensity:
@@ -333,8 +477,8 @@ class _MainDrawerState extends State<MainDrawer> {
                               AppLocalizations.of(context).main_drawer_login,
                               style: TextStyle(
                                   // color: Color.fromRGBO(153, 153, 153, 1),
-                                  color: Colors.black,
-                                  fontSize: 17,
+                                  color: Colors.green,
+                                  fontSize: 18,
                                   fontWeight: FontWeight.w600)),
                           onTap: () {
                             Navigator.push(context,
@@ -357,8 +501,8 @@ class _MainDrawerState extends State<MainDrawer> {
                               AppLocalizations.of(context).main_drawer_logout,
                               style: TextStyle(
 //color: Color.fromRGBO(153, 153, 153, 1),
-                                  color: Colors.black,
-                                  fontSize: 17,
+                                  color: Colors.red,
+                                  fontSize: 18,
                                   fontWeight: FontWeight.w600)),
                           onTap: () {
                             onTapLogout(context);

@@ -19,8 +19,10 @@ class PasswordForget extends StatefulWidget {
 
 class _PasswordForgetState extends State<PasswordForget> {
   String _send_code_by = "email"; //phone or email
-  String initialCountry = 'US';
-  PhoneNumber phoneCode = PhoneNumber(isoCode: 'US');
+  // String initialCountry = 'US';
+  // PhoneNumber phoneCode = PhoneNumber(isoCode: 'US');
+  String initialCountry = 'BD';
+  PhoneNumber phoneCode = PhoneNumber(isoCode: 'BD');
   String _phone = "";
 
   //controllers
@@ -84,11 +86,11 @@ class _PasswordForgetState extends State<PasswordForget> {
         backgroundColor: Colors.white,
         body: Stack(
           children: [
-            Container(
-              width: _screen_width * (3 / 4),
-              child: Image.asset(
-                  "assets/splash_login_registration_background_image.png"),
-            ),
+            // Container(
+            //   width: _screen_width * (3 / 4),
+            //   child: Image.asset(
+            //       "assets/splash_login_registration_background_image.png"),
+            // ),
             Container(
               width: double.infinity,
               child: SingleChildScrollView(
@@ -141,7 +143,7 @@ class _PasswordForgetState extends State<PasswordForget> {
                                     autofocus: false,
                                     decoration:
                                         InputDecorations.buildInputDecoration_1(
-                                            hint_text: "johndoe@example.com"),
+                                            hint_text: "bongobaba@example.com"),
                                   ),
                                 ),
                                 otp_addon_installed.$

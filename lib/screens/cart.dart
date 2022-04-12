@@ -499,7 +499,7 @@ backgroundColor: Colors.white,
       ),
       title: Text(
         AppLocalizations.of(context).cart_screen_shopping_cart,
-        style: TextStyle(fontSize: 16, color: MyTheme.white),
+        style: TextStyle(fontSize: 20, color: MyTheme.white),
       ),
       elevation: 0.0,
       titleSpacing: 0,

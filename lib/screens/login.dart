@@ -326,7 +326,7 @@ class _LoginState extends State<Login> {
                                     autofocus: false,
                                     decoration:
                                         InputDecorations.buildInputDecoration_1(
-                                            hint_text: "johndoe@example.com"),
+                                            hint_text: "bongobaba@example.com"),
                                   ),
                                 ),
                                 otp_addon_installed.$
@@ -435,7 +435,7 @@ class _LoginState extends State<Login> {
                                        child: Icon(password?Icons.visibility:Icons.visibility_off), ),
                                         
                                         
-                                          hint_text: "• • • • • • • •",
+                                          hint_text: "* * * * * *",
                                           ),
                                 ),
                               ),

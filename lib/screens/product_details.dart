@@ -1945,10 +1945,21 @@ class _ProductDetailsState extends State<ProductDetails> {
 
   AppBar buildAppBar(double statusBarHeight, BuildContext context) {
     return AppBar(
+
+      toolbarHeight: 75,
       backgroundColor: Colors.white,
+      flexibleSpace: Container(
+        decoration: BoxDecoration(
+            gradient: LinearGradient(colors: [
+          // Color(0xff0fc744),
+          // Color(0xff3fcad2)
+          Color.fromRGBO(206, 35, 43, 1),
+          Color.fromRGBO(237, 101, 85, 1),
+        ],),borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20),bottomRight: Radius.circular(20))),
+      ),
       leading: Builder(
         builder: (context) => IconButton(
-          icon: Icon(Icons.arrow_back, color: MyTheme.dark_grey),
+          icon: Icon(Icons.arrow_back, color: MyTheme.white),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
@@ -1963,7 +1974,7 @@ class _ProductDetailsState extends State<ProductDetails> {
               padding: const EdgeInsets.only(top: 22.0),
               child: Text(
                 _appbarPriceString,
-                style: TextStyle(fontSize: 16, color: MyTheme.font_grey),
+                style: TextStyle(fontSize: 20, color: MyTheme.white),
               ),
             )),
       ),
@@ -1973,7 +1984,7 @@ class _ProductDetailsState extends State<ProductDetails> {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
           child: IconButton(
-            icon: Icon(Icons.share_outlined, color: MyTheme.dark_grey),
+            icon: Icon(Icons.share_outlined, color: MyTheme.white),
             onPressed: () {
               onPressShare(context);
             },

@@ -173,7 +173,7 @@ class _RegistrationState extends State<Registration> {
                               controller: _nameController,
                               autofocus: false,
                               decoration: InputDecorations.buildInputDecoration_1(
-                                  hint_text: "John Doe"),
+                                  hint_text: "Enter Your Name"),
                             ),
                           ),
                         ),
@@ -199,7 +199,7 @@ class _RegistrationState extends State<Registration> {
                                     autofocus: false,
                                     decoration:
                                         InputDecorations.buildInputDecoration_1(
-                                            hint_text: "johndoe@example.com"),
+                                            hint_text: "bongobaba@example.com"),
                                   ),
                                 ),
                                 otp_addon_installed.$
@@ -304,7 +304,7 @@ class _RegistrationState extends State<Registration> {
                                          prefixicon:InkWell(
                                           onTap: showpassword,
                                        child: Icon(password?Icons.visibility:Icons.visibility_off), ),
-                                          hint_text: "• • • • • • • •"),
+                                          hint_text: "* * * * * *"),
                                 ),
                               ),
                               Text(
