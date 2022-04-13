@@ -128,7 +128,7 @@ class _CategoryProductsState extends State<CategoryProducts> {
               // Color.fromRGBO(70, 183, 121, 1),
               Color.fromRGBO(206, 35, 43, 1),
               Color.fromRGBO(237, 101, 85, 1),
-            ])),
+            ], begin: Alignment.topCenter,end:Alignment.bottomCenter)),
       ),
       // backgroundColor: MyTheme.blue_color,
       // toolbarHeight: 75,

@@ -46,11 +46,12 @@ class _MiniProductCardState extends State<MiniProductCard> {
             children: <Widget>[
               Expanded(
                 child: Container(
+                  padding: EdgeInsets.all(8),
                     width: double.infinity,
                     //height: (MediaQuery.of(context).size.width - 36) / 3.5,
                     height: (MediaQuery.of(context).size.width - 36) / 3.8,
                     // height: 200,
-
+                    
                     child: ClipRRect(
                         borderRadius: BorderRadius.vertical(
                             top: Radius.circular(10), bottom: Radius.zero),
@@ -64,7 +65,7 @@ class _MiniProductCardState extends State<MiniProductCard> {
               Column(crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: EdgeInsets.fromLTRB(3, 4, 8, 0),
+                    padding: EdgeInsets.all(8),
                     child: Text(
                       widget.name,
                       overflow: TextOverflow.ellipsis,

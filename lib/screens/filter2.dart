@@ -388,7 +388,7 @@ class _FilterState2 extends State<Filter2> {
       child: Scaffold(
         endDrawer: buildFilterDrawer(),
         key: _scaffoldKey,
-        backgroundColor: Colors.white,
+         backgroundColor: Color(0xffeafbf0),
         body: Stack(overflow: Overflow.visible, children: [
           _selectedFilter.option_key == 'product'
               ? buildProductList()
@@ -428,7 +428,7 @@ class _FilterState2 extends State<Filter2> {
                 // Color(0xff3fcad2)
                 Color.fromRGBO(206, 35, 43, 1),
                 Color.fromRGBO(237, 101, 85, 1),
-              ]),
+              ], begin: Alignment.topCenter,end:Alignment.bottomCenter),
               borderRadius: BorderRadius.horizontal(
                   left: Radius.circular(20), right: Radius.circular(20))),
           child: Padding(
@@ -1154,10 +1154,10 @@ class _FilterState2 extends State<Filter2> {
                 controller: _scrollController,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
+                    crossAxisSpacing: 0,
+                    mainAxisSpacing: 0,
                     childAspectRatio: 0.618),
-                padding: EdgeInsets.all(16),
+                padding: EdgeInsets.all(5),
                 physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
@@ -1224,10 +1224,10 @@ class _FilterState2 extends State<Filter2> {
                 controller: _scrollController,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
-                    crossAxisSpacing: 10,
+                    crossAxisSpacing: 0,
                     mainAxisSpacing: 10,
-                    childAspectRatio: 1),
-                padding: EdgeInsets.all(8),
+                    childAspectRatio:  1),
+                padding: EdgeInsets.all(5),
                 physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemBuilder: (context, index) {

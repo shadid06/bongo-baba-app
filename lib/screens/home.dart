@@ -280,7 +280,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                   AppLocalizations.of(context)
                                       .home_screen_featured_categories,
                                   style: TextStyle(
-                                    fontSize: 19,
+                                    fontSize: 16,
                                   ),
                                 ),
                               ],
@@ -317,7 +317,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                 Text(
                                   AppLocalizations.of(context)
                                       .home_screen_featured_products,
-                                  style: TextStyle(fontSize: 19),
+                                  style: TextStyle(fontSize: 16),
                                 ),
                               ],
                             ),
@@ -440,7 +440,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                     side: new BorderSide(color: MyTheme.light_grey, width: 1.0),
                     borderRadius: BorderRadius.circular(16.0),
                   ),
-                  elevation: 3.0,
+                  elevation: 0.0,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
@@ -456,7 +456,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                 image: AppConfig.BASE_PATH +
                                     _featuredCategoryList[index].banner,
                                 fit: BoxFit.contain,
-
                               ))),
                       Expanded(
                         child: Padding(
@@ -497,7 +496,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   }
 
   buildHomeMenuRow(BuildContext context) {
-    return Container(height: 100,
+    return Container(
+      height: 100,
       //color:MyTheme. blue_color,
       //color:Colors.green[900],
       decoration: BoxDecoration(
@@ -506,14 +506,15 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           // Color(0xff3fcad2),
           // Color(0xff0fc744),
           // Color.fromRGBO(206, 35, 43, 1),
-          // Color.fromRGBO(206, 35, 43, 1),
-          // Color.fromRGBO(237, 101, 85, 1),
+          Color.fromRGBO(237, 101, 85, 1),
+          Color.fromRGBO(206, 35, 43, 1),
+          
           //  Color.fromRGBO(237, 101, 85, 1),
-          Color.fromRGBO(0, 145, 76, 1),
-          Color.fromRGBO(0, 145, 76, 1),
+          // Color.fromRGBO(0, 145, 76, 1),
+          // Color.fromRGBO(0, 145, 76, 1),
           // Color.fromRGBO(70, 183, 121, 1),
           // Color.fromRGBO(70, 183, 121, 1),
-        ],
+        ], begin: Alignment.topCenter,end:Alignment.bottomCenter ,
       )),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -731,24 +732,24 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       );
     } else if (_carouselImageList.length > 0) {
       return Container(
-        height: 150,
+        height: 140,
+        width: MediaQuery.of(context).size.width,
         padding:
             const EdgeInsets.only(left: 0.0, right: 0.0, top: 0, bottom: 0),
         //color: Color(0xffeafbf0),
-        color: Colors.green[200],
+        color: Colors.white,
         child: CarouselSlider(
-          options: CarouselOptions(height: 150,
-              
-              viewportFraction: 1.2,
+          options: CarouselOptions(
+              height: 150,
+              viewportFraction: 1,
               initialPage: 0,
               enableInfiniteScroll: true,
               reverse: false,
               autoPlay: true,
-              
               autoPlayInterval: Duration(seconds: 5),
               autoPlayAnimationDuration: Duration(milliseconds: 1000),
-              autoPlayCurve: Curves.easeInCubic,
-              enlargeCenterPage: true,
+              autoPlayCurve: Curves.easeInOut,
+              enlargeCenterPage: false,
               scrollDirection: Axis.horizontal,
               onPageChanged: (index, reason) {
                 setState(() {
@@ -761,40 +762,44 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                 return Stack(
                   children: <Widget>[
                     Container(
-                      height: 150,
+                        height: 300,
                         width: double.infinity,
                         // margin: EdgeInsets.symmetric(horizontal: 10.0,vertical: 0),
 
                         child: FadeInImage.assetNetwork(
-                          placeholder:
-                              'assets/placeholder_rectangle.png',
+                          placeholder: 'assets/placeholder_rectangle.png',
                           image: AppConfig.BASE_PATH + i,
-                          // fit: BoxFit.contain,
-                          // height: double.infinity,
-                          width:double.infinity ,
+                          fit: BoxFit.fitHeight,
+                          height: double.infinity,
+                          width: double.infinity,
                         )),
-                    // Align(
-                    //   alignment: Alignment.bottomCenter,
-                    //   child: Row(
-                    //     mainAxisAlignment: MainAxisAlignment.center,
-                    //     children: _carouselImageList.map((url) {
-                    //       int index = _carouselImageList.indexOf(url);
-                    //       return Container(
-                    //         width: 7.0,
-                    //         height: 7.0,
-                    //         margin: EdgeInsets.symmetric(
-                    //             vertical: 10.0, horizontal: 4.0),
-                    //         decoration: BoxDecoration(
-                    //           shape: BoxShape.circle,
-                    //           color: _current_slider == index
-                    //               ? MyTheme.white
-                    //               : Color.fromRGBO(112, 112, 112, .3),
-                    //         ),
-                    //       );
-                    //     }).toList(),
-                    //   ),
-                    // ),
-                  ],
+
+
+                   Positioned(
+                     
+                     child: 
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: _carouselImageList.map((url) {
+                          int index = _carouselImageList.indexOf(url);
+                          return Container(
+                            width: 10.0,
+                            height: 10.0,
+                            margin: EdgeInsets.symmetric(
+                                vertical: 10.0, horizontal: 4.0),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: _current_slider == index
+                                  ? MyTheme.red_color
+                                  : Color.fromRGBO(112, 112, 112, .3),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                    ) ],
                 );
               },
             );
@@ -827,7 +832,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           // Color(0xff3fcad2)
           Color.fromRGBO(206, 35, 43, 1),
           Color.fromRGBO(237, 101, 85, 1),
-        ])),
+        ],
+        begin: Alignment.topCenter,end:Alignment.bottomCenter ),),
       ),
       //backgroundColor:   Colors.green[900],
       leading: GestureDetector(

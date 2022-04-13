@@ -474,7 +474,7 @@ backgroundColor: Colors.white,
               // Color(0xff3fcad2)
               Color.fromRGBO(206, 35, 43, 1),
               Color.fromRGBO(237, 101, 85, 1),
-            ]),
+            ], begin: Alignment.topCenter,end:Alignment.bottomCenter),
             borderRadius: BorderRadius.horizontal(
                 left: Radius.circular(20), right: Radius.circular(20))),
       ),

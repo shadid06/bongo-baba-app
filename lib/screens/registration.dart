@@ -118,7 +118,7 @@ class _RegistrationState extends State<Registration> {
     return Directionality(
       textDirection: app_language_rtl.$ ? TextDirection.rtl : TextDirection.ltr,
       child: Scaffold(
-            backgroundColor: Color(0xffeafbf0),
+            backgroundColor: MyTheme.white,
         body: Stack(
           children: [
             // Container(

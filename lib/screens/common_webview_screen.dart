@@ -1,7 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:active_ecommerce_flutter/my_theme.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
+
+
 
 
 class CommonWebviewScreen extends StatefulWidget {
@@ -17,11 +22,15 @@ class CommonWebviewScreen extends StatefulWidget {
 
 class _CommonWebviewScreenState extends State<CommonWebviewScreen> {
   WebViewController _webViewController;
+  bool isLoading=true;
+  final Completer< WebViewController> _controller=Completer< WebViewController>();
+  
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    WebView.platform=AndroidWebView();
   }
 
   @override
@@ -38,7 +47,8 @@ class _CommonWebviewScreenState extends State<CommonWebviewScreen> {
 
   buildBody() {
     return SizedBox.expand(
-      child: Container(
+      child: ModalProgressHUD(
+        inAsyncCall:isLoading ,
         child: WebView(
           debuggingEnabled: false,
           javascriptMode: JavascriptMode.unrestricted,
@@ -49,6 +59,9 @@ class _CommonWebviewScreenState extends State<CommonWebviewScreen> {
           onWebResourceError: (error) {},
           onPageFinished: (page) {
             //print(page.toString());
+            setState(() {
+              isLoading=false;
+            });
           },
         ),
       ),

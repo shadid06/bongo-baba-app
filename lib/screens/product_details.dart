@@ -750,7 +750,7 @@ class _ProductDetailsState extends State<ProductDetails> {
         style: TextStyle(color: MyTheme.font_grey),
       ),
       backgroundColor: MyTheme.soft_accent_color,
-      duration: const Duration(seconds: 3),
+      duration: const Duration(seconds: 10),
       action: SnackBarAction(
         label: AppLocalizations.of(context)
             .product_details_screen_snackbar_show_cart,

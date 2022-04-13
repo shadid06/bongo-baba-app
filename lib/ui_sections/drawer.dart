@@ -1,5 +1,6 @@
 import 'package:active_ecommerce_flutter/my_theme.dart';
 import 'package:active_ecommerce_flutter/screens/change_language.dart';
+import 'package:active_ecommerce_flutter/screens/common_webview_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -396,9 +397,9 @@ class _MainDrawerState extends State<MainDrawer> {
                       onTap: () {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
-                          return WebView(
-                              initialUrl: 'https://bongobaba.com/return-policy',
-                              javascriptMode: JavascriptMode.unrestricted,
+                          return CommonWebviewScreen(
+                              url: 'https://bongobaba.com/return-policy',
+                             
                             );
 
                         }));
@@ -423,9 +424,9 @@ class _MainDrawerState extends State<MainDrawer> {
                       onTap: () {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
-                       return WebView(
-                              initialUrl: 'https://bongobaba.com/terms',
-                              javascriptMode: JavascriptMode.unrestricted,
+                       return CommonWebviewScreen(
+                              url: 'https://bongobaba.com/terms',
+                            
                             );
                         }));
                       }),
@@ -455,10 +456,10 @@ class _MainDrawerState extends State<MainDrawer> {
                       onTap: () {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
-                         return WebView(
-                              initialUrl:
+                         return CommonWebviewScreen(
+                              url:
                                   'https://bongobaba.com/support-policy',
-                              javascriptMode: JavascriptMode.unrestricted,
+                              
                             );
                         }));
                       }),

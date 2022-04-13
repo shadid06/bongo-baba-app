@@ -24,6 +24,7 @@ if (flutterVersionName == null) {
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
+//apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.gms.google-services'
 
 //def keystoreProperties = new Properties()
@@ -82,7 +83,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:20.1.0'
     implementation 'com.android.support:multidex:1.0.3'
     // Import the Firebase BoM
-    implementation platform('com.google.firebase:firebase-bom:28.0.1')
+    //implementation platform('com.google.firebase:firebase-bom:28.0.1')
+    implementation platform('com.google.firebase:firebase-bom:29.3.0')
     implementation("com.google.firebase:firebase-iid")
 
     // When using the BoM, you don't specify versions in Firebase library dependencies
@@ -94,5 +96,6 @@ dependencies {
     // For example, declare the dependencies for Firebase Authentication and Cloud Firestore
     implementation 'com.google.firebase:firebase-auth-ktx'
     implementation 'com.google.firebase:firebase-firestore-ktx'
+ 
 
 }

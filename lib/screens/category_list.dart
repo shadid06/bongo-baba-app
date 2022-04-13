@@ -77,7 +77,7 @@ class _CategoryListState extends State<CategoryList> {
               // Color(0xff3fcad2)
               Color.fromRGBO(206, 35, 43, 1),
               Color.fromRGBO(237, 101, 85, 1),
-            ]),
+            ], begin: Alignment.topCenter,end:Alignment.bottomCenter),
             borderRadius: BorderRadius.horizontal(
                 left: Radius.circular(20), right: Radius.circular(20))),
       ),
@@ -232,7 +232,7 @@ class _CategoryListState extends State<CategoryList> {
         side: new BorderSide(color: MyTheme.light_grey, width: 1.0),
         borderRadius: BorderRadius.circular(10.0),
       ),
-      elevation: 3.0,
+      elevation: 0.0,
       child: Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
         Container(
             width: 80,
