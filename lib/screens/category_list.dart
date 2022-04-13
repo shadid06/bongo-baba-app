@@ -229,7 +229,7 @@ class _CategoryListState extends State<CategoryList> {
   Card buildCategoryItemCard(categoryResponse, index) {
     return Card(
       shape: RoundedRectangleBorder(
-        side: new BorderSide(color: MyTheme.light_grey, width: 1.0),
+        side: new BorderSide(color: MyTheme.light_grey, width: 0.0),
         borderRadius: BorderRadius.circular(10.0),
       ),
       elevation: 0.0,

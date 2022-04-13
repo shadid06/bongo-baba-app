@@ -279,9 +279,16 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                 Text(
                                   AppLocalizations.of(context)
                                       .home_screen_featured_categories,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                  ),
+                                         style: TextStyle(fontSize: 16),
+                                  //                      style: TextStyle(
+                                  // fontSize: 16,
+                                  // color: Colors.transparent,
+
+                                  // shadows: [Shadow(offset: Offset(0, -6), color: Colors.black)],
+                                  // decoration: TextDecoration.underline,
+                                  // decorationStyle: TextDecorationStyle.solid,
+                                  // decorationColor: Colors.red,
+                                  // decorationThickness: 4),
                                 ),
                               ],
                             ),
@@ -437,7 +444,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                 child: Card(
                   clipBehavior: Clip.antiAliasWithSaveLayer,
                   shape: RoundedRectangleBorder(
-                    side: new BorderSide(color: MyTheme.light_grey, width: 1.0),
+                    side: new BorderSide(color: MyTheme.light_grey, width: 0.0),
                     borderRadius: BorderRadius.circular(16.0),
                   ),
                   elevation: 0.0,
@@ -468,7 +475,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                               overflow: TextOverflow.ellipsis,
                               maxLines: 2,
                               style: TextStyle(
-                                  fontSize: 13, color: MyTheme.font_grey),
+                                  fontSize: 13, color: MyTheme.black_color,fontWeight: FontWeight.w400),
                             ),
                           ),
                         ),
@@ -508,13 +515,15 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           // Color.fromRGBO(206, 35, 43, 1),
           Color.fromRGBO(237, 101, 85, 1),
           Color.fromRGBO(206, 35, 43, 1),
-          
+
           //  Color.fromRGBO(237, 101, 85, 1),
           // Color.fromRGBO(0, 145, 76, 1),
           // Color.fromRGBO(0, 145, 76, 1),
           // Color.fromRGBO(70, 183, 121, 1),
           // Color.fromRGBO(70, 183, 121, 1),
-        ], begin: Alignment.topCenter,end:Alignment.bottomCenter ,
+        ],
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
       )),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -773,33 +782,30 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           height: double.infinity,
                           width: double.infinity,
                         )),
-
-
-                   Positioned(
-                     
-                     child: 
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: _carouselImageList.map((url) {
-                          int index = _carouselImageList.indexOf(url);
-                          return Container(
-                            width: 10.0,
-                            height: 10.0,
-                            margin: EdgeInsets.symmetric(
-                                vertical: 10.0, horizontal: 4.0),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: _current_slider == index
-                                  ? MyTheme.red_color
-                                  : Color.fromRGBO(112, 112, 112, .3),
-                            ),
-                          );
-                        }).toList(),
+                    Positioned(
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: _carouselImageList.map((url) {
+                            int index = _carouselImageList.indexOf(url);
+                            return Container(
+                              width: 10.0,
+                              height: 10.0,
+                              margin: EdgeInsets.symmetric(
+                                  vertical: 10.0, horizontal: 4.0),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: _current_slider == index
+                                    ? MyTheme.red_color
+                                    : Color.fromRGBO(112, 112, 112, .3),
+                              ),
+                            );
+                          }).toList(),
+                        ),
                       ),
-                    ),
-                    ) ],
+                    )
+                  ],
                 );
               },
             );
@@ -827,13 +833,13 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       backgroundColor: MyTheme.blue_color,
       flexibleSpace: Container(
         decoration: BoxDecoration(
-            gradient: LinearGradient(colors: [
-          // Color(0xff0fc744),
-          // Color(0xff3fcad2)
-          Color.fromRGBO(206, 35, 43, 1),
-          Color.fromRGBO(237, 101, 85, 1),
-        ],
-        begin: Alignment.topCenter,end:Alignment.bottomCenter ),),
+          gradient: LinearGradient(colors: [
+            // Color(0xff0fc744),
+            // Color(0xff3fcad2)
+            Color.fromRGBO(206, 35, 43, 1),
+            Color.fromRGBO(237, 101, 85, 1),
+          ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
+        ),
       ),
       //backgroundColor:   Colors.green[900],
       leading: GestureDetector(

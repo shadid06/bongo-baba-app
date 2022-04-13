@@ -30,10 +30,10 @@ class _ProductCardState extends State<ProductCard> {
       child: Card(semanticContainer: false,
          //clipBehavior: Clip.antiAliasWithSaveLayer,
         shape: RoundedRectangleBorder(
-          side: new BorderSide(color: MyTheme.light_grey, width: 1.0),
+          side: new BorderSide(color: MyTheme.light_grey, width: 0.0),
           borderRadius: BorderRadius.circular(10.0),
         ),
-        elevation: 1.0,
+        elevation: 0.0,
         child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,9 +65,9 @@ class _ProductCardState extends State<ProductCard> {
                         maxLines: 2,
                         style: TextStyle(
                             color: MyTheme.font_grey,
-                            fontSize: 14,
+                            fontSize: 13,
                             height: 1.2,
-                            fontWeight: FontWeight.w600),
+                            fontWeight: FontWeight.w400),
                       ),
                     ),
                     Padding(

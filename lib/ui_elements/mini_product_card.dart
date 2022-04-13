@@ -36,17 +36,17 @@ class _MiniProductCardState extends State<MiniProductCard> {
       },
       child: Card(
         shape: RoundedRectangleBorder(
-          side: new BorderSide(color: MyTheme.light_grey, width: 1.0),
+          side: new BorderSide(color: MyTheme.light_grey, width: 0.0),
           borderRadius: BorderRadius.circular(16.0),
         ),
-        elevation: 5.0,
+        elevation: 0.0,
         child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Expanded(
                 child: Container(
-                  padding: EdgeInsets.all(8),
+                  padding: EdgeInsets.all(5),
                     width: double.infinity,
                     //height: (MediaQuery.of(context).size.width - 36) / 3.5,
                     height: (MediaQuery.of(context).size.width - 36) / 3.8,
