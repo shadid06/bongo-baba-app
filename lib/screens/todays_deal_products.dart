@@ -6,7 +6,6 @@ import 'package:active_ecommerce_flutter/helpers/shimmer_helper.dart';
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
 class TodaysDealProducts extends StatefulWidget {
   @override
   _TodaysDealProductsState createState() => _TodaysDealProductsState();
@@ -29,17 +28,28 @@ class _TodaysDealProductsState extends State<TodaysDealProducts> {
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
+      flexibleSpace: Container(
+        decoration: BoxDecoration(
+            gradient: LinearGradient(colors: [
+              // Color(0xff0fc744),
+              // Color(0xff3fcad2)
+              Color.fromRGBO(206, 35, 43, 1),
+              Color.fromRGBO(237, 101, 85, 1),
+            ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
+            borderRadius: BorderRadius.horizontal(
+                left: Radius.circular(20), right: Radius.circular(20))),
+      ),
       backgroundColor: Colors.white,
       centerTitle: true,
       leading: Builder(
         builder: (context) => IconButton(
-          icon: Icon(Icons.arrow_back, color: MyTheme.dark_grey),
+          icon: Icon(Icons.arrow_back, color: MyTheme.white),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
       title: Text(
         AppLocalizations.of(context).todays_deal_products_screen_todays_deal,
-        style: TextStyle(fontSize: 16, color: MyTheme.accent_color),
+        style: TextStyle(fontSize: 20, color: MyTheme.white),
       ),
       elevation: 0.0,
       titleSpacing: 0,

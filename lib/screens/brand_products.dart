@@ -188,8 +188,8 @@ class _BrandProductsState extends State<BrandProducts> {
             controller: _scrollController,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
+                crossAxisSpacing: 0,
+                mainAxisSpacing: 0,
                 childAspectRatio: 0.618),
             padding: EdgeInsets.all(16),
             physics: NeverScrollableScrollPhysics(),

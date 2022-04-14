@@ -269,7 +269,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           Padding(
                             padding: const EdgeInsets.fromLTRB(
                               5.0,
-                              9.0,
+                              16.0,
                               5.0,
                               0.0,
                             ),
@@ -279,16 +279,37 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                 Text(
                                   AppLocalizations.of(context)
                                       .home_screen_featured_categories,
-                                         style: TextStyle(fontSize: 16),
-                                  //                      style: TextStyle(
-                                  // fontSize: 16,
-                                  // color: Colors.transparent,
-
-                                  // shadows: [Shadow(offset: Offset(0, -6), color: Colors.black)],
-                                  // decoration: TextDecoration.underline,
-                                  // decorationStyle: TextDecorationStyle.solid,
-                                  // decorationColor: Colors.red,
-                                  // decorationThickness: 4),
+                                  style: TextStyle(fontSize: 16),
+                                  //   style: TextStyle(
+                                  //       fontSize: 16,
+                                  //       color: Colors.transparent,
+                                  //       shadows: [
+                                  //         Shadow(
+                                  //             offset: Offset(0, -7),
+                                  //             color: Colors.black)
+                                  //       ],
+                                  //       decoration: TextDecoration.underline,
+                                  //       decorationStyle:
+                                  //           TextDecorationStyle.solid,
+                                  //       decorationColor: Colors.red[400],
+                                  //       decorationThickness: 3),
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Row(
+                                  children: [
+                                    Container(
+                                      height: 3,
+                                      width: 142,
+                                      color: Colors.red[300],
+                                    ),
+                                    Container(
+                                      height: 1,
+                                      width: 240,
+                                      color: MyTheme.dark_grey,
+                                    )
+                                  ],
                                 ),
                               ],
                             ),
@@ -314,7 +335,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           Padding(
                             padding: const EdgeInsets.fromLTRB(
                               5.0,
-                              9.0,
+                              16.0,
                               5.0,
                               0.0,
                             ),
@@ -325,6 +346,36 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                   AppLocalizations.of(context)
                                       .home_screen_featured_products,
                                   style: TextStyle(fontSize: 16),
+                                  // style: TextStyle(
+                                  //     fontSize: 16,
+                                  //     color: Colors.transparent,
+                                  //     shadows: [
+                                  //       Shadow(
+                                  //           offset: Offset(0, -7),
+                                  //           color: Colors.black)
+                                  //     ],
+                                  //     decoration: TextDecoration.underline,
+                                  //     decorationStyle:
+                                  //         TextDecorationStyle.solid,
+                                  //     decorationColor: Colors.red[400],
+                                  //     decorationThickness: 3),
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Row(
+                                  children: [
+                                    Container(
+                                      height: 3,
+                                      width: 130,
+                                      color: Colors.red[300],
+                                    ),
+                                    Container(
+                                      height: 1,
+                                      width: 252,
+                                      color: MyTheme.dark_grey,
+                                    )
+                                  ],
                                 ),
                               ],
                             ),
@@ -475,7 +526,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                               overflow: TextOverflow.ellipsis,
                               maxLines: 2,
                               style: TextStyle(
-                                  fontSize: 13, color: MyTheme.black_color,fontWeight: FontWeight.w400),
+                                  fontSize: 13,
+                                  color: MyTheme.black_color,
+                                  fontWeight: FontWeight.w400),
                             ),
                           ),
                         ),

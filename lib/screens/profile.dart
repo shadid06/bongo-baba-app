@@ -161,6 +161,8 @@ class _ProfileState extends State<Profile> {
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Divider(
                     height: 24,
+                    color: Colors.red,
+                   
                   ),
                 ),
                 buildHorizontalMenu(),
@@ -168,6 +170,8 @@ class _ProfileState extends State<Profile> {
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Divider(
                     height: 24,
+                    color: Colors.red,
+                 
                   ),
                 ),
                 buildVerticalMenu()
@@ -613,23 +617,23 @@ class _ProfileState extends State<Profile> {
         Padding(
           padding: const EdgeInsets.only(top: 16.0),
           child: Container(
-            height: 24,
+            height:30,
             child: FlatButton(
               color: Colors.green,
               // 	rgb(50,205,50)
               shape: RoundedRectangleBorder(
                   borderRadius: const BorderRadius.only(
-                topLeft: const Radius.circular(16.0),
-                bottomLeft: const Radius.circular(16.0),
-                topRight: const Radius.circular(16.0),
-                bottomRight: const Radius.circular(16.0),
+                topLeft: const Radius.circular(5.0),
+                bottomLeft: const Radius.circular(5.0),
+                topRight: const Radius.circular(5.0),
+                bottomRight: const Radius.circular(5.0),
               )),
               child: Text(
                 AppLocalizations.of(context).profile_screen_check_balance,
                 style: TextStyle(
                     color: Colors.white,
-                    fontSize: 11,
-                    fontWeight: FontWeight.w600),
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500),
               ),
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {

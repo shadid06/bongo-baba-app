@@ -13,7 +13,7 @@ class AppConfig {
   //configure this
   //static const DOMAIN_PATH = "192.168.31.29/bongobaba"; //localhost
   static const DOMAIN_PATH = "www.bongobaba.com"; //inside a folder
-  //static const DOMAIN_PATH = "mydomain.com"; // directly inside the public folder
+  //static const DOMAIN_PATH = "www.apcombd.com"; // directly inside the public folder
 
   //do not configure these below
   static const String API_ENDPATH = "api/v2";

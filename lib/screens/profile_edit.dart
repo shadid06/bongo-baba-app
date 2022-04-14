@@ -162,16 +162,25 @@ class _ProfileEditState extends State<ProfileEdit> {
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
 backgroundColor: Colors.white,
+flexibleSpace: Container(
+        decoration: BoxDecoration(
+            gradient: LinearGradient(colors: [
+          // Color(0xff0fc744),
+          // Color(0xff3fcad2)
+          Color.fromRGBO(206, 35, 43, 1),
+          Color.fromRGBO(237, 101, 85, 1),
+        ], begin: Alignment.topCenter,end:Alignment.bottomCenter),borderRadius: BorderRadius.horizontal(left: Radius.circular(20),right: Radius.circular(20))),
+      ),
       centerTitle: true,
       leading: Builder(
         builder: (context) => IconButton(
-          icon: Icon(Icons.arrow_back, color: MyTheme.dark_grey),
+          icon: Icon(Icons.arrow_back, color: MyTheme.white),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
       title: Text(
         AppLocalizations.of(context).profile_edit_screen_edit_profile,
-        style: TextStyle(fontSize: 16, color: MyTheme.accent_color),
+        style: TextStyle(fontSize: 20, color: MyTheme.white),
       ),
       elevation: 0.0,
       titleSpacing: 0,
@@ -383,6 +392,7 @@ backgroundColor: Colors.white,
                     child: FlatButton(
                       minWidth: MediaQuery.of(context).size.width,
                       //height: 50,
+
                       color: MyTheme.accent_color,
                       shape: RoundedRectangleBorder(
                           borderRadius:
@@ -391,7 +401,7 @@ backgroundColor: Colors.white,
                         AppLocalizations.of(context).profile_edit_screen_btn_update_profile,
                         style: TextStyle(
                             color: Colors.white,
-                            fontSize: 14,
+                            fontSize: 13,
                             fontWeight: FontWeight.w600),
                       ),
                       onPressed: () {

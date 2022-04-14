@@ -959,7 +959,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                             ),
                     ),
                     Divider(
-                      height: 24,
+                      height: 4,
                     ),
 
                     // ListView.separated(
@@ -1081,7 +1081,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                           8.0,
                           0.0,
                           8.0,
-                          8.0,
+                          0.0,
                         ),
                         child: _productDetails != null
                             ? buildExpandableShortDescription()
@@ -1104,7 +1104,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                               .product_details_screen_description,
                           style: TextStyle(
                               color: MyTheme.font_grey,
-                              fontSize: 18,
+                              fontSize: 16,
                               fontWeight: FontWeight.w600),
                         ),
                       ),
@@ -1227,9 +1227,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                         onTap: () {
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) {
-                            return WebView(
-                              initialUrl: 'https://bongobaba.com/terms',
-                              javascriptMode: JavascriptMode.unrestricted,
+                            return CommonWebviewScreen(
+                              url: 'https://bongobaba.com/privacy-policy-page',
+                             
                             );
 
                             // CommonWebviewScreen(
@@ -1254,7 +1254,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                 Text(
                                   // AppLocalizations.of(context)
                                   //     .product_details_screen_seller_policy,
-                                  'Terms & Conditions',
+                                  'privacy-policy',
                                   style: TextStyle(
                                       color: MyTheme.font_grey,
                                       fontSize: 14,
@@ -1273,14 +1273,13 @@ class _ProductDetailsState extends State<ProductDetails> {
                       ),
                       Divider(
                         height: 1,
-                      ),
-                      InkWell(
+                      ),                      InkWell(
                         onTap: () {
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) {
-                            return WebView(
-                              initialUrl: 'https://bongobaba.com/return-policy',
-                              javascriptMode: JavascriptMode.unrestricted,
+                            return CommonWebviewScreen(
+                              url: 'https://bongobaba.com/return-refund-page',
+                             
                             );
 
                             // CommonWebviewScreen(
@@ -1320,6 +1319,54 @@ class _ProductDetailsState extends State<ProductDetails> {
                             ),
                           ),
                         ),
+                      ),   Divider(
+                        height: 1,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return CommonWebviewScreen(
+                              url: 'https://bongobaba.com/terms-conditions-page',
+                            
+                            );
+                            // CommonWebviewScreen(
+                            //   url:
+                            //       "${AppConfig.RAW_BASE_URL}/mobile-page/returnpolicy",
+                            //   page_name: AppLocalizations.of(context)
+                            //       .product_details_screen_return_policy,
+                            // );
+                          }));
+                        },
+                        child: Container(
+                          height: 40,
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(
+                              16.0,
+                              0.0,
+                              8.0,
+                              0.0,
+                            ),
+                            child: Row(
+                              children: [
+                                Text('Terms & Condition',
+                                  // AppLocalizations.of(context)
+                                  //     .product_details_screen_return_policy,
+                                  style: TextStyle(
+                                      color: MyTheme.font_grey,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                                Spacer(),
+                                Icon(
+                                  Ionicons.ios_add,
+                                  color: MyTheme.font_grey,
+                                  size: 24,
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
                       ),
                       Divider(
                         height: 1,
@@ -1328,10 +1375,10 @@ class _ProductDetailsState extends State<ProductDetails> {
                         onTap: () {
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) {
-                            return WebView(
-                              initialUrl:
-                                  'https://bongobaba.com/support-policy',
-                              javascriptMode: JavascriptMode.unrestricted,
+                            return CommonWebviewScreen(
+                              url:
+                                  'https://bongobaba.com/support-policy-page',
+                              
                             );
 
                             // CommonWebviewScreen(
@@ -1385,13 +1432,47 @@ class _ProductDetailsState extends State<ProductDetails> {
                           16.0,
                           0.0,
                         ),
-                        child: Text(
-                          AppLocalizations.of(context)
-                              .product_details_screen_products_may_like,
-                          style: TextStyle(
-                              color: MyTheme.font_grey,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              AppLocalizations.of(context)
+                                  .product_details_screen_products_may_like,
+                              style: TextStyle(
+                                  color: MyTheme.black_color,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500),
+                              //   style: TextStyle(
+                              //       fontSize: 16,
+                              //       color: Colors.transparent,
+                              //       shadows: [
+                              //         Shadow(
+                              //             offset: Offset(0, -7),
+                              //             color: Colors.black)
+                              //       ],
+                              //       decoration: TextDecoration.underline,
+                              //       decorationStyle: TextDecorationStyle.solid,
+                              //       decorationColor: Colors.red[400],
+                              //       decorationThickness: 3),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Row(
+                              children: [
+                                Container(
+                                  height: 3,
+                                  width: 183,
+                                  color: Colors.red[300],
+                                ),
+                                Container(
+                                  height: 1,
+                                  width: 177,
+                                  color: MyTheme.dark_grey,
+                                )
+                              ],
+                            ),
+                          ],
                         ),
                       ),
                       Padding(
@@ -1414,13 +1495,46 @@ class _ProductDetailsState extends State<ProductDetails> {
                           16.0,
                           0.0,
                         ),
-                        child: Text(
-                          AppLocalizations.of(context)
-                              .top_selling_products_screen_top_selling_products,
-                          style: TextStyle(
-                              color: MyTheme.font_grey,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              AppLocalizations.of(context)
+                                  .top_selling_products_screen_top_selling_products,
+                              style: TextStyle(
+                                  color: MyTheme.black_color,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500),
+                              // style: TextStyle(
+                              //     fontSize: 16,
+                              //     color: Colors.transparent,
+                              //     shadows: [
+                              //       Shadow(
+                              //           offset: Offset(0, -7), color: Colors.black)
+                              //     ],
+                              //     decoration: TextDecoration.underline,
+                              //     decorationStyle: TextDecorationStyle.solid,
+                              //     decorationColor: Colors.red[400],
+                              //     decorationThickness: 3),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Row(
+                              children: [
+                                Container(
+                                  height: 3,
+                                  width: 142,
+                                  color: Colors.red[300],
+                                ),
+                                Container(
+                                  height: 1,
+                                  width: 218,
+                                  color: MyTheme.dark_grey,
+                                )
+                              ],
+                            ),
+                          ],
                         ),
                       ),
                       Padding(
@@ -1431,6 +1545,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                           0.0,
                         ),
                         child: buildProductList(context),
+                      ),
+                      SizedBox(
+                        height: 20,
                       )
                     ]),
                   )
@@ -1945,17 +2062,21 @@ class _ProductDetailsState extends State<ProductDetails> {
 
   AppBar buildAppBar(double statusBarHeight, BuildContext context) {
     return AppBar(
-
       toolbarHeight: 75,
       backgroundColor: Colors.white,
       flexibleSpace: Container(
         decoration: BoxDecoration(
-            gradient: LinearGradient(colors: [
-          // Color(0xff0fc744),
-          // Color(0xff3fcad2)
-          Color.fromRGBO(206, 35, 43, 1),
-          Color.fromRGBO(237, 101, 85, 1),
-        ],),borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20),bottomRight: Radius.circular(20))),
+            gradient: LinearGradient(
+              colors: [
+                // Color(0xff0fc744),
+                // Color(0xff3fcad2)
+                Color.fromRGBO(206, 35, 43, 1),
+                Color.fromRGBO(237, 101, 85, 1),
+              ],
+            ),
+            borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(20),
+                bottomRight: Radius.circular(20))),
       ),
       leading: Builder(
         builder: (context) => IconButton(
@@ -2177,7 +2298,10 @@ class _ProductDetailsState extends State<ProductDetails> {
           Expandable(
             collapsed: Container(
                 height: 30, child: Html(data: _productDetails.description)),
-            expanded: Container(child: Html(data: _productDetails.description)),
+            expanded: Container(
+                child: Html(
+              data: _productDetails.description,
+            )),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -2190,7 +2314,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                       !controller.expanded
                           ? AppLocalizations.of(context).common_view_more
                           : AppLocalizations.of(context).common_show_less,
-                      style: TextStyle(color: MyTheme.font_grey, fontSize: 16),
+                      style:
+                          TextStyle(color: MyTheme.black_color, fontSize: 14),
                     ),
                     onPressed: () {
                       controller.toggle();

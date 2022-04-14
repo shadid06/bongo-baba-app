@@ -249,8 +249,7 @@
 //   }
 
 //   Future<void> _onRefresh() {
-    
-   
+
 //     // fetchData();
 //     //  reset();
 //   }
@@ -274,7 +273,6 @@
 //     setState(() {});
 //   }
 // }
-
 
 // // import 'package:flutter/material.dart';
 // // import 'package:active_ecommerce_flutter/my_theme.dart';
@@ -555,7 +553,7 @@ class _FlashDealProductsState extends State<FlashDealProducts> {
   ScrollController _xcrollController = ScrollController();
   TextEditingController _searchController = TextEditingController();
 
-  List<dynamic> _productList = [];
+  // List<dynamic> _productList = [];
   bool _isInitial = true;
   int _page = 1;
   String _searchKey = "";
@@ -600,7 +598,7 @@ class _FlashDealProductsState extends State<FlashDealProducts> {
       width: double.infinity,
       color: Colors.white,
       child: Center(
-        child: Text(_totalData == _productList.length
+        child: Text(_totalData == _searchList.length
             ? AppLocalizations.of(context).common_no_more_products
             : AppLocalizations.of(context).common_loading_more_products),
       ),
@@ -667,8 +665,8 @@ class _FlashDealProductsState extends State<FlashDealProducts> {
     return Directionality(
       textDirection: app_language_rtl.$ ? TextDirection.rtl : TextDirection.ltr,
       child: Scaffold(
-       // backgroundColor: Colors.white,
-         backgroundColor: Color(0xffeafbf0),
+        // backgroundColor: Colors.white,
+        backgroundColor: Color(0xffeafbf0),
         appBar: buildAppBar(context),
         body: Stack(
           children: [
@@ -692,15 +690,18 @@ class _FlashDealProductsState extends State<FlashDealProducts> {
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
       backgroundColor: Colors.white,
-       flexibleSpace: Container(
-          decoration: BoxDecoration( borderRadius: BorderRadius.horizontal(
-           left: Radius.circular(16), right: Radius.circular(16)),
-        gradient: LinearGradient(colors: [
-          // Color(0xff0fc744),
-          // Color(0xff3fcad2)
-          Color.fromRGBO(206, 35, 43, 1),
-          Color.fromRGBO(237, 101, 85, 1),
-        ]),),),
+      flexibleSpace: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.horizontal(
+              left: Radius.circular(16), right: Radius.circular(16)),
+          gradient: LinearGradient(colors: [
+            // Color(0xff0fc744),
+            // Color(0xff3fcad2)
+            Color.fromRGBO(206, 35, 43, 1),
+            Color.fromRGBO(237, 101, 85, 1),
+          ]),
+        ),
+      ),
       toolbarHeight: 75,
       /*bottom: PreferredSize(
           child: Container(
@@ -730,8 +731,7 @@ class _FlashDealProductsState extends State<FlashDealProducts> {
                 hintText:
                     "${AppLocalizations.of(context).flash_deal_products_screen_search_products_from} : " +
                         widget.flash_deal_name,
-                hintStyle:
-                    TextStyle(fontSize: 14.0, color: MyTheme.white),
+                hintStyle: TextStyle(fontSize: 14.0, color: MyTheme.white),
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: MyTheme.white, width: 0.0),
                 ),

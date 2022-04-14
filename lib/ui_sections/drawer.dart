@@ -351,7 +351,10 @@ class _MainDrawerState extends State<MainDrawer> {
                             }));
                           })
                       : Container(),
-                  Divider(height: 5,color: Colors.cyan,),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16,right: 16),
+                    child: Divider(height: 5,color: Colors.cyan,),
+                  ),
                   ListTile(
                       visualDensity:
                           VisualDensity(horizontal: -4, vertical: -4),
@@ -374,7 +377,10 @@ class _MainDrawerState extends State<MainDrawer> {
                       onTap: () {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
-                          return Wallet();
+                          return CommonWebviewScreen(
+                              url: 'https://bongobaba.com/privacy-policy-page',
+                             
+                            );
                         }));
                       }),
                   ListTile(
@@ -398,7 +404,7 @@ class _MainDrawerState extends State<MainDrawer> {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
                           return CommonWebviewScreen(
-                              url: 'https://bongobaba.com/return-policy',
+                              url: 'https://bongobaba.com/return-refund-page',
                              
                             );
 
@@ -425,7 +431,7 @@ class _MainDrawerState extends State<MainDrawer> {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
                        return CommonWebviewScreen(
-                              url: 'https://bongobaba.com/terms',
+                              url: 'https://bongobaba.com/terms-conditions-page',
                             
                             );
                         }));
@@ -458,7 +464,7 @@ class _MainDrawerState extends State<MainDrawer> {
                             MaterialPageRoute(builder: (context) {
                          return CommonWebviewScreen(
                               url:
-                                  'https://bongobaba.com/support-policy',
+                                  'https://bongobaba.com/support-policy-page',
                               
                             );
                         }));
