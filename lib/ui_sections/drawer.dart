@@ -167,8 +167,25 @@ class _MainDrawerState extends State<MainDrawer> {
                             ],
                           ),
                         )
-                      : Padding(
-                          padding: const EdgeInsets.only(top: 70),
+                      : Container(
+                         height: 140,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(10),
+                            bottomRight: Radius.circular(10)),
+                        gradient: LinearGradient(
+                            colors: [
+                              // Color(0xff0fc744),
+                              // Color(0xff3fcad2)
+                              // Color.fromRGBO(206, 35, 43, 2),
+                              // Color.fromRGBO(237, 101, 85, 1),
+                              Colors.red[100],
+                              Colors.green[100]
+                            ],
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter),
+                      ),
+                        child: Center(
                           child: Text(
                               AppLocalizations.of(context)
                                   .main_drawer_not_logged_in,
@@ -179,6 +196,7 @@ class _MainDrawerState extends State<MainDrawer> {
                                   fontSize: 18,
                                   fontWeight: FontWeight.w600)),
                         ),
+                      ),
                   // Divider(
                   //   height: 5,
                   //   color: Colors.red,

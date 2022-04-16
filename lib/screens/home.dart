@@ -335,7 +335,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           Padding(
                             padding: const EdgeInsets.fromLTRB(
                               5.0,
-                              16.0,
+                              9.0,
                               5.0,
                               0.0,
                             ),

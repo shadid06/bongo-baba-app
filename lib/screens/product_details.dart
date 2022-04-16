@@ -1254,7 +1254,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                 Text(
                                   // AppLocalizations.of(context)
                                   //     .product_details_screen_seller_policy,
-                                  'privacy-policy',
+                                  'Privacy Policy',
                                   style: TextStyle(
                                       color: MyTheme.font_grey,
                                       fontSize: 14,
