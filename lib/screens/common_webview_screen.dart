@@ -12,6 +12,7 @@ import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 class CommonWebviewScreen extends StatefulWidget {
   String url;
   String page_name;
+  
 
   CommonWebviewScreen({Key key, this.url = "", this.page_name = ""})
       : super(key: key);

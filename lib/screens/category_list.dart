@@ -107,7 +107,7 @@ class _CategoryListState extends State<CategoryList> {
             )
           : Builder(
               builder: (context) => IconButton(
-                icon: Icon(Icons.arrow_back, color: MyTheme.dark_grey),
+                icon: Icon(Icons.arrow_back, color: MyTheme.white),
                 onPressed: () => Navigator.of(context).pop(),
               ),
             ),
