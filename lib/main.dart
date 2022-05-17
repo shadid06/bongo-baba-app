@@ -31,7 +31,6 @@ main() async {
     DeviceOrientation.portraitDown,
   ]);
 
-
   AddonsHelper().setAddonsData();
   BusinessSettingHelper().setBusinessSettingData();
   app_language.load();
@@ -89,7 +88,7 @@ class _MyAppState extends State<MyApp> {
               primaryColor: MyTheme.white,
               visualDensity: VisualDensity.adaptivePlatformDensity,
               accentColor: MyTheme.accent_color,
-            
+
               /*textTheme: TextTheme(
               bodyText1: TextStyle(),
               bodyText2: TextStyle(fontSize: 12.0),

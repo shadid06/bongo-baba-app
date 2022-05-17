@@ -526,7 +526,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                               overflow: TextOverflow.ellipsis,
                               maxLines: 2,
                               style: TextStyle(
-                                  fontSize: 13,
+                                  fontSize: 12,
                                   color: MyTheme.black_color,
                                   fontWeight: FontWeight.w400),
                             ),

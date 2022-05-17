@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:active_ecommerce_flutter/screens/cart.dart';
 import 'package:active_ecommerce_flutter/screens/common_webview_screen.dart';
+import 'package:active_ecommerce_flutter/screens/login.dart';
 import 'package:active_ecommerce_flutter/screens/product_reviews.dart';
 import 'package:active_ecommerce_flutter/ui_elements/list_product_card.dart';
 import 'package:active_ecommerce_flutter/ui_elements/mini_product_card.dart';
@@ -365,10 +366,10 @@ class _ProductDetailsState extends State<ProductDetails> {
 
   addToCart({mode, context = null, snackbar = null}) async {
     if (is_logged_in.$ == false) {
-      ToastComponent.showDialog(
-          AppLocalizations.of(context).common_login_warning, context,
-          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
-
+      // ToastComponent.showDialog(
+      //     AppLocalizations.of(context).common_login_warning, context,
+      //     gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+Navigator.push(context, MaterialPageRoute(builder: (context)=>Login()));
       return;
     }
 

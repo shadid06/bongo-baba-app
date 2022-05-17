@@ -6,6 +6,7 @@ import 'package:active_ecommerce_flutter/screens/cart.dart';
 import 'package:active_ecommerce_flutter/screens/category_list.dart';
 import 'package:active_ecommerce_flutter/screens/filter2.dart';
 import 'package:active_ecommerce_flutter/screens/home.dart';
+import 'package:active_ecommerce_flutter/screens/listen.dart';
 import 'package:active_ecommerce_flutter/screens/login.dart';
 import 'package:active_ecommerce_flutter/screens/profile.dart';
 import 'package:active_ecommerce_flutter/screens/filter.dart';
@@ -29,7 +30,8 @@ class Main extends StatefulWidget {
 class _MainState extends State<Main> {
   int _currentIndex = 0;
   var _children = [
-    Home(),
+    // Home(),
+    Listen(),
     CategoryList(
       is_base_category: true,
     ),
@@ -37,8 +39,7 @@ class _MainState extends State<Main> {
     Cart(has_bottomnav: true),
     // Profile()
 
-    !is_logged_in.$==true?
-    Login():Profile()
+    !is_logged_in.$ == true ? Login() : Profile()
   ];
 
   void onTapped(int i) {
@@ -116,7 +117,7 @@ class _MainState extends State<Main> {
                 currentIndex: _currentIndex,
                 backgroundColor: Colors.white.withOpacity(0.8),
                 // fixedColor: Theme.of(context).accentColor,
-                     fixedColor: MyTheme.red_color,
+                fixedColor: MyTheme.red_color,
                 unselectedItemColor: Color.fromRGBO(153, 153, 153, 1),
                 items: [
                   BottomNavigationBarItem(
@@ -139,7 +140,7 @@ class _MainState extends State<Main> {
                       icon: Image.asset(
                         "assets/categories.png",
                         color: _currentIndex == 1
-                            ?MyTheme.red_color
+                            ? MyTheme.red_color
                             : Color.fromRGBO(153, 153, 153, 1),
                         height: 20,
                       ),
