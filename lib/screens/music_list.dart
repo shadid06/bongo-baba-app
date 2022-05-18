@@ -88,6 +88,17 @@ class _MusicListState extends State<MusicList> {
                       )
                     ],
                   ),
+                  SizedBox(
+                    height: 40,
+                    width: 60,
+                    child: PlayButton(
+                      pauseIcon:
+                          Icon(Icons.pause, color: Colors.black, size: 20),
+                      playIcon:
+                          Icon(Icons.play_arrow, color: Colors.black, size: 20),
+                      onPressed: () {},
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -95,15 +106,6 @@ class _MusicListState extends State<MusicList> {
           Divider(
             height: 1,
             color: Colors.grey,
-          ),
-          SizedBox(
-            height: 200,
-            width: 200,
-            child: PlayButton(
-              pauseIcon: Icon(Icons.pause, color: Colors.black, size: 20),
-              playIcon: Icon(Icons.play_arrow, color: Colors.black, size: 20),
-              onPressed: () {},
-            ),
           ),
         ],
       )),
@@ -245,10 +247,10 @@ class Blob extends StatelessWidget {
           decoration: BoxDecoration(
             color: color,
             borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(50),
-              topRight: Radius.circular(240),
-              bottomLeft: Radius.circular(220),
-              bottomRight: Radius.circular(180),
+              topLeft: Radius.circular(50), //250
+              topRight: Radius.circular(40), //240
+              bottomLeft: Radius.circular(20), //220
+              bottomRight: Radius.circular(80), //180
             ),
           ),
         ),
