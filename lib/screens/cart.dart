@@ -11,7 +11,6 @@ import 'package:active_ecommerce_flutter/custom/toast_component.dart';
 import 'package:toast/toast.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
 class Cart extends StatefulWidget {
   Cart({Key key, this.has_bottomnav}) : super(key: key);
   final bool has_bottomnav;
@@ -51,8 +50,7 @@ class _CartState extends State<Cart> {
   }
 
   fetchData() async {
-
-  var cartResponseList =
+    var cartResponseList =
         await CartRepository().getCartResponseList(user_id.$);
 
     if (cartResponseList != null && cartResponseList.length > 0) {
@@ -103,8 +101,8 @@ class _CartState extends State<Cart> {
       ToastComponent.showDialog(
           "${AppLocalizations.of(context).cart_screen_cannot_order_more_than} ${_shopList[seller_index].cart_items[item_index].upper_limit} ${AppLocalizations.of(context).cart_screen_items_of_this}",
           context,
-          gravity: Toast.CENTER,
-          duration: Toast.LENGTH_LONG);
+          gravity: Toast.center,
+          duration: Toast.lengthLong);
     }
   }
 
@@ -118,8 +116,8 @@ class _CartState extends State<Cart> {
       ToastComponent.showDialog(
           "${AppLocalizations.of(context).cart_screen_cannot_order_more_than} ${_shopList[seller_index].cart_items[item_index].lower_limit} ${AppLocalizations.of(context).cart_screen_items_of_this}",
           context,
-          gravity: Toast.CENTER,
-          duration: Toast.LENGTH_LONG);
+          gravity: Toast.center,
+          duration: Toast.lengthLong);
     }
   }
 
@@ -169,13 +167,13 @@ class _CartState extends State<Cart> {
 
     if (cartDeleteResponse.result == true) {
       ToastComponent.showDialog(cartDeleteResponse.message, context,
-          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+          gravity: Toast.center, duration: Toast.lengthLong);
 
       reset();
       fetchData();
     } else {
       ToastComponent.showDialog(cartDeleteResponse.message, context,
-          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+          gravity: Toast.center, duration: Toast.lengthLong);
     }
   }
 
@@ -202,8 +200,9 @@ class _CartState extends State<Cart> {
     }
 
     if (cart_ids.length == 0) {
-      ToastComponent.showDialog(AppLocalizations.of(context).cart_screen_cart_empty, context,
-          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+      ToastComponent.showDialog(
+          AppLocalizations.of(context).cart_screen_cart_empty, context,
+          gravity: Toast.center, duration: Toast.lengthLong);
       return;
     }
 
@@ -218,19 +217,17 @@ class _CartState extends State<Cart> {
 
     if (cartProcessResponse.result == false) {
       ToastComponent.showDialog(cartProcessResponse.message, context,
-          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+          gravity: Toast.center, duration: Toast.lengthLong);
     } else {
       ToastComponent.showDialog(cartProcessResponse.message, context,
-          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+          gravity: Toast.center, duration: Toast.lengthLong);
 
       if (mode == "update") {
         reset();
         fetchData();
       } else if (mode == "proceed_to_shipping") {
         Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return ShippingInfo(
-
-          );
+          return ShippingInfo();
         })).then((value) {
           onPopped(value);
         });
@@ -359,37 +356,38 @@ class _CartState extends State<Cart> {
                         color: Colors.white,
                         border:
                             Border.all(color: MyTheme.textfield_grey, width: 1),
-                        borderRadius: app_language_rtl.$ ?
-                        const BorderRadius.only(
-                          topLeft: const Radius.circular(0.0),
-                          bottomLeft: const Radius.circular(0.0),
-                          topRight: const Radius.circular(8.0),
-                          bottomRight: const Radius.circular(8.0),
-                        ): const BorderRadius.only(
-                          topLeft: const Radius.circular(8.0),
-                          bottomLeft: const Radius.circular(8.0),
-                          topRight: const Radius.circular(0.0),
-                          bottomRight: const Radius.circular(0.0),
-                        )),
+                        borderRadius: app_language_rtl.$
+                            ? const BorderRadius.only(
+                                topLeft: const Radius.circular(0.0),
+                                bottomLeft: const Radius.circular(0.0),
+                                topRight: const Radius.circular(8.0),
+                                bottomRight: const Radius.circular(8.0),
+                              )
+                            : const BorderRadius.only(
+                                topLeft: const Radius.circular(8.0),
+                                bottomLeft: const Radius.circular(8.0),
+                                topRight: const Radius.circular(0.0),
+                                bottomRight: const Radius.circular(0.0),
+                              )),
                     child: FlatButton(
                       minWidth: MediaQuery.of(context).size.width,
                       //height: 50,
                       color: MyTheme.light_grey,
-                      shape: app_language_rtl.$?
-                      RoundedRectangleBorder(
-                          borderRadius: const BorderRadius.only(
-                            topLeft: const Radius.circular(0.0),
-                            bottomLeft: const Radius.circular(0.0),
-                            topRight: const Radius.circular(8.0),
-                            bottomRight: const Radius.circular(8.0),
-                          ))
+                      shape: app_language_rtl.$
+                          ? RoundedRectangleBorder(
+                              borderRadius: const BorderRadius.only(
+                              topLeft: const Radius.circular(0.0),
+                              bottomLeft: const Radius.circular(0.0),
+                              topRight: const Radius.circular(8.0),
+                              bottomRight: const Radius.circular(8.0),
+                            ))
                           : RoundedRectangleBorder(
-                          borderRadius: const BorderRadius.only(
-                        topLeft: const Radius.circular(8.0),
-                        bottomLeft: const Radius.circular(8.0),
-                        topRight: const Radius.circular(0.0),
-                        bottomRight: const Radius.circular(0.0),
-                      )),
+                              borderRadius: const BorderRadius.only(
+                              topLeft: const Radius.circular(8.0),
+                              bottomLeft: const Radius.circular(8.0),
+                              topRight: const Radius.circular(0.0),
+                              bottomRight: const Radius.circular(0.0),
+                            )),
                       child: Text(
                         AppLocalizations.of(context).cart_screen_update_cart,
                         style: TextStyle(
@@ -412,39 +410,41 @@ class _CartState extends State<Cart> {
                         color: Colors.white,
                         border:
                             Border.all(color: MyTheme.textfield_grey, width: 1),
-                        borderRadius:app_language_rtl.$ ?
-                        const BorderRadius.only(
-                          topLeft: const Radius.circular(8.0),
-                          bottomLeft: const Radius.circular(8.0),
-                          topRight: const Radius.circular(0.0),
-                          bottomRight: const Radius.circular(0.0),
-                        ): const BorderRadius.only(
-                          topLeft: const Radius.circular(0.0),
-                          bottomLeft: const Radius.circular(0.0),
-                          topRight: const Radius.circular(8.0),
-                          bottomRight: const Radius.circular(8.0),
-                        )),
+                        borderRadius: app_language_rtl.$
+                            ? const BorderRadius.only(
+                                topLeft: const Radius.circular(8.0),
+                                bottomLeft: const Radius.circular(8.0),
+                                topRight: const Radius.circular(0.0),
+                                bottomRight: const Radius.circular(0.0),
+                              )
+                            : const BorderRadius.only(
+                                topLeft: const Radius.circular(0.0),
+                                bottomLeft: const Radius.circular(0.0),
+                                topRight: const Radius.circular(8.0),
+                                bottomRight: const Radius.circular(8.0),
+                              )),
                     child: FlatButton(
                       minWidth: MediaQuery.of(context).size.width,
                       //height: 50,
                       color: MyTheme.accent_color,
-                      shape: app_language_rtl.$ ?
-                      RoundedRectangleBorder(
-                          borderRadius: const BorderRadius.only(
-                            topLeft: const Radius.circular(8.0),
-                            bottomLeft: const Radius.circular(8.0),
-                            topRight: const Radius.circular(0.0),
-                            bottomRight: const Radius.circular(0.0),
-                          ))
+                      shape: app_language_rtl.$
+                          ? RoundedRectangleBorder(
+                              borderRadius: const BorderRadius.only(
+                              topLeft: const Radius.circular(8.0),
+                              bottomLeft: const Radius.circular(8.0),
+                              topRight: const Radius.circular(0.0),
+                              bottomRight: const Radius.circular(0.0),
+                            ))
                           : RoundedRectangleBorder(
-                          borderRadius: const BorderRadius.only(
-                        topLeft: const Radius.circular(0.0),
-                        bottomLeft: const Radius.circular(0.0),
-                        topRight: const Radius.circular(8.0),
-                        bottomRight: const Radius.circular(8.0),
-                      )),
+                              borderRadius: const BorderRadius.only(
+                              topLeft: const Radius.circular(0.0),
+                              bottomLeft: const Radius.circular(0.0),
+                              topRight: const Radius.circular(8.0),
+                              bottomRight: const Radius.circular(8.0),
+                            )),
                       child: Text(
-                        AppLocalizations.of(context).cart_screen_proceed_to_shipping,
+                        AppLocalizations.of(context)
+                            .cart_screen_proceed_to_shipping,
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 13,
@@ -466,15 +466,15 @@ class _CartState extends State<Cart> {
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
-backgroundColor: Colors.white,
- flexibleSpace: Container(
+      backgroundColor: Colors.white,
+      flexibleSpace: Container(
         decoration: BoxDecoration(
             gradient: LinearGradient(colors: [
               // Color(0xff0fc744),
               // Color(0xff3fcad2)
               Color.fromRGBO(206, 35, 43, 1),
               Color.fromRGBO(237, 101, 85, 1),
-            ], begin: Alignment.topCenter,end:Alignment.bottomCenter),
+            ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
             borderRadius: BorderRadius.horizontal(
                 left: Radius.circular(20), right: Radius.circular(20))),
       ),
@@ -506,15 +506,13 @@ backgroundColor: Colors.white,
     );
   }
 
-
-
   buildCartSellerList() {
     if (is_logged_in.$ == false) {
       return Container(
           height: 100,
           child: Center(
               child: Text(
-                AppLocalizations.of(context).cart_screen_please_log_in,
+            AppLocalizations.of(context).cart_screen_please_log_in,
             style: TextStyle(color: MyTheme.font_grey),
           )));
     } else if (_isInitial && _shopList.length == 0) {
@@ -538,9 +536,8 @@ backgroundColor: Colors.white,
                     padding: const EdgeInsets.only(bottom: 0.0, top: 16.0),
                     child: Row(
                       children: [
-
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal:8.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: Text(
                             _shopList[index].name,
                             style: TextStyle(color: MyTheme.font_grey),
@@ -570,7 +567,7 @@ backgroundColor: Colors.white,
           height: 100,
           child: Center(
               child: Text(
-                AppLocalizations.of(context).cart_screen_cart_empty,
+            AppLocalizations.of(context).cart_screen_cart_empty,
             style: TextStyle(color: MyTheme.font_grey),
           )));
     }

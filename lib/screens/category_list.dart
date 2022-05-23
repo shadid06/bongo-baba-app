@@ -67,8 +67,8 @@ class _CategoryListState extends State<CategoryList> {
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
-       backgroundColor: Color(0xffd5f8f2),
-    
+      backgroundColor: Color(0xffd5f8f2),
+
       centerTitle: true,
       flexibleSpace: Container(
         decoration: BoxDecoration(
@@ -77,7 +77,7 @@ class _CategoryListState extends State<CategoryList> {
               // Color(0xff3fcad2)
               Color.fromRGBO(206, 35, 43, 1),
               Color.fromRGBO(237, 101, 85, 1),
-            ], begin: Alignment.topCenter,end:Alignment.bottomCenter),
+            ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
             borderRadius: BorderRadius.horizontal(
                 left: Radius.circular(20), right: Radius.circular(20))),
       ),
@@ -290,8 +290,8 @@ class _CategoryListState extends State<CategoryList> {
                               AppLocalizations.of(context)
                                   .category_list_screen_no_subcategories,
                               context,
-                              gravity: Toast.CENTER,
-                              duration: Toast.LENGTH_LONG);
+                              gravity: Toast.center,
+                              duration: Toast.lengthLong);
                         }
                       },
                       child: Row(

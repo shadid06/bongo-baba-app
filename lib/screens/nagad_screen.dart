@@ -9,7 +9,6 @@ import 'package:active_ecommerce_flutter/screens/order_list.dart';
 import 'package:active_ecommerce_flutter/screens/wallet.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
 class NagadScreen extends StatefulWidget {
   double amount;
   String payment_type;
@@ -51,11 +50,11 @@ class _NagadScreenState extends State<NagadScreen> {
 
   createOrder() async {
     var orderCreateResponse = await PaymentRepository()
-        .getOrderCreateResponse( widget.payment_method_key);
+        .getOrderCreateResponse(widget.payment_method_key);
 
     if (orderCreateResponse.result == false) {
       ToastComponent.showDialog(orderCreateResponse.message, context,
-          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+          gravity: Toast.center, duration: Toast.lengthLong);
       Navigator.of(context).pop();
       return;
     }
@@ -73,14 +72,13 @@ class _NagadScreenState extends State<NagadScreen> {
 
     if (nagadUrlResponse.result == false) {
       ToastComponent.showDialog(nagadUrlResponse.message, context,
-          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+          gravity: Toast.center, duration: Toast.lengthLong);
       Navigator.of(context).pop();
       return;
     }
 
     _initial_url = nagadUrlResponse.url;
     _initial_url_fetched = true;
-
 
     setState(() {});
 
@@ -106,8 +104,8 @@ class _NagadScreenState extends State<NagadScreen> {
       Map<String, dynamic> responseJSON = jsonDecode(decodedJSON);
       print(data.toString());
       if (responseJSON["result"] == false) {
-        Toast.show(responseJSON["message"], context,
-            duration: Toast.LENGTH_LONG, gravity: Toast.CENTER);
+        Toast.show(responseJSON["message"],
+            duration: Toast.lengthLong, gravity: Toast.center);
         Navigator.pop(context);
       } else if (responseJSON["result"] == true) {
         payment_details = responseJSON['payment_details'];
@@ -115,20 +113,21 @@ class _NagadScreenState extends State<NagadScreen> {
       }
     });
   }
-  onPaymentSuccess(payment_details) async{
 
-    var nagadPaymentProcessResponse = await PaymentRepository().getNagadPaymentProcessResponse(widget.payment_type, widget.amount,_combined_order_id, payment_details);
+  onPaymentSuccess(payment_details) async {
+    var nagadPaymentProcessResponse = await PaymentRepository()
+        .getNagadPaymentProcessResponse(widget.payment_type, widget.amount,
+            _combined_order_id, payment_details);
 
-    if(nagadPaymentProcessResponse.result == false ){
-
-      Toast.show(nagadPaymentProcessResponse.message, context,
-          duration: Toast.LENGTH_LONG, gravity: Toast.CENTER);
+    if (nagadPaymentProcessResponse.result == false) {
+      Toast.show(nagadPaymentProcessResponse.message,
+          duration: Toast.lengthLong, gravity: Toast.center);
       Navigator.pop(context);
       return;
     }
 
-    Toast.show(nagadPaymentProcessResponse.message, context,
-        duration: Toast.LENGTH_LONG, gravity: Toast.CENTER);
+    Toast.show(nagadPaymentProcessResponse.message,
+        duration: Toast.lengthLong, gravity: Toast.center);
     if (widget.payment_type == "cart_payment") {
       Navigator.push(context, MaterialPageRoute(builder: (context) {
         return OrderList(from_checkout: true);
@@ -138,10 +137,7 @@ class _NagadScreenState extends State<NagadScreen> {
         return Wallet(from_recharge: true);
       }));
     }
-
-
   }
-  
 
   buildBody() {
     if (_order_init == false &&
@@ -155,7 +151,8 @@ class _NagadScreenState extends State<NagadScreen> {
     } else if (_initial_url_fetched == false) {
       return Container(
         child: Center(
-          child: Text(AppLocalizations.of(context).nagad_screen_fetching_nagad_url),
+          child: Text(
+              AppLocalizations.of(context).nagad_screen_fetching_nagad_url),
         ),
       );
     } else {
@@ -193,7 +190,7 @@ class _NagadScreenState extends State<NagadScreen> {
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
-backgroundColor: Colors.white,
+      backgroundColor: Colors.white,
       centerTitle: true,
       leading: Builder(
         builder: (context) => IconButton(

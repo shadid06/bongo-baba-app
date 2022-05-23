@@ -90,7 +90,7 @@ class _ProductReviewsState extends State<ProductReviews> {
   onTapReviewSubmit(context) async {
     if (is_logged_in.$ == false) {
       ToastComponent.showDialog("You need to login to give a review", context,
-          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+          gravity: Toast.center, duration: Toast.lengthLong);
       return;
     }
 
@@ -102,15 +102,15 @@ class _ProductReviewsState extends State<ProductReviews> {
           AppLocalizations.of(context)
               .product_reviews_screen_review_empty_warning,
           context,
-          gravity: Toast.CENTER,
-          duration: Toast.LENGTH_LONG);
+          gravity: Toast.center,
+          duration: Toast.lengthLong);
       return;
     } else if (_my_rating < 1.0) {
       ToastComponent.showDialog(
           AppLocalizations.of(context).product_reviews_screen_star_warning,
           context,
-          gravity: Toast.CENTER,
-          duration: Toast.LENGTH_LONG);
+          gravity: Toast.center,
+          duration: Toast.lengthLong);
       return;
     }
 
@@ -119,12 +119,12 @@ class _ProductReviewsState extends State<ProductReviews> {
 
     if (reviewSubmitResponse.result == false) {
       ToastComponent.showDialog(reviewSubmitResponse.message, context,
-          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+          gravity: Toast.center, duration: Toast.lengthLong);
       return;
     }
 
     ToastComponent.showDialog(reviewSubmitResponse.message, context,
-        gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+        gravity: Toast.center, duration: Toast.lengthLong);
 
     reset();
     fetchData();
@@ -370,7 +370,9 @@ class _ProductReviewsState extends State<ProductReviews> {
                         var controller = ExpandableController.of(context);
                         return FlatButton(
                           child: Text(
-                            !controller.expanded ? AppLocalizations.of(context).common_view_more : AppLocalizations.of(context).common_show_less,
+                            !controller.expanded
+                                ? AppLocalizations.of(context).common_view_more
+                                : AppLocalizations.of(context).common_show_less,
                             style: TextStyle(
                                 color: MyTheme.font_grey, fontSize: 11),
                           ),
@@ -395,8 +397,10 @@ class _ProductReviewsState extends State<ProductReviews> {
       color: Colors.white,
       child: Center(
         child: Text(_totalData == _reviewList.length
-            ? AppLocalizations.of(context).product_reviews_screen_no_more_reviews
-            : AppLocalizations.of(context).product_reviews_screen_loading_more_reviews),
+            ? AppLocalizations.of(context)
+                .product_reviews_screen_no_more_reviews
+            : AppLocalizations.of(context)
+                .product_reviews_screen_loading_more_reviews),
       ),
     );
   }
@@ -441,7 +445,8 @@ class _ProductReviewsState extends State<ProductReviews> {
                 decoration: InputDecoration(
                     filled: true,
                     fillColor: Color.fromRGBO(251, 251, 251, 1),
-                    hintText: AppLocalizations.of(context).product_reviews_screen_type_your_review_here,
+                    hintText: AppLocalizations.of(context)
+                        .product_reviews_screen_type_your_review_here,
                     hintStyle: TextStyle(
                         fontSize: 14.0, color: MyTheme.textfield_grey),
                     enabledBorder: OutlineInputBorder(

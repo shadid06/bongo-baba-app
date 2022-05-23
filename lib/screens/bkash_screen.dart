@@ -50,11 +50,11 @@ class _BkashScreenState extends State<BkashScreen> {
 
   createOrder() async {
     var orderCreateResponse = await PaymentRepository()
-        .getOrderCreateResponse( widget.payment_method_key);
+        .getOrderCreateResponse(widget.payment_method_key);
 
     if (orderCreateResponse.result == false) {
       ToastComponent.showDialog(orderCreateResponse.message, context,
-          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+          gravity: Toast.center, duration: Toast.lengthLong);
       Navigator.of(context).pop();
       return;
     }
@@ -72,14 +72,13 @@ class _BkashScreenState extends State<BkashScreen> {
 
     if (bkashUrlResponse.result == false) {
       ToastComponent.showDialog(bkashUrlResponse.message, context,
-          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+          gravity: Toast.center, duration: Toast.lengthLong);
       Navigator.of(context).pop();
       return;
     }
 
     _initial_url = bkashUrlResponse.url;
     _initial_url_fetched = true;
-
 
     setState(() {});
 
@@ -105,8 +104,8 @@ class _BkashScreenState extends State<BkashScreen> {
       Map<String, dynamic> responseJSON = jsonDecode(decodedJSON);
       //print(data.toString());
       if (responseJSON["result"] == false) {
-        Toast.show(responseJSON["message"], context,
-            duration: Toast.LENGTH_LONG, gravity: Toast.CENTER);
+        Toast.show(responseJSON["message"],
+            gravity: Toast.center, duration: Toast.lengthLong);
         Navigator.pop(context);
       } else if (responseJSON["result"] == true) {
         payment_details = responseJSON['payment_details'];
@@ -114,20 +113,21 @@ class _BkashScreenState extends State<BkashScreen> {
       }
     });
   }
-  onPaymentSuccess(payment_details) async{
 
-    var bkashPaymentProcessResponse = await PaymentRepository().getBkashPaymentProcessResponse(widget.payment_type, widget.amount,_combined_order_id, payment_details);
+  onPaymentSuccess(payment_details) async {
+    var bkashPaymentProcessResponse = await PaymentRepository()
+        .getBkashPaymentProcessResponse(widget.payment_type, widget.amount,
+            _combined_order_id, payment_details);
 
-    if(bkashPaymentProcessResponse.result == false ){
-
-      Toast.show(bkashPaymentProcessResponse.message, context,
-          duration: Toast.LENGTH_LONG, gravity: Toast.CENTER);
+    if (bkashPaymentProcessResponse.result == false) {
+      Toast.show(bkashPaymentProcessResponse.message,
+          gravity: Toast.center, duration: Toast.lengthLong);
       Navigator.pop(context);
       return;
     }
 
-    Toast.show(bkashPaymentProcessResponse.message, context,
-        duration: Toast.LENGTH_LONG, gravity: Toast.CENTER);
+    Toast.show(bkashPaymentProcessResponse.message,
+        gravity: Toast.center, duration: Toast.lengthLong);
     if (widget.payment_type == "cart_payment") {
       Navigator.push(context, MaterialPageRoute(builder: (context) {
         return OrderList(from_checkout: true);
@@ -137,10 +137,7 @@ class _BkashScreenState extends State<BkashScreen> {
         return Wallet(from_recharge: true);
       }));
     }
-
-
   }
-  
 
   buildBody() {
     if (_order_init == false &&
@@ -154,7 +151,8 @@ class _BkashScreenState extends State<BkashScreen> {
     } else if (_initial_url_fetched == false) {
       return Container(
         child: Center(
-          child: Text(AppLocalizations.of(context).bkash_screen_fetching_bkash_url),
+          child: Text(
+              AppLocalizations.of(context).bkash_screen_fetching_bkash_url),
         ),
       );
     } else {
@@ -177,7 +175,7 @@ class _BkashScreenState extends State<BkashScreen> {
                 getData();
               } else if (page.contains("/bkash/api/fail")) {
                 ToastComponent.showDialog("Payment cancelled", context,
-                    gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+                    gravity: Toast.center, duration: Toast.lengthLong);
                 Navigator.of(context).pop();
                 return;
               }
@@ -190,7 +188,7 @@ class _BkashScreenState extends State<BkashScreen> {
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
-backgroundColor: Colors.white,
+      backgroundColor: Colors.white,
       centerTitle: true,
       leading: Builder(
         builder: (context) => IconButton(

@@ -89,13 +89,13 @@ class _MusicListState extends State<MusicList> {
                     ],
                   ),
                   SizedBox(
-                    height: 40,
-                    width: 60,
+                    height: 33,
+                    width: 46,
                     child: PlayButton(
                       pauseIcon:
-                          Icon(Icons.pause, color: Colors.black, size: 20),
+                          Icon(Icons.pause, color: Colors.black, size: 15),
                       playIcon:
-                          Icon(Icons.play_arrow, color: Colors.black, size: 20),
+                          Icon(Icons.play_arrow, color: Colors.black, size: 15),
                       onPressed: () {},
                     ),
                   ),
@@ -242,15 +242,15 @@ class Blob extends StatelessWidget {
       child: Transform.rotate(
         angle: rotation,
         child: Container(
-          height: 40,
-          width: 60,
+          height: 20,
+          width: 40,
           decoration: BoxDecoration(
             color: color,
             borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(50), //250
-              topRight: Radius.circular(40), //240
-              bottomLeft: Radius.circular(20), //220
-              bottomRight: Radius.circular(80), //180
+              topLeft: Radius.circular(150), //250
+              topRight: Radius.circular(140), //240
+              bottomLeft: Radius.circular(120), //220
+              bottomRight: Radius.circular(180), //180
             ),
           ),
         ),

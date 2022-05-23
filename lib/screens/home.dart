@@ -953,7 +953,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           onTap: () {
             ToastComponent.showDialog(
                 AppLocalizations.of(context).common_coming_soon, context,
-                gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+                gravity: Toast.center, duration: Toast.lengthLong);
           },
           child: Visibility(
             visible: false,

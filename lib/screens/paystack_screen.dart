@@ -11,7 +11,6 @@ import 'package:active_ecommerce_flutter/app_config.dart';
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
 class PaystackScreen extends StatefulWidget {
   double amount;
   String payment_type;
@@ -39,8 +38,6 @@ class _PaystackScreenState extends State<PaystackScreen> {
     // TODO: implement initState
     super.initState();
 
-
-
     if (widget.payment_type == "cart_payment") {
       createOrder();
     }
@@ -52,7 +49,7 @@ class _PaystackScreenState extends State<PaystackScreen> {
 
     if (orderCreateResponse.result == false) {
       ToastComponent.showDialog(orderCreateResponse.message, context,
-          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+          gravity: Toast.center, duration: Toast.lengthLong);
       Navigator.of(context).pop();
       return;
     }
@@ -84,8 +81,8 @@ class _PaystackScreenState extends State<PaystackScreen> {
       Map<String, dynamic> responseJSON = jsonDecode(decodedJSON);
       //print(responseJSON.toString());
       if (responseJSON["result"] == false) {
-        Toast.show(responseJSON["message"], context,
-            duration: Toast.LENGTH_LONG, gravity: Toast.CENTER);
+        Toast.show(responseJSON["message"],
+            gravity: Toast.center, duration: Toast.lengthLong);
 
         Navigator.pop(context);
       } else if (responseJSON["result"] == true) {
@@ -96,21 +93,23 @@ class _PaystackScreenState extends State<PaystackScreen> {
     });
   }
 
-  onPaymentSuccess(payment_details) async{
+  onPaymentSuccess(payment_details) async {
     print("b");
 
-    var paystackPaymentSuccessResponse = await PaymentRepository().getPaystackPaymentSuccessResponse(widget.payment_type, widget.amount,_combined_order_id, payment_details);
+    var paystackPaymentSuccessResponse = await PaymentRepository()
+        .getPaystackPaymentSuccessResponse(widget.payment_type, widget.amount,
+            _combined_order_id, payment_details);
 
-    if(paystackPaymentSuccessResponse.result == false ){
+    if (paystackPaymentSuccessResponse.result == false) {
       print("c");
-      Toast.show(paystackPaymentSuccessResponse.message, context,
-          duration: Toast.LENGTH_LONG, gravity: Toast.CENTER);
+      Toast.show(paystackPaymentSuccessResponse.message,
+          gravity: Toast.center, duration: Toast.lengthLong);
       Navigator.pop(context);
       return;
     }
 
-    Toast.show(paystackPaymentSuccessResponse.message, context,
-        duration: Toast.LENGTH_LONG, gravity: Toast.CENTER);
+    Toast.show(paystackPaymentSuccessResponse.message,
+        gravity: Toast.center, duration: Toast.lengthLong);
     if (widget.payment_type == "cart_payment") {
       Navigator.push(context, MaterialPageRoute(builder: (context) {
         return OrderList(from_checkout: true);
@@ -121,13 +120,9 @@ class _PaystackScreenState extends State<PaystackScreen> {
         return Wallet(from_recharge: true);
       }));
     }
-
-
   }
 
-
   buildBody() {
-
     String initial_url =
         "${AppConfig.BASE_URL}/paystack/init?payment_type=${widget.payment_type}&combined_order_id=${_combined_order_id}&amount=${widget.amount}&user_id=${user_id.$}";
 
@@ -155,7 +150,7 @@ class _PaystackScreenState extends State<PaystackScreen> {
             onWebResourceError: (error) {},
             onPageFinished: (page) {
               print(page.toString());
-                getData();
+              getData();
             },
           ),
         ),
@@ -165,7 +160,7 @@ class _PaystackScreenState extends State<PaystackScreen> {
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
-backgroundColor: Colors.white,
+      backgroundColor: Colors.white,
       centerTitle: true,
       leading: Builder(
         builder: (context) => IconButton(

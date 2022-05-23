@@ -139,7 +139,7 @@ class _ProfileState extends State<Profile> {
           height: 100,
           child: Center(
               child: Text(
-                AppLocalizations.of(context).profile_screen_please_log_in,
+            AppLocalizations.of(context).profile_screen_please_log_in,
             style: TextStyle(color: MyTheme.font_grey),
           )));
     } else {
@@ -162,7 +162,6 @@ class _ProfileState extends State<Profile> {
                   child: Divider(
                     height: 24,
                     color: Colors.red,
-                   
                   ),
                 ),
                 buildHorizontalMenu(),
@@ -171,7 +170,6 @@ class _ProfileState extends State<Profile> {
                   child: Divider(
                     height: 24,
                     color: Colors.red,
-                 
                   ),
                 ),
                 buildVerticalMenu()
@@ -271,7 +269,6 @@ class _ProfileState extends State<Profile> {
                   // color: Colors.redAccent,
                   decoration: BoxDecoration(
                     color: MyTheme.light_grey,
-
                     shape: BoxShape.circle,
                   ),
                   child: Padding(
@@ -336,8 +333,9 @@ class _ProfileState extends State<Profile> {
         children: [
           InkWell(
             onTap: () {
-              ToastComponent.showDialog(AppLocalizations.of(context).common_coming_soon, context,
-                  gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+              ToastComponent.showDialog(
+                  AppLocalizations.of(context).common_coming_soon, context,
+                  gravity: Toast.center, duration: Toast.lengthLong);
             },
             child: Visibility(
               visible: false,
@@ -362,7 +360,8 @@ class _ProfileState extends State<Profile> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: Text(
-                        AppLocalizations.of(context).profile_screen_notification,
+                        AppLocalizations.of(context)
+                            .profile_screen_notification,
                         textAlign: TextAlign.center,
                         style:
                             TextStyle(color: MyTheme.font_grey, fontSize: 14),
@@ -400,7 +399,8 @@ class _ProfileState extends State<Profile> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: Text(
-                      AppLocalizations.of(context).profile_screen_purchase_history,
+                      AppLocalizations.of(context)
+                          .profile_screen_purchase_history,
                       textAlign: TextAlign.center,
                       style: TextStyle(color: MyTheme.font_grey, fontSize: 14),
                     ),
@@ -438,7 +438,8 @@ class _ProfileState extends State<Profile> {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16.0),
                           child: Text(
-                            AppLocalizations.of(context).profile_screen_earning_points,
+                            AppLocalizations.of(context)
+                                .profile_screen_earning_points,
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 color: MyTheme.font_grey, fontSize: 14),
@@ -451,43 +452,44 @@ class _ProfileState extends State<Profile> {
               : Container(),
           refund_addon_installed.$
               ? InkWell(
-            onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) {
-                    return RefundRequest();
-                  }));
-            },
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 16.0),
-              child: Row(
-                children: [
-                  Container(
-                      height: 40,
-                      width: 40,
-                      decoration: BoxDecoration(
-                        color: Colors.pinkAccent,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Icon(
-                          Icons.double_arrow,
-                          color: Colors.white,
-                        ),
-                      )),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Text(
-                      AppLocalizations.of(context).profile_screen_refund_requests,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: MyTheme.font_grey, fontSize: 14),
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return RefundRequest();
+                    }));
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 16.0),
+                    child: Row(
+                      children: [
+                        Container(
+                            height: 40,
+                            width: 40,
+                            decoration: BoxDecoration(
+                              color: Colors.pinkAccent,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Icon(
+                                Icons.double_arrow,
+                                color: Colors.white,
+                              ),
+                            )),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Text(
+                            AppLocalizations.of(context)
+                                .profile_screen_refund_requests,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: MyTheme.font_grey, fontSize: 14),
+                          ),
+                        )
+                      ],
                     ),
-                  )
-                ],
-              ),
-            ),
-          )
+                  ),
+                )
               : Container(),
         ],
       ),
@@ -604,20 +606,17 @@ class _ProfileState extends State<Profile> {
         ),
         Padding(
             padding: const EdgeInsets.only(top: 4.0),
-            child:
-                Text(
-                  //if user email is not available then check user phone if user phone is not available use empty string
-                    "${user_email.$ != "" && user_email.$ != null?
-                    user_email.$:user_phone.$ != "" && user_phone.$ != null?user_phone.$:''}",
-                    style: TextStyle(
-                      color: MyTheme.medium_grey,
-                    ),
-                  )
-        ),
+            child: Text(
+              //if user email is not available then check user phone if user phone is not available use empty string
+              "${user_email.$ != "" && user_email.$ != null ? user_email.$ : user_phone.$ != "" && user_phone.$ != null ? user_phone.$ : ''}",
+              style: TextStyle(
+                color: MyTheme.medium_grey,
+              ),
+            )),
         Padding(
           padding: const EdgeInsets.only(top: 16.0),
           child: Container(
-            height:30,
+            height: 30,
             child: FlatButton(
               color: Colors.green,
               // 	rgb(50,205,50)
@@ -649,15 +648,17 @@ class _ProfileState extends State<Profile> {
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
-backgroundColor: Colors.white,
- flexibleSpace: Container(
+      backgroundColor: Colors.white,
+      flexibleSpace: Container(
         decoration: BoxDecoration(
             gradient: LinearGradient(colors: [
-          // Color(0xff0fc744),
-          // Color(0xff3fcad2)
-          Color.fromRGBO(206, 35, 43, 1),
-          Color.fromRGBO(237, 101, 85, 1),
-        ], begin: Alignment.topCenter,end:Alignment.bottomCenter),borderRadius: BorderRadius.horizontal(left: Radius.circular(20),right: Radius.circular(20))),
+              // Color(0xff0fc744),
+              // Color(0xff3fcad2)
+              Color.fromRGBO(206, 35, 43, 1),
+              Color.fromRGBO(237, 101, 85, 1),
+            ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
+            borderRadius: BorderRadius.horizontal(
+                left: Radius.circular(20), right: Radius.circular(20))),
       ),
       centerTitle: true,
       leading: GestureDetector(

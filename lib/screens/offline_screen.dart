@@ -14,7 +14,6 @@ import 'package:active_ecommerce_flutter/screens/order_details.dart';
 import 'package:active_ecommerce_flutter/helpers/file_helper.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
 class OfflineScreen extends StatefulWidget {
   int order_id;
   String details;
@@ -65,14 +64,17 @@ class _OfflineState extends State<OfflineScreen> {
 
     if (amount == "" || name == "" || trx_id == "") {
       ToastComponent.showDialog(
-          AppLocalizations.of(context).offline_screen_amount_name_trxid_warning, context,
-          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+          AppLocalizations.of(context).offline_screen_amount_name_trxid_warning,
+          context,
+          gravity: Toast.center,
+          duration: Toast.lengthLong);
       return;
     }
 
     if (_photo_path == "" || _photo_upload_id == 0) {
-      ToastComponent.showDialog(AppLocalizations.of(context).offline_screen_photo_warning, context,
-          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+      ToastComponent.showDialog(
+          AppLocalizations.of(context).offline_screen_photo_warning, context,
+          gravity: Toast.center, duration: Toast.lengthLong);
       return;
     }
 
@@ -86,11 +88,10 @@ class _OfflineState extends State<OfflineScreen> {
 
     if (submitResponse.result == false) {
       ToastComponent.showDialog(submitResponse.message, context,
-          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+          gravity: Toast.center, duration: Toast.lengthLong);
     } else {
       ToastComponent.showDialog(submitResponse.message, context,
-          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
-
+          gravity: Toast.center, duration: Toast.lengthLong);
       Navigator.push(context, MaterialPageRoute(builder: (context) {
         return OrderDetails(id: widget.order_id, go_back: false);
       }));
@@ -105,8 +106,10 @@ class _OfflineState extends State<OfflineScreen> {
       showDialog(
           context: context,
           builder: (BuildContext context) => CupertinoAlertDialog(
-                title: Text(AppLocalizations.of(context).common_photo_permission),
-                content: Text(AppLocalizations.of(context).common_app_needs_permission),
+                title:
+                    Text(AppLocalizations.of(context).common_photo_permission),
+                content: Text(
+                    AppLocalizations.of(context).common_app_needs_permission),
                 actions: <Widget>[
                   CupertinoDialogAction(
                     child: Text(AppLocalizations.of(context).common_deny),
@@ -121,14 +124,15 @@ class _OfflineState extends State<OfflineScreen> {
     } else if (status.isRestricted) {
       ToastComponent.showDialog(
           AppLocalizations.of(context).common_give_photo_permission, context,
-          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+          gravity: Toast.center, duration: Toast.lengthLong);
     } else if (status.isGranted) {
       //file = await ImagePicker.pickImage(source: ImageSource.camera);
       _photo_file = await _picker.pickImage(source: ImageSource.gallery);
 
       if (_photo_file == null) {
-        ToastComponent.showDialog(AppLocalizations.of(context).common_no_file_chosen, context,
-            gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+        ToastComponent.showDialog(
+            AppLocalizations.of(context).common_no_file_chosen, context,
+            gravity: Toast.center, duration: Toast.lengthLong);
         return;
       }
 
@@ -145,12 +149,11 @@ class _OfflineState extends State<OfflineScreen> {
       if (imageUpdateResponse.result == false) {
         print(imageUpdateResponse.message);
         ToastComponent.showDialog(imageUpdateResponse.message, context,
-            gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+            gravity: Toast.center, duration: Toast.lengthLong);
         return;
       } else {
         ToastComponent.showDialog(imageUpdateResponse.message, context,
-            gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
-
+            gravity: Toast.center, duration: Toast.lengthLong);
         _photo_path = imageUpdateResponse.path;
         _photo_upload_id = imageUpdateResponse.upload_id;
         setState(() {});
@@ -195,7 +198,7 @@ class _OfflineState extends State<OfflineScreen> {
           height: 100,
           child: Center(
               child: Text(
-                AppLocalizations.of(context).common_login_warning,
+            AppLocalizations.of(context).common_login_warning,
             style: TextStyle(color: MyTheme.font_grey),
           )));
     } else {
@@ -251,7 +254,8 @@ class _OfflineState extends State<OfflineScreen> {
             Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
               child: Text(
-                AppLocalizations.of(context).offline_screen_fill_up_necessary_info,
+                AppLocalizations.of(context)
+                    .offline_screen_fill_up_necessary_info,
                 style: TextStyle(color: MyTheme.grey_153, fontSize: 14.0),
               ),
             ),
@@ -358,7 +362,8 @@ class _OfflineState extends State<OfflineScreen> {
                 _photo_path != ""
                     ? Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Text(AppLocalizations.of(context).common_selected),
+                        child:
+                            Text(AppLocalizations.of(context).common_selected),
                       )
                     : Container()
               ],

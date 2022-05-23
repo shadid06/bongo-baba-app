@@ -21,18 +21,17 @@ import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 import 'package:active_ecommerce_flutter/repositories/profile_repository.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
 class Login extends StatefulWidget {
   @override
   _LoginState createState() => _LoginState();
 }
 
 class _LoginState extends State<Login> {
-  bool password=true;
+  bool password = true;
   String _login_by = "email"; //phone or email
   // String initialCountry = 'US';
   // PhoneNumber phoneCode = PhoneNumber(isoCode: 'US', dialCode: "+1");
-    String initialCountry = 'BD';
+  String initialCountry = 'BD';
   PhoneNumber phoneCode = PhoneNumber(isoCode: 'BD', dialCode: "+880");
   String _phone = "";
 
@@ -61,16 +60,19 @@ class _LoginState extends State<Login> {
     var password = _passwordController.text.toString();
 
     if (_login_by == 'email' && email == "") {
-      ToastComponent.showDialog(AppLocalizations.of(context).login_screen_email_warning, context,
-          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+      ToastComponent.showDialog(
+          AppLocalizations.of(context).login_screen_email_warning, context,
+          gravity: Toast.center, duration: Toast.lengthLong);
       return;
     } else if (_login_by == 'phone' && _phone == "") {
-      ToastComponent.showDialog(AppLocalizations.of(context).login_screen_phone_warning, context,
-          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+      ToastComponent.showDialog(
+          AppLocalizations.of(context).login_screen_phone_warning, context,
+          gravity: Toast.center, duration: Toast.lengthLong);
       return;
     } else if (password == "") {
-      ToastComponent.showDialog(AppLocalizations.of(context).login_screen_password_warning, context,
-          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+      ToastComponent.showDialog(
+          AppLocalizations.of(context).login_screen_password_warning, context,
+          gravity: Toast.center, duration: Toast.lengthLong);
       return;
     }
 
@@ -78,11 +80,10 @@ class _LoginState extends State<Login> {
         .getLoginResponse(_login_by == 'email' ? email : _phone, password);
     if (loginResponse.result == false) {
       ToastComponent.showDialog(loginResponse.message, context,
-          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+          gravity: Toast.center, duration: Toast.lengthLong);
     } else {
-
       ToastComponent.showDialog(loginResponse.message, context,
-          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+          gravity: Toast.center, duration: Toast.lengthLong);
       AuthHelper().setUserData(loginResponse);
       // push notification starts
       if (OtherConfig.USE_PUSH_NOTIFICATION) {
@@ -121,20 +122,23 @@ class _LoginState extends State<Login> {
   }
 
   onPressedFacebookLogin() async {
-    final facebookLogin =await FacebookAuth.instance.login(loginBehavior: LoginBehavior.webOnly);
+    final facebookLogin =
+        await FacebookAuth.instance.login(loginBehavior: LoginBehavior.webOnly);
     if (facebookLogin.status == LoginStatus.success) {
       // get the user data
       // by default we get the userId, email,name and picture
       final userData = await FacebookAuth.instance.getUserData();
       var loginResponse = await AuthRepository().getSocialLoginResponse(
-          userData['name'].toString(), userData['email'].toString(), userData['id'].toString());
+          userData['name'].toString(),
+          userData['email'].toString(),
+          userData['id'].toString());
       print("..........................${loginResponse.toString()}");
       if (loginResponse.result == false) {
         ToastComponent.showDialog(loginResponse.message, context,
-            gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+            gravity: Toast.center, duration: Toast.lengthLong);
       } else {
         ToastComponent.showDialog(loginResponse.message, context,
-            gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+            gravity: Toast.center, duration: Toast.lengthLong);
         AuthHelper().setUserData(loginResponse);
         Navigator.push(context, MaterialPageRoute(builder: (context) {
           return Main();
@@ -148,7 +152,6 @@ class _LoginState extends State<Login> {
       print(facebookLogin.status);
       print(facebookLogin.message);
     }
-
 
     /*print(facebookLoginResult.accessToken);
     print(facebookLoginResult.accessToken.token);
@@ -203,10 +206,10 @@ class _LoginState extends State<Login> {
       print(loginResponse);
       if (loginResponse.result == false) {
         ToastComponent.showDialog(loginResponse.message, context,
-            gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+            gravity: Toast.center, duration: Toast.lengthLong);
       } else {
         ToastComponent.showDialog(loginResponse.message, context,
-            gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+            gravity: Toast.center, duration: Toast.lengthLong);
         AuthHelper().setUserData(loginResponse);
         Navigator.push(context, MaterialPageRoute(builder: (context) {
           return Main();
@@ -217,7 +220,6 @@ class _LoginState extends State<Login> {
       print("error is ....... $e");
       // TODO
     }
-
 
     /*
     GoogleSignIn _googleSignIn = GoogleSignIn(
@@ -267,7 +269,7 @@ class _LoginState extends State<Login> {
     return Directionality(
       textDirection: app_language_rtl.$ ? TextDirection.rtl : TextDirection.ltr,
       child: Scaffold(
-      backgroundColor:MyTheme.white,
+        backgroundColor: MyTheme.white,
         body: Stack(
           children: [
             // Container(
@@ -286,14 +288,15 @@ class _LoginState extends State<Login> {
                     child: Container(
                       width: 75,
                       height: 75,
-                      child:
-                          Image.asset('assets/login_registration_form_logo.png'),
+                      child: Image.asset(
+                          'assets/login_registration_form_logo.png'),
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 20.0),
                     child: Text(
-                      "${AppLocalizations.of(context).login_screen_login_to} " + AppConfig.app_name,
+                      "${AppLocalizations.of(context).login_screen_login_to} " +
+                          AppConfig.app_name,
                       style: TextStyle(
                           color: MyTheme.accent_color,
                           fontSize: 18,
@@ -308,7 +311,11 @@ class _LoginState extends State<Login> {
                         Padding(
                           padding: const EdgeInsets.only(bottom: 4.0),
                           child: Text(
-                            _login_by == "email" ? AppLocalizations.of(context).login_screen_email : AppLocalizations.of(context).login_screen_phone,
+                            _login_by == "email"
+                                ? AppLocalizations.of(context)
+                                    .login_screen_email
+                                : AppLocalizations.of(context)
+                                    .login_screen_phone,
                             style: TextStyle(
                                 color: MyTheme.accent_color,
                                 fontWeight: FontWeight.w600),
@@ -338,7 +345,8 @@ class _LoginState extends State<Login> {
                                           });
                                         },
                                         child: Text(
-                                            AppLocalizations.of(context).login_screen_or_login_with_phone,
+                                          AppLocalizations.of(context)
+                                              .login_screen_or_login_with_phone,
                                           style: TextStyle(
                                               color: MyTheme.accent_color,
                                               fontStyle: FontStyle.italic,
@@ -369,7 +377,8 @@ class _LoginState extends State<Login> {
                                       print(value);
                                     },
                                     selectorConfig: SelectorConfig(
-                                      selectorType: PhoneInputSelectorType.DIALOG,
+                                      selectorType:
+                                          PhoneInputSelectorType.DIALOG,
                                     ),
                                     ignoreBlank: false,
                                     autoValidateMode: AutovalidateMode.disabled,
@@ -380,8 +389,9 @@ class _LoginState extends State<Login> {
                                     initialValue: phoneCode,
                                     textFieldController: _phoneNumberController,
                                     formatInput: true,
-                                    keyboardType: TextInputType.numberWithOptions(
-                                        signed: true, decimal: true),
+                                    keyboardType:
+                                        TextInputType.numberWithOptions(
+                                            signed: true, decimal: true),
                                     inputDecoration: InputDecorations
                                         .buildInputDecoration_phone(
                                             hint_text: "01710 333 558"),
@@ -397,7 +407,8 @@ class _LoginState extends State<Login> {
                                     });
                                   },
                                   child: Text(
-                                    AppLocalizations.of(context).login_screen_or_login_with_email,
+                                    AppLocalizations.of(context)
+                                        .login_screen_or_login_with_email,
                                     style: TextStyle(
                                         color: MyTheme.accent_color,
                                         fontStyle: FontStyle.italic,
@@ -431,13 +442,14 @@ class _LoginState extends State<Login> {
                                   autocorrect: false,
                                   decoration:
                                       InputDecorations.buildInputDecoration_1(
-                                        prefixicon:InkWell(
-                                          onTap: showpassword,
-                                       child: Icon(password?Icons.visibility:Icons.visibility_off), ),
-                                        
-                                        
-                                          hint_text: "* * * * * *",
-                                          ),
+                                    prefixicon: InkWell(
+                                      onTap: showpassword,
+                                      child: Icon(password
+                                          ? Icons.visibility
+                                          : Icons.visibility_off),
+                                    ),
+                                    hint_text: "* * * * * *",
+                                  ),
                                 ),
                               ),
                               GestureDetector(
@@ -448,7 +460,8 @@ class _LoginState extends State<Login> {
                                   }));
                                 },
                                 child: Text(
-                                    AppLocalizations.of(context).login_screen_forgot_password,
+                                  AppLocalizations.of(context)
+                                      .login_screen_forgot_password,
                                   style: TextStyle(
                                       color: MyTheme.accent_color,
                                       fontStyle: FontStyle.italic,
@@ -470,12 +483,13 @@ class _LoginState extends State<Login> {
                             child: FlatButton(
                               minWidth: MediaQuery.of(context).size.width,
                               //height: 50,
-                             color: MyTheme.blue_color,
+                              color: MyTheme.blue_color,
                               shape: RoundedRectangleBorder(
                                   borderRadius: const BorderRadius.all(
                                       Radius.circular(12.0))),
                               child: Text(
-                                AppLocalizations.of(context).login_screen_log_in,
+                                AppLocalizations.of(context)
+                                    .login_screen_log_in,
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 14,
@@ -491,7 +505,8 @@ class _LoginState extends State<Login> {
                           padding: const EdgeInsets.only(top: 20.0),
                           child: Center(
                               child: Text(
-                                AppLocalizations.of(context).login_screen_or_create_new_account,
+                            AppLocalizations.of(context)
+                                .login_screen_or_create_new_account,
                             style: TextStyle(
                                 color: MyTheme.medium_grey, fontSize: 12),
                           )),
@@ -513,7 +528,8 @@ class _LoginState extends State<Login> {
                                   borderRadius: const BorderRadius.all(
                                       Radius.circular(12.0))),
                               child: Text(
-                                AppLocalizations.of(context).login_screen_sign_up,
+                                AppLocalizations.of(context)
+                                    .login_screen_sign_up,
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 14,
@@ -529,16 +545,16 @@ class _LoginState extends State<Login> {
                           ),
                         ),
                         Visibility(
-                          visible: allow_google_login.$ ||
-                              allow_facebook_login.$,
+                          visible:
+                              allow_google_login.$ || allow_facebook_login.$,
                           child: Padding(
                             padding: const EdgeInsets.only(top: 20.0),
                             child: Center(
                                 child: Text(''
-                                  // AppLocalizations.of(context).login_screen_login_with,
-                              // style: TextStyle(
-                              //     color: MyTheme.medium_grey, fontSize: 14),
-                            )),
+                                    // AppLocalizations.of(context).login_screen_login_with,
+                                    // style: TextStyle(
+                                    //     color: MyTheme.medium_grey, fontSize: 14),
+                                    )),
                           ),
                         ),
                         Padding(
@@ -547,7 +563,8 @@ class _LoginState extends State<Login> {
                             child: Container(
                               width: 120,
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Visibility(
                                     visible: allow_google_login.$,
@@ -609,7 +626,7 @@ class _LoginState extends State<Login> {
 
   void showpassword() {
     setState(() {
-      password=!password;
+      password = !password;
     });
   }
 }

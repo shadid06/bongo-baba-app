@@ -37,7 +37,7 @@ class _MainState extends State<Main> {
     ),
     Home(),
     Cart(has_bottomnav: true),
-    // Profile()
+    Profile(),
 
     !is_logged_in.$ == true ? Login() : Profile()
   ];
@@ -128,14 +128,16 @@ class _MainState extends State<Main> {
                             : Color.fromRGBO(153, 153, 153, 1),
                         height: 20,
                       ),
-                      title: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          AppLocalizations.of(context)
-                              .main_screen_bottom_navigation_home,
-                          style: TextStyle(fontSize: 12),
-                        ),
-                      )),
+                      label: "Home"
+                      // title: Padding(
+                      //   padding: const EdgeInsets.all(8.0),
+                      //   child: Text(
+                      //     AppLocalizations.of(context)
+                      //         .main_screen_bottom_navigation_home,
+                      //     style: TextStyle(fontSize: 12),
+                      //   ),
+                      // )
+                      ),
                   BottomNavigationBarItem(
                       icon: Image.asset(
                         "assets/categories.png",
@@ -144,21 +146,24 @@ class _MainState extends State<Main> {
                             : Color.fromRGBO(153, 153, 153, 1),
                         height: 20,
                       ),
-                      title: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          AppLocalizations.of(context)
-                              .main_screen_bottom_navigation_categories,
-                          style: TextStyle(fontSize: 12),
-                        ),
-                      )),
+                      label: "Category"
+                      // title: Padding(
+                      //   padding: const EdgeInsets.all(8.0),
+                      //   child: Text(
+                      //     AppLocalizations.of(context)
+                      //         .main_screen_bottom_navigation_categories,
+                      //     style: TextStyle(fontSize: 12),
+                      //   ),
+                      // )
+                      ),
                   BottomNavigationBarItem(
-                    icon: Icon(
-                      Icons.circle,
-                      color: Colors.transparent,
-                    ),
-                    title: Text(""),
-                  ),
+                      icon: Icon(
+                        Icons.circle,
+                        color: Colors.transparent,
+                      ),
+                      label: ""
+                      // title: Text(""),
+                      ),
                   BottomNavigationBarItem(
                       icon: Image.asset(
                         "assets/cart.png",
@@ -167,14 +172,16 @@ class _MainState extends State<Main> {
                             : Color.fromRGBO(153, 153, 153, 1),
                         height: 20,
                       ),
-                      title: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          AppLocalizations.of(context)
-                              .main_screen_bottom_navigation_cart,
-                          style: TextStyle(fontSize: 12),
-                        ),
-                      )),
+                      label: "Cart"
+                      // title: Padding(
+                      //   padding: const EdgeInsets.all(8.0),
+                      //   child: Text(
+                      //     AppLocalizations.of(context)
+                      //         .main_screen_bottom_navigation_cart,
+                      //     style: TextStyle(fontSize: 12),
+                      //   ),
+                      // )
+                      ),
                   BottomNavigationBarItem(
                       icon: Image.asset(
                         "assets/profile.png",
@@ -183,14 +190,16 @@ class _MainState extends State<Main> {
                             : Color.fromRGBO(153, 153, 153, 1),
                         height: 20,
                       ),
-                      title: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          AppLocalizations.of(context)
-                              .main_screen_bottom_navigation_profile,
-                          style: TextStyle(fontSize: 12),
-                        ),
-                      )),
+                      label: "Profile"
+                      // title: Padding(
+                      //   padding: const EdgeInsets.all(8.0),
+                      //   child: Text(
+                      //     AppLocalizations.of(context)
+                      //         .main_screen_bottom_navigation_profile,
+                      //     style: TextStyle(fontSize: 12),
+                      //   ),
+                      // )
+                      ),
                 ],
               ),
             ),

@@ -250,7 +250,7 @@ class _ProductDetailsState extends State<ProductDetails> {
     if (is_logged_in.$ == false) {
       ToastComponent.showDialog(
           AppLocalizations.of(context).common_login_warning, context,
-          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+          gravity: Toast.center, duration: Toast.lengthLong);
       return;
     }
 
@@ -369,7 +369,7 @@ class _ProductDetailsState extends State<ProductDetails> {
       // ToastComponent.showDialog(
       //     AppLocalizations.of(context).common_login_warning, context,
       //     gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
-Navigator.push(context, MaterialPageRoute(builder: (context)=>Login()));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
       return;
     }
 
@@ -383,7 +383,7 @@ Navigator.push(context, MaterialPageRoute(builder: (context)=>Login()));
 
     if (cartAddResponse.result == false) {
       ToastComponent.showDialog(cartAddResponse.message, context,
-          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+          gravity: Toast.center, duration: Toast.lengthLong);
       return;
     } else {
       if (mode == "add_to_cart") {
@@ -704,8 +704,8 @@ Navigator.push(context, MaterialPageRoute(builder: (context)=>Login()));
           AppLocalizations.of(context)
               .product_details_screen_seller_chat_title_message_empty_warning,
           context,
-          gravity: Toast.CENTER,
-          duration: Toast.LENGTH_LONG);
+          gravity: Toast.center,
+          duration: Toast.lengthLong);
       return;
     }
 
@@ -718,8 +718,8 @@ Navigator.push(context, MaterialPageRoute(builder: (context)=>Login()));
           AppLocalizations.of(context)
               .product_details_screen_seller_chat_creation_unable_warning,
           context,
-          gravity: Toast.CENTER,
-          duration: Toast.LENGTH_LONG);
+          gravity: Toast.center,
+          duration: Toast.lengthLong);
       return;
     }
 
@@ -1135,8 +1135,8 @@ Navigator.push(context, MaterialPageRoute(builder: (context)=>Login()));
                                 AppLocalizations.of(context)
                                     .product_details_screen_video_not_available,
                                 context,
-                                gravity: Toast.CENTER,
-                                duration: Toast.LENGTH_LONG);
+                                gravity: Toast.center,
+                                duration: Toast.lengthLong);
                             return;
                           }
 
@@ -1230,7 +1230,6 @@ Navigator.push(context, MaterialPageRoute(builder: (context)=>Login()));
                               MaterialPageRoute(builder: (context) {
                             return CommonWebviewScreen(
                               url: 'https://bongobaba.com/privacy-policy-page',
-                             
                             );
 
                             // CommonWebviewScreen(
@@ -1274,13 +1273,13 @@ Navigator.push(context, MaterialPageRoute(builder: (context)=>Login()));
                       ),
                       Divider(
                         height: 1,
-                      ),                      InkWell(
+                      ),
+                      InkWell(
                         onTap: () {
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) {
                             return CommonWebviewScreen(
                               url: 'https://bongobaba.com/return-refund-page',
-                             
                             );
 
                             // CommonWebviewScreen(
@@ -1320,7 +1319,8 @@ Navigator.push(context, MaterialPageRoute(builder: (context)=>Login()));
                             ),
                           ),
                         ),
-                      ),   Divider(
+                      ),
+                      Divider(
                         height: 1,
                       ),
                       InkWell(
@@ -1328,8 +1328,8 @@ Navigator.push(context, MaterialPageRoute(builder: (context)=>Login()));
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) {
                             return CommonWebviewScreen(
-                              url: 'https://bongobaba.com/terms-conditions-page',
-                            
+                              url:
+                                  'https://bongobaba.com/terms-conditions-page',
                             );
                             // CommonWebviewScreen(
                             //   url:
@@ -1350,7 +1350,8 @@ Navigator.push(context, MaterialPageRoute(builder: (context)=>Login()));
                             ),
                             child: Row(
                               children: [
-                                Text('Terms & Condition',
+                                Text(
+                                  'Terms & Condition',
                                   // AppLocalizations.of(context)
                                   //     .product_details_screen_return_policy,
                                   style: TextStyle(
@@ -1377,9 +1378,7 @@ Navigator.push(context, MaterialPageRoute(builder: (context)=>Login()));
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) {
                             return CommonWebviewScreen(
-                              url:
-                                  'https://bongobaba.com/support-policy-page',
-                              
+                              url: 'https://bongobaba.com/support-policy-page',
                             );
 
                             // CommonWebviewScreen(
@@ -1612,7 +1611,7 @@ Navigator.push(context, MaterialPageRoute(builder: (context)=>Login()));
               onTap: () {
                 if (is_logged_in == false) {
                   ToastComponent.showDialog("You need to log in", context,
-                      gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+                      gravity: Toast.center, duration: Toast.lengthLong);
                   return;
                 }
 

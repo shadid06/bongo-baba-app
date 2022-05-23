@@ -51,7 +51,7 @@ class _RazorpayScreenState extends State<RazorpayScreen> {
 
     if (orderCreateResponse.result == false) {
       ToastComponent.showDialog(orderCreateResponse.message, context,
-          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+          gravity: Toast.center, duration: Toast.lengthLong);
       Navigator.of(context).pop();
       return;
     }
@@ -92,8 +92,8 @@ class _RazorpayScreenState extends State<RazorpayScreen> {
       Map<String, dynamic> responseJSON = jsonDecode(decodedJSON);
       //print(responseJSON.toString());
       if (responseJSON["result"] == false) {
-        Toast.show(responseJSON["message"], context,
-            duration: Toast.LENGTH_LONG, gravity: Toast.CENTER);
+        Toast.show(responseJSON["message"],
+            gravity: Toast.center, duration: Toast.lengthLong);
 
         Navigator.pop(context);
       } else if (responseJSON["result"] == true) {
@@ -113,14 +113,14 @@ class _RazorpayScreenState extends State<RazorpayScreen> {
 
     if (razorpayPaymentSuccessResponse.result == false) {
       print("c");
-      Toast.show(razorpayPaymentSuccessResponse.message, context,
-          duration: Toast.LENGTH_LONG, gravity: Toast.CENTER);
+      Toast.show(razorpayPaymentSuccessResponse.message,
+          gravity: Toast.center, duration: Toast.lengthLong);
       Navigator.pop(context);
       return;
     }
 
-    Toast.show(razorpayPaymentSuccessResponse.message, context,
-        duration: Toast.LENGTH_LONG, gravity: Toast.CENTER);
+    Toast.show(razorpayPaymentSuccessResponse.message,
+        gravity: Toast.center, duration: Toast.lengthLong);
     if (widget.payment_type == "cart_payment") {
       Navigator.push(context, MaterialPageRoute(builder: (context) {
         return OrderList(from_checkout: true);
@@ -175,7 +175,7 @@ class _RazorpayScreenState extends State<RazorpayScreen> {
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
-backgroundColor: Colors.white,
+      backgroundColor: Colors.white,
       centerTitle: true,
       leading: Builder(
         builder: (context) => IconButton(

@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:active_ecommerce_flutter/app_config.dart';
 import 'package:active_ecommerce_flutter/my_theme.dart';
 import 'package:active_ecommerce_flutter/screens/main.dart';
@@ -296,7 +294,7 @@ class _CustomSplashScreenState extends State<CustomSplashScreen> {
     return Directionality(
       textDirection: app_language_rtl.$ ? TextDirection.rtl : TextDirection.ltr,
       child: Scaffold(
-             backgroundColor: Color(0xffeafbf0),
+        backgroundColor: Color(0xffeafbf0),
         body: InkWell(
           onTap: widget.onClick,
           child: Stack(

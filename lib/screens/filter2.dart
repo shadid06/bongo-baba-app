@@ -388,27 +388,30 @@ class _FilterState2 extends State<Filter2> {
       child: Scaffold(
         endDrawer: buildFilterDrawer(),
         key: _scaffoldKey,
-         backgroundColor: Color(0xffeafbf0),
-        body: Stack(overflow: Overflow.visible, children: [
-          _selectedFilter.option_key == 'product'
-              ? buildProductList()
-              : (_selectedFilter.option_key == 'brands'
-                  ? buildBrandList()
-                  : buildShopList()),
-          Positioned(
-            top: 0.0,
-            left: 0.0,
-            right: 0.0,
-            child: buildAppBar(context),
-          ),
-          Align(
-              alignment: Alignment.bottomCenter,
-              child: _selectedFilter.option_key == 'product'
-                  ? buildProductLoadingContainer()
+        backgroundColor: Color(0xffeafbf0),
+        body: Stack(
+            // overflow: Overflow.visible,
+
+            children: [
+              _selectedFilter.option_key == 'product'
+                  ? buildProductList()
                   : (_selectedFilter.option_key == 'brands'
-                      ? buildBrandLoadingContainer()
-                      : buildShopLoadingContainer()))
-        ]),
+                      ? buildBrandList()
+                      : buildShopList()),
+              Positioned(
+                top: 0.0,
+                left: 0.0,
+                right: 0.0,
+                child: buildAppBar(context),
+              ),
+              Align(
+                  alignment: Alignment.bottomCenter,
+                  child: _selectedFilter.option_key == 'product'
+                      ? buildProductLoadingContainer()
+                      : (_selectedFilter.option_key == 'brands'
+                          ? buildBrandLoadingContainer()
+                          : buildShopLoadingContainer()))
+            ]),
       ),
     );
   }
@@ -428,7 +431,7 @@ class _FilterState2 extends State<Filter2> {
                 // Color(0xff3fcad2)
                 Color.fromRGBO(206, 35, 43, 1),
                 Color.fromRGBO(237, 101, 85, 1),
-              ], begin: Alignment.topCenter,end:Alignment.bottomCenter),
+              ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
               borderRadius: BorderRadius.horizontal(
                   left: Radius.circular(20), right: Radius.circular(20))),
           child: Padding(
@@ -487,8 +490,8 @@ class _FilterState2 extends State<Filter2> {
                 : ToastComponent.showDialog(
                     AppLocalizations.of(context).filter_screen_sort_warning,
                     context,
-                    gravity: Toast.CENTER,
-                    duration: Toast.LENGTH_LONG);
+                    gravity: Toast.center,
+                    duration: Toast.lengthLong);
           },
           child: Container(
             decoration: BoxDecoration(
@@ -669,8 +672,8 @@ class _FilterState2 extends State<Filter2> {
                 : ToastComponent.showDialog(
                     AppLocalizations.of(context).filter_screen_filter_warning,
                     context,
-                    gravity: Toast.CENTER,
-                    duration: Toast.LENGTH_LONG);
+                    gravity: Toast.center,
+                    duration: Toast.lengthLong);
           },
           child: Container(
             decoration: BoxDecoration(
@@ -1030,8 +1033,8 @@ class _FilterState2 extends State<Filter2> {
                                 AppLocalizations.of(context)
                                     .filter_screen_min_max_warning,
                                 context,
-                                gravity: Toast.CENTER,
-                                duration: Toast.LENGTH_LONG);
+                                gravity: Toast.center,
+                                duration: Toast.lengthLong);
                             apply = false;
                           }
                         }
@@ -1226,7 +1229,7 @@ class _FilterState2 extends State<Filter2> {
                     crossAxisCount: 2,
                     crossAxisSpacing: 0,
                     mainAxisSpacing: 10,
-                    childAspectRatio:  1),
+                    childAspectRatio: 1),
                 padding: EdgeInsets.all(5),
                 physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,

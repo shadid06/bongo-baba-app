@@ -9,7 +9,6 @@ import 'package:toast/toast.dart';
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
 class Wishlist extends StatefulWidget {
   @override
   _WishlistState createState() => _WishlistState();
@@ -65,7 +64,7 @@ class _WishlistState extends State<Wishlist> {
 
     if (wishlistDeleteResponse.result == true) {
       ToastComponent.showDialog(wishlistDeleteResponse.message, context,
-          gravity: Toast.TOP, duration: Toast.LENGTH_SHORT);
+          gravity: Toast.center, duration: Toast.lengthLong);
     }
   }
 
@@ -120,7 +119,7 @@ class _WishlistState extends State<Wishlist> {
           height: 100,
           child: Center(
               child: Text(
-                AppLocalizations.of(context).wishlist_screen_login_warning,
+            AppLocalizations.of(context).wishlist_screen_login_warning,
             style: TextStyle(color: MyTheme.font_grey),
           )));
     } else if (_wishlistInit == true && _wishlistItems.length == 0) {
@@ -146,7 +145,8 @@ class _WishlistState extends State<Wishlist> {
       return Container(
           height: 100,
           child: Center(
-              child: Text(AppLocalizations.of(context).common_no_item_is_available,
+              child: Text(
+                  AppLocalizations.of(context).common_no_item_is_available,
                   style: TextStyle(color: MyTheme.font_grey))));
     }
   }

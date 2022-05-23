@@ -167,8 +167,12 @@ class _FlashDealListState extends State<FlashDealList> {
           return GestureDetector(
             onTap: () {
               if (time == null) {
-                ToastComponent.showDialog(AppLocalizations.of(context).flash_deal_list_screen_flash_deal_has_ended, context,
-                    gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+                ToastComponent.showDialog(
+                    AppLocalizations.of(context)
+                        .flash_deal_list_screen_flash_deal_has_ended,
+                    context,
+                    gravity: Toast.center,
+                    duration: Toast.lengthLong);
               } else {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
                   return FlashDealProducts(
@@ -215,7 +219,8 @@ class _FlashDealListState extends State<FlashDealList> {
                   child: Center(
                       child: time == null
                           ? Text(
-                        AppLocalizations.of(context).flash_deal_list_screen_ended,
+                              AppLocalizations.of(context)
+                                  .flash_deal_list_screen_ended,
                               style: TextStyle(
                                   color: MyTheme.accent_color,
                                   fontSize: 16.0,
@@ -300,14 +305,18 @@ class _FlashDealListState extends State<FlashDealList> {
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
       backgroundColor: Colors.white,
-       flexibleSpace: Container(
+      flexibleSpace: Container(
         decoration: BoxDecoration(
-            gradient: LinearGradient(colors: [
-          // Color(0xff0fc744),
-          // Color(0xff3fcad2)
-          Color.fromRGBO(206, 35, 43, 1),
-          Color.fromRGBO(237, 101, 85, 1),
-        ],),borderRadius: BorderRadius.horizontal(left: Radius.circular(20),right: Radius.circular(20))),
+            gradient: LinearGradient(
+              colors: [
+                // Color(0xff0fc744),
+                // Color(0xff3fcad2)
+                Color.fromRGBO(206, 35, 43, 1),
+                Color.fromRGBO(237, 101, 85, 1),
+              ],
+            ),
+            borderRadius: BorderRadius.horizontal(
+                left: Radius.circular(20), right: Radius.circular(20))),
       ),
       centerTitle: true,
       leading: Builder(

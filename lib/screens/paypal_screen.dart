@@ -10,7 +10,6 @@ import 'package:active_ecommerce_flutter/screens/wallet.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 
-
 class PaypalScreen extends StatefulWidget {
   double amount;
   String payment_type;
@@ -56,7 +55,7 @@ class _PaypalScreenState extends State<PaypalScreen> {
 
     if (orderCreateResponse.result == false) {
       ToastComponent.showDialog(orderCreateResponse.message, context,
-          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+          gravity: Toast.center, duration: Toast.lengthLong);
       Navigator.of(context).pop();
       return;
     }
@@ -74,14 +73,13 @@ class _PaypalScreenState extends State<PaypalScreen> {
 
     if (paypalUrlResponse.result == false) {
       ToastComponent.showDialog(paypalUrlResponse.message, context,
-          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+          gravity: Toast.center, duration: Toast.lengthLong);
       Navigator.of(context).pop();
       return;
     }
 
     _initial_url = paypalUrlResponse.url;
     _initial_url_fetched = true;
-
 
     setState(() {});
 
@@ -109,12 +107,12 @@ class _PaypalScreenState extends State<PaypalScreen> {
       Map<String, dynamic> responseJSON = jsonDecode(decodedJSON);
       //print(data.toString());
       if (responseJSON["result"] == false) {
-        Toast.show(responseJSON["message"], context,
-            duration: Toast.LENGTH_LONG, gravity: Toast.CENTER);
+        Toast.show(responseJSON["message"],
+            gravity: Toast.center, duration: Toast.lengthLong);
         Navigator.pop(context);
       } else if (responseJSON["result"] == true) {
-        Toast.show(responseJSON["message"], context,
-            duration: Toast.LENGTH_LONG, gravity: Toast.CENTER);
+        Toast.show(responseJSON["message"],
+            gravity: Toast.center, duration: Toast.lengthLong);
 
         if (widget.payment_type == "cart_payment") {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
@@ -141,7 +139,8 @@ class _PaypalScreenState extends State<PaypalScreen> {
     } else if (_initial_url_fetched == false) {
       return Container(
         child: Center(
-          child: Text(AppLocalizations.of(context).paypal_screen_fetching_paypal_url),
+          child: Text(
+              AppLocalizations.of(context).paypal_screen_fetching_paypal_url),
         ),
       );
     } else {
@@ -164,7 +163,7 @@ class _PaypalScreenState extends State<PaypalScreen> {
                 getData();
               } else if (page.contains("/paypal/payment/cancel")) {
                 ToastComponent.showDialog("Payment cancelled", context,
-                    gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+                    gravity: Toast.center, duration: Toast.lengthLong);
                 Navigator.of(context).pop();
                 return;
               }
@@ -177,7 +176,7 @@ class _PaypalScreenState extends State<PaypalScreen> {
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
-backgroundColor: Colors.white,
+      backgroundColor: Colors.white,
       centerTitle: true,
       leading: Builder(
         builder: (context) => IconButton(
@@ -186,7 +185,7 @@ backgroundColor: Colors.white,
         ),
       ),
       title: Text(
-          AppLocalizations.of(context).paypal_screen_pay_with_paypal,
+        AppLocalizations.of(context).paypal_screen_pay_with_paypal,
         style: TextStyle(fontSize: 16, color: MyTheme.accent_color),
       ),
       elevation: 0.0,
