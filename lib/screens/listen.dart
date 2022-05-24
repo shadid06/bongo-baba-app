@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:active_ecommerce_flutter/custom/listen_row.dart';
 import 'package:active_ecommerce_flutter/custom/music_card.dart';
 import 'package:active_ecommerce_flutter/custom/toast_component.dart';
@@ -8,6 +10,7 @@ import 'package:active_ecommerce_flutter/repositories/prayertime_repository.dart
 import 'package:active_ecommerce_flutter/ui_sections/drawer.dart';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -28,6 +31,10 @@ class _ListenState extends State<Listen> {
   bool isTimes = true;
   var zhur;
   var zhurCmp;
+  var zhurCmpHour;
+  var zhurCmpMinute;
+  var asarCmpHour;
+  var asarCmpMinute;
   var asar;
   var asarCmp;
   var sunsetCmp;
@@ -36,11 +43,36 @@ class _ListenState extends State<Listen> {
   var magrib;
   var isha;
   var ishaCmp;
+  var percent = 0;
+  String currentTime;
+  var currentTimeSplit;
+  var currentHour;
+  var currentMinute;
+  var selectedYakt;
+  var selectedYaktTimeDifference;
+  var selectedHour;
+  var countDownHour;
+  var countDownMinute;
+  var differenInMinute;
+  var magribCmpHour;
+  var ishaCmpHour;
+  var totalAnimationTime;
+  var fajar;
+  var fajarCmp;
+  var fajarCmpHour;
+  var sunrise;
+  var sunriseCmp;
+  var sunriseCmpHour;
+  var magribCmpMinute;
+  var ishaCmpMinute;
+  var fajarCmpMinute;
+  var sunriseCmpMinute;
 
   @override
   void initState() {
     super.initState();
     fetchPrayerTime();
+    showTime();
   }
 
   fetchPrayerTime() async {
@@ -52,20 +84,46 @@ class _ListenState extends State<Listen> {
     setState(() {});
   }
 
+  showTime() {
+    var now = DateTime.now();
+    currentTime = DateFormat('HH:mm').format(now);
+    currentTimeSplit = currentTime.split(':');
+
+    currentHour = int.parse(currentTimeSplit[0]);
+    currentMinute = int.parse(currentTimeSplit[1]);
+    // if (currentHour > zhurCmpHour && currentHour < asarCmpHour) {}
+    print(currentTime); //HH:mm:ss
+    print(currentHour);
+  }
+
   timeConvert() {
+    fajar = prayerTimeResponse.data.timings.fajr.split(':');
+    sunrise = prayerTimeResponse.data.timings.sunrise.split(':');
     zhur = prayerTimeResponse.data.timings.dhuhr.split(':');
     asar = prayerTimeResponse.data.timings.asr.split(':');
     sunset = prayerTimeResponse.data.timings.sunset.split(':');
     magrib = prayerTimeResponse.data.timings.maghrib.split(':');
     isha = prayerTimeResponse.data.timings.isha.split(':');
+    fajarCmpHour = int.parse(fajar[0]);
+    fajarCmp = int.parse(fajar[0]);
+    fajarCmpMinute = int.parse(fajar[1]);
+    sunriseCmpHour = int.parse(sunrise[0]);
+    sunriseCmp = int.parse(sunrise[0]);
+    sunriseCmpMinute = int.parse(sunrise[1]);
+
     var zh;
     zh = zhur[0];
+    zhurCmpHour = int.parse(zh);
     zhurCmp = int.parse(zh);
+    zhurCmpMinute = int.parse(zhur[1]);
     if (zhurCmp >= 12) {
       zhurCmp = zhurCmp - 12;
     }
     var as;
     as = asar[0];
+    asarCmpHour = int.parse(as);
+    print(asarCmpHour);
+    asarCmpMinute = int.parse(asar[1]);
     asarCmp = int.parse(as);
     if (asarCmp >= 12) {
       asarCmp = asarCmp - 12;
@@ -78,117 +136,79 @@ class _ListenState extends State<Listen> {
     }
     var mg;
     mg = magrib[0];
+    magribCmpHour = int.parse(mg);
     magribCmp = int.parse(mg);
+    magribCmpMinute = int.parse(magrib[1]);
+    // print(magribCmpHour);
     if (magribCmp >= 12) {
       magribCmp = magribCmp - 12;
     }
     var ish;
     ish = isha[0];
+    ishaCmpHour = int.parse(ish);
     ishaCmp = int.parse(ish);
+    ishaCmpMinute = int.parse(isha[1]);
     if (ishaCmp >= 12) {
       ishaCmp = ishaCmp - 12;
     }
+    yaktSelector();
   }
-  // final AssetsAudioPlayer audioPlayer = AssetsAudioPlayer.withId("0");
-  // Audio selectedAudio;
-  // int globalIndex = 0;
-  // List<Audio> audioList = [
-  //   Audio.network(
-  //       'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-13.mp3',
-  //       metas: Metas(
-  //           title: 'Song1',
-  //           artist: 'Artist1',
-  //           album: 'album1',
-  //           //: MetasImage.network("assets/images/country.jpg"),
-  //           id: 'https://thumbs.dreamstime.com/b/environment-earth-day-hands-trees-growing-seedlings-bokeh-green-background-female-hand-holding-tree-nature-field-gra-130247647.jpg')),
-  //   Audio.network(
-  //       'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-14.mp3',
-  //       metas: Metas(
-  //           title: 'Song2',
-  //           artist: 'Artist2',
-  //           album: 'album1',
-  //           id: 'https://tinypng.com/images/social/website.jpg')),
-  //   Audio.network(
-  //       'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3',
-  //       metas: Metas(
-  //           title: 'Song3',
-  //           artist: 'Artist3',
-  //           album: 'album1',
-  //           id: 'https://static.addtoany.com/images/dracaena-cinnabari.jpg')),
-  // ];
-  // @override
-  // void initState() {
-  //   super.initState();
-  // }
 
-  // @override
-  // void dispose() {
-  //   super.dispose();
-  //   audioPlayer.dispose();
-  // }
+  yaktSelector() {
+    if (currentHour >= zhurCmpHour && currentHour <= asarCmpHour) {
+      selectedYakt = "যোহর";
+      // setState(() {});
+      var difHour = asarCmpHour - currentHour;
+      differenInMinute = ((difHour * 60) + asarCmpMinute) - currentMinute;
+      // totalAnimationTime = differenInMinute * 60000;
+      setState(() {});
+      // countDownHour = (differenInMinute / 60).floor();
+      // countDownMinute = (differenInMinute % 60);
+      // print(differenInMinute);
+      // print(countDownHour);
+      // print(countDownMinute);
+      //যোহর আছর মাগরিব ইশা সাহরি	ইফতার সূর্যোদয় সূর্যাস্ত চলছে
+    } else if (currentHour >= asarCmpHour && currentHour <= magribCmpHour) {
+      selectedYakt = "আছর";
+      setState(() {});
+      var difHour = magribCmpHour - currentHour;
+      differenInMinute = ((difHour * 60) + magribCmpMinute) - currentMinute;
+      // totalAnimationTime = differenInMinute * 60000;
+    } else if (currentHour >= magribCmpHour && currentHour <= ishaCmpHour) {
+      selectedYakt = "মাগরিব";
+      var difHour = ishaCmpHour - currentHour;
+      differenInMinute = ((difHour * 60) + ishaCmpMinute) - currentMinute;
+      // totalAnimationTime = differenInMinute * 60000;
+      setState(() {});
+    } else if (currentHour >= ishaCmpHour || currentHour <= fajarCmpHour) {
+      selectedYakt = "ইশা";
+      var difHour = fajarCmpHour - currentHour;
+      differenInMinute = ((difHour * 60) + fajarCmpMinute) - currentMinute;
+      setState(() {});
+    } else if (currentHour >= fajarCmpHour && currentHour <= sunriseCmpHour) {
+      selectedYakt = "ফজর";
+      var difHour = sunriseCmpHour - currentHour;
+      differenInMinute = ((difHour * 60) + sunriseCmpMinute) - currentMinute;
+      setState(() {});
+    } else if (currentHour >= sunriseCmpHour && currentHour <= zhurCmpHour) {
+      selectedYakt = "বাকি";
+      var difHour = zhurCmpHour - currentHour;
+      differenInMinute = ((difHour * 60) + zhurCmpMinute) - currentMinute;
+      setState(() {});
+    }
+  }
 
-  // void setupPlaylist() async {
-  //   audioPlayer.open(
-  //     Playlist(audios: audioList),
-  //     notificationSettings: NotificationSettings(
-  //       customPrevAction: (player) {
-  //         if (globalIndex > 0) {
-  //           globalIndex--;
-  //           setState(() {});
-  //           selectedAudio = audioList[globalIndex];
-  //           setState(() {});
-  //           player.playlistPlayAtIndex(globalIndex);
-  //           setState(() {});
-  //         } else if (globalIndex == 0) {
-  //           globalIndex = audioList.length - 1;
-  //           setState(() {});
-  //           selectedAudio = audioList[globalIndex];
-  //           setState(() {});
-  //           // player.previous(keepLoopMode: false);
-  //           player.playlistPlayAtIndex(globalIndex);
-  //           setState(() {});
-  //         }
-  //       },
-  //       customNextAction: (player) {
-  //         if (globalIndex == (audioList.length - 1)) {
-  //           globalIndex = 0;
-  //           setState(() {});
-  //           selectedAudio = audioList[globalIndex];
-  //           setState(() {});
-  //         } else if (globalIndex < audioList.length - 1) {
-  //           globalIndex++;
-  //           setState(() {});
-  //           selectedAudio = audioList[globalIndex];
-  //           setState(() {});
-  //         }
-  //         player.next();
-  //       },
-  //     ),
-  //     showNotification: true,
-  //     autoStart: false,
-  //     // loopMode: isLoop == true ? LoopMode.single : LoopMode.none
-  //   );
-  // }
-
-  // playMusic() async {
-  //   // await audioPlayer.play();
-  //   await audioPlayer.playlistPlayAtIndex(globalIndex);
-  // }
-
-  // pauseMusic() async {
-  //   await audioPlayer.pause();
-  // }
-
-  // skipPrevious() async {
-  //   await audioPlayer.previous();
-  //   // await audioPlayer.prev();
-  // }
-
-  // skipNext() async {
-  //   await audioPlayer.next(keepLoopMode: true);
-  //   // globalIndex++;
-  //   // setState(() {});
-  // }
+  double progress = 0;
+  currentProgressColor() {
+    if (progress >= 0.6 && progress < 0.8) {
+      return Colors.orange;
+    }
+    if (progress >= 0.8) {
+      return Colors.red;
+    } else {
+      return Colors.green;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -229,72 +249,65 @@ class _ListenState extends State<Listen> {
                                 child: CircularPercentIndicator(
                                   radius: 50.0,
                                   animation: true,
-                                  animationDuration: 1200,
-                                  lineWidth: 15.0,
-                                  percent: 0.4,
+
+                                  animationDuration: differenInMinute * 60000,
+                                  lineWidth: 6.0,
+                                  percent: 100 / 100,
+
                                   // center: new Text(
                                   //   "40 hours",
                                   //   style: new TextStyle(
                                   //       fontWeight: FontWeight.bold,
                                   //       fontSize: 20.0),
                                   // ),
-                                  center: TweenAnimationBuilder<Duration>(
-                                      duration: Duration(minutes: 3),
-                                      tween: Tween(
-                                          begin: Duration(minutes: 3),
-                                          end: Duration.zero),
-                                      onEnd: () {
-                                        print('Timer ended');
-                                      },
-                                      builder: (BuildContext context,
-                                          Duration value, Widget child) {
-                                        final minutes = value.inMinutes;
-                                        final seconds = value.inSeconds % 60;
-                                        return Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 5),
-                                            child: Text(
-                                              '$minutes:$seconds',
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  // color: Color(0xff5DAE7B),
-                                                  // fontFamily: balooDa2,
-                                                  color: Colors.white,
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w600),
-                                            ));
-                                      }),
+                                  center: Column(
+                                    children: [
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                      Text(selectedYakt),
+                                      TweenAnimationBuilder<Duration>(
+                                          duration: Duration(
+                                              minutes: differenInMinute),
+                                          tween: Tween(
+                                              begin: Duration(
+                                                  minutes: differenInMinute),
+                                              end: Duration.zero),
+                                          onEnd: () async {
+                                            print('Timer ended');
+                                            await showTime();
+                                            yaktSelector();
+                                          },
+                                          builder: (BuildContext context,
+                                              Duration value, Widget child) {
+                                            final hours = value.inHours;
+                                            final minutes =
+                                                value.inMinutes % 60;
+                                            final seconds =
+                                                value.inSeconds % 60;
+                                            return Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 5),
+                                                child: Text(
+                                                  '$hours:$minutes:$seconds',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      // color: Color(0xff5DAE7B),
+                                                      // fontFamily: balooDa2,
+                                                      color: Colors.white,
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w600),
+                                                ));
+                                          }),
+                                    ],
+                                  ),
                                   circularStrokeCap: CircularStrokeCap.butt,
-                                  backgroundColor: Colors.yellow,
+                                  backgroundColor: Colors.amberAccent,
                                   progressColor: Colors.white,
                                 ),
                               ),
-                              // child: TweenAnimationBuilder<Duration>(
-                              //     duration: Duration(minutes: 3),
-                              //     tween: Tween(
-                              //         begin: Duration(minutes: 3),
-                              //         end: Duration.zero),
-                              //     onEnd: () {
-                              //       print('Timer ended');
-                              //     },
-                              //     builder: (BuildContext context,
-                              //         Duration value, Widget child) {
-                              //       final minutes = value.inMinutes;
-                              //       final seconds = value.inSeconds % 60;
-                              //       return Padding(
-                              //           padding: const EdgeInsets.symmetric(
-                              //               vertical: 5),
-                              //           child: Text(
-                              //             '$minutes:$seconds',
-                              //             textAlign: TextAlign.center,
-                              //             style: TextStyle(
-                              //                 // color: Color(0xff5DAE7B),
-                              //                 // fontFamily: balooDa2,
-                              //                 color: Colors.white,
-                              //                 fontSize: 14,
-                              //                 fontWeight: FontWeight.w600),
-                              //           ));
-                              //     }),
                             ),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
