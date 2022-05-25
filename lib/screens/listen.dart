@@ -10,6 +10,7 @@ import 'package:active_ecommerce_flutter/repositories/prayertime_repository.dart
 import 'package:active_ecommerce_flutter/ui_sections/drawer.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_html/shims/dart_ui_real.dart';
 import 'package:intl/intl.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:shimmer/shimmer.dart';
@@ -67,6 +68,7 @@ class _ListenState extends State<Listen> {
   var ishaCmpMinute;
   var fajarCmpMinute;
   var sunriseCmpMinute;
+  var currentDate;
 
   @override
   void initState() {
@@ -86,6 +88,7 @@ class _ListenState extends State<Listen> {
 
   showTime() {
     var now = DateTime.now();
+    currentDate = DateFormat('dd-MM-yyyy').format(now);
     currentTime = DateFormat('HH:mm').format(now);
     currentTimeSplit = currentTime.split(':');
 
@@ -176,25 +179,26 @@ class _ListenState extends State<Listen> {
       // totalAnimationTime = differenInMinute * 60000;
     } else if (currentHour >= magribCmpHour && currentHour <= ishaCmpHour) {
       selectedYakt = "মাগরিব";
+      setState(() {});
       var difHour = ishaCmpHour - currentHour;
       differenInMinute = ((difHour * 60) + ishaCmpMinute) - currentMinute;
       // totalAnimationTime = differenInMinute * 60000;
-      setState(() {});
+
     } else if (currentHour >= ishaCmpHour || currentHour <= fajarCmpHour) {
       selectedYakt = "ইশা";
+      setState(() {});
       var difHour = fajarCmpHour - currentHour;
       differenInMinute = ((difHour * 60) + fajarCmpMinute) - currentMinute;
-      setState(() {});
     } else if (currentHour >= fajarCmpHour && currentHour <= sunriseCmpHour) {
       selectedYakt = "ফজর";
+      setState(() {});
       var difHour = sunriseCmpHour - currentHour;
       differenInMinute = ((difHour * 60) + sunriseCmpMinute) - currentMinute;
-      setState(() {});
     } else if (currentHour >= sunriseCmpHour && currentHour <= zhurCmpHour) {
       selectedYakt = "বাকি";
+      setState(() {});
       var difHour = zhurCmpHour - currentHour;
       differenInMinute = ((difHour * 60) + zhurCmpMinute) - currentMinute;
-      setState(() {});
     }
   }
 
@@ -217,253 +221,497 @@ class _ListenState extends State<Listen> {
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: Color(0xffeafbf0),
-      appBar: buildAppBar(statusBarHeight, context),
+      // appBar: buildAppBar(statusBarHeight, context),
+
       drawer: MainDrawer(),
       body: SafeArea(
           child: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: 10,
+        child: Column(
+          children: [
+            Container(
+              height: 210,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.redAccent,
+                image: DecorationImage(
+                  image: AssetImage("assets/ayat back.png"),
+                  fit: BoxFit.cover,
+                ),
+                // borderRadius: BorderRadius.circular(10)
               ),
-              Container(
-                height: 140,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                    color: Colors.redAccent,
-                    borderRadius: BorderRadius.circular(10)),
-                child: isTimes == false
-                    ? Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 8),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              height: 100,
-                              width: 120,
-                              child: Center(
-                                child: CircularPercentIndicator(
-                                  radius: 50.0,
-                                  animation: true,
+              child: isTimes == false
+                  ? Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [Icon(Icons.notifications_outlined)],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 8),
+                          child: Row(
+                            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                children: [
+                                  Container(
+                                    height: 100,
+                                    width: 120,
+                                    child: Center(
+                                      child: CircularPercentIndicator(
+                                        radius: 62.0,
+                                        animation: true,
 
-                                  animationDuration: differenInMinute * 60000,
-                                  lineWidth: 6.0,
-                                  percent: 100 / 100,
+                                        animationDuration:
+                                            differenInMinute * 60000,
+                                        lineWidth: 6.0,
+                                        percent: 100 / 100,
 
-                                  // center: new Text(
-                                  //   "40 hours",
-                                  //   style: new TextStyle(
-                                  //       fontWeight: FontWeight.bold,
-                                  //       fontSize: 20.0),
-                                  // ),
-                                  center: Column(
-                                    children: [
-                                      SizedBox(
-                                        height: 20,
+                                        // center: new Text(
+                                        //   "40 hours",
+                                        //   style: new TextStyle(
+                                        //       fontWeight: FontWeight.bold,
+                                        //       fontSize: 20.0),
+                                        // ),
+                                        center: Column(
+                                          children: [
+                                            SizedBox(
+                                              height: 20,
+                                            ),
+                                            Text(selectedYakt),
+                                            TweenAnimationBuilder<Duration>(
+                                                duration: Duration(
+                                                    minutes: differenInMinute),
+                                                tween: Tween(
+                                                    begin: Duration(
+                                                        minutes:
+                                                            differenInMinute),
+                                                    end: Duration.zero),
+                                                onEnd: () async {
+                                                  print('Timer ended');
+                                                  await showTime();
+                                                  await yaktSelector();
+                                                  setState(() {});
+                                                },
+                                                builder: (BuildContext context,
+                                                    Duration value,
+                                                    Widget child) {
+                                                  final hours = value.inHours;
+                                                  final minutes =
+                                                      value.inMinutes % 60;
+                                                  final seconds =
+                                                      value.inSeconds % 60;
+                                                  return Padding(
+                                                      padding: const EdgeInsets
+                                                              .symmetric(
+                                                          vertical: 5),
+                                                      child: Text(
+                                                        '$hours:$minutes:$seconds',
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: TextStyle(
+                                                            // color: Color(0xff5DAE7B),
+                                                            // fontFamily: balooDa2,
+                                                            color: Colors.white,
+                                                            fontSize: 14,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w600),
+                                                      ));
+                                                }),
+                                          ],
+                                        ),
+                                        circularStrokeCap:
+                                            CircularStrokeCap.round,
+                                        backgroundColor: Colors.amberAccent,
+                                        progressColor: Colors.white,
                                       ),
-                                      Text(selectedYakt),
-                                      TweenAnimationBuilder<Duration>(
-                                          duration: Duration(
-                                              minutes: differenInMinute),
-                                          tween: Tween(
-                                              begin: Duration(
-                                                  minutes: differenInMinute),
-                                              end: Duration.zero),
-                                          onEnd: () async {
-                                            print('Timer ended');
-                                            await showTime();
-                                            yaktSelector();
-                                          },
-                                          builder: (BuildContext context,
-                                              Duration value, Widget child) {
-                                            final hours = value.inHours;
-                                            final minutes =
-                                                value.inMinutes % 60;
-                                            final seconds =
-                                                value.inSeconds % 60;
-                                            return Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 5),
-                                                child: Text(
-                                                  '$hours:$minutes:$seconds',
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      // color: Color(0xff5DAE7B),
-                                                      // fontFamily: balooDa2,
-                                                      color: Colors.white,
-                                                      fontSize: 14,
-                                                      fontWeight:
-                                                          FontWeight.w600),
-                                                ));
-                                          }),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        Icons.calendar_today,
+                                        size: 15,
+                                      ),
+                                      SizedBox(
+                                        width: 15,
+                                      ),
+                                      Text(currentDate,
+                                          style:
+                                              TextStyle(color: Colors.white)),
                                     ],
                                   ),
-                                  circularStrokeCap: CircularStrokeCap.butt,
-                                  backgroundColor: Colors.amberAccent,
-                                  progressColor: Colors.white,
-                                ),
+                                  SizedBox(
+                                    height: 4,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        Icons.location_on_rounded,
+                                        size: 15,
+                                        color: Colors.red,
+                                      ),
+                                      SizedBox(
+                                        width: 4,
+                                      ),
+                                      Text("Dhaka, Bangladesh",
+                                          style:
+                                              TextStyle(color: Colors.white)),
+                                    ],
+                                  )
+                                ],
                               ),
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                //যোহর আছর মাগরিব ইশা সাহরি	ইফতার সূর্যোদয় সূর্যাস্ত
-                                Text(
-                                    "ফজর ${prayerTimeResponse.data.timings.fajr} AM"),
-                                Text(
-                                    "সূর্যোদয় ${prayerTimeResponse.data.timings.sunrise} AM"),
-                                Text(zhurCmp < 12
-                                    ? "যোহর ${prayerTimeResponse.data.timings.dhuhr} AM"
-                                    : "যোহর 0${zhurCmp}:${zhur[1]} PM"),
-                                Text("আছর 0${asarCmp}:${asar[1]} PM"),
-                                Text("সূর্যাস্ত 0${sunsetCmp}:${sunset[1]} PM"),
-                                Text("মাগরিব 0${magribCmp}:${magrib[1]} PM"),
-                                Text("ইশা 0${ishaCmp}:${isha[1]} PM"),
-                              ],
-                            )
-                          ],
+                              SizedBox(
+                                width: 6,
+                              ),
+                              Column(
+                                // crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  //যোহর আছর মাগরিব ইশা সাহরি	ইফতার সূর্যোদয় সূর্যাস্ত
+                                  Row(
+                                    children: [
+                                      Container(
+                                        height: 30,
+                                        width: 96,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            border: Border.all(
+                                                width: 2,
+                                                color: Colors.white
+                                                    .withOpacity(0.65))),
+                                        child: Center(
+                                          child: Text(
+                                            "ফজর ${prayerTimeResponse.data.timings.fajr} AM",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w800),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Container(
+                                          height: 30,
+                                          width: 108,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                              border: Border.all(
+                                                  width: 2,
+                                                  color: Colors.white
+                                                      .withOpacity(0.65))),
+                                          child: Center(
+                                            child: Text(
+                                              "সূর্যোদয় ${prayerTimeResponse.data.timings.sunrise} AM",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w800),
+                                            ),
+                                          ))
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Container(
+                                        height: 30,
+                                        width: 96,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            border: Border.all(
+                                                width: 2,
+                                                color: Colors.white
+                                                    .withOpacity(0.65))),
+                                        child: Center(
+                                          child: Text(
+                                            zhurCmp < 12
+                                                ? "যোহর ${prayerTimeResponse.data.timings.dhuhr} AM"
+                                                : "যোহর 0${zhurCmp}:${zhur[1]} PM",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w800),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Container(
+                                          height: 30,
+                                          width: 108,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                              border: Border.all(
+                                                  width: 2,
+                                                  color: Colors.white
+                                                      .withOpacity(0.65))),
+                                          child: Center(
+                                            child: Text(
+                                              "আছর 0${asarCmp}:${asar[1]} PM",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w800),
+                                            ),
+                                          ))
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Container(
+                                        height: 30,
+                                        width: 96,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            border: Border.all(
+                                                width: 2,
+                                                color: Colors.white
+                                                    .withOpacity(0.65))),
+                                        child: Center(
+                                          child: Text(
+                                            "সূর্যাস্ত 0${sunsetCmp}:${sunset[1]} PM",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w800),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Container(
+                                          height: 30,
+                                          width: 108,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                              border: Border.all(
+                                                  width: 2,
+                                                  color: Colors.white
+                                                      .withOpacity(0.65))),
+                                          child: Center(
+                                            child: Text(
+                                              "মাগরিব 0${magribCmp}:${magrib[1]} PM",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w800),
+                                            ),
+                                          ))
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Container(
+                                      height: 30,
+                                      width: 96,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          border: Border.all(
+                                              width: 2,
+                                              color: Colors.white
+                                                  .withOpacity(0.65))),
+                                      child: Center(
+                                        child: Text(
+                                          "ইশা 0${ishaCmp}:${isha[1]} PM",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w800),
+                                        ),
+                                      )),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Container(
+                                      height: 30,
+                                      width: 96,
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          border: Border.all(
+                                              width: 2,
+                                              color: Colors.white
+                                                  .withOpacity(0.65))),
+                                      child: Center(
+                                        child: Text(
+                                          "Enable",
+                                          style: TextStyle(
+                                              color: Colors.lightBlueAccent,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w800),
+                                        ),
+                                      )),
+                                ],
+                              )
+                            ],
+                          ),
                         ),
-                      )
-                    : Container(
-                        color: Colors.black,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 5.0, right: 5.0),
-                          child: Shimmer.fromColors(
-                            baseColor: MyTheme.shimmer_base,
-                            highlightColor: MyTheme.shimmer_highlighted,
-                            child: Container(
-                              height: 140,
-                              width: double.infinity,
-                              color: Colors.black,
-                            ),
+                      ],
+                    )
+                  : Container(
+                      color: Colors.black,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 5.0, right: 5.0),
+                        child: Shimmer.fromColors(
+                          baseColor: MyTheme.shimmer_base,
+                          highlightColor: MyTheme.shimmer_highlighted,
+                          child: Container(
+                            height: 140,
+                            width: double.infinity,
+                            color: Colors.black,
                           ),
                         ),
                       ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              ListenRow(
-                title: "Trending Song",
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                height: 140,
-                child: ListView.builder(
-                    itemCount: 4,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                      return MusicCard(
-                        songName: "Song Name",
-                        artistName: "Artist Name",
-                        imageUrl:
-                            "https://i.cdn.newsbytesapp.com/images/l37220210424184951.png",
-                      );
-                    }),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              ListenRow(
-                title: "Recently Played",
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                height: 140,
-                child: ListView.builder(
-                    itemCount: 4,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                      return MusicCard(
-                        songName: "Song Name",
-                        artistName: "Artist Name",
-                        imageUrl:
-                            "https://i.cdn.newsbytesapp.com/images/l37220210424184951.png",
-                      );
-                    }),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              ListenRow(
-                title: "Album",
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                height: 140,
-                child: ListView.builder(
-                    itemCount: 4,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                      return MusicCard(
-                        songName: "Song Name",
-                        artistName: "Artist Name",
-                        imageUrl:
-                            "https://i.cdn.newsbytesapp.com/images/l37220210424184951.png",
-                      );
-                    }),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              ListenRow(
-                title: "Artist",
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                height: 110,
-                child: ListView.builder(
-                    itemCount: 4,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 4),
-                        child: Column(
-                          children: [
-                            Container(
-                              height: 90,
-                              width: 90,
-                              decoration: BoxDecoration(
-                                  // color: Colors.redAccent,
-                                  borderRadius: BorderRadius.circular(45)),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(45),
-                                child: Image.network(
-                                  "https://i.cdn.newsbytesapp.com/images/l37220210424184951.png",
-                                  fit: BoxFit.cover,
+                    ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 20,
+                  ),
+                  ListenRow(
+                    title: "Trending Song",
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    height: 140,
+                    child: ListView.builder(
+                        itemCount: 4,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          return MusicCard(
+                            songName: "Song Name",
+                            artistName: "Artist Name",
+                            imageUrl:
+                                "https://i.cdn.newsbytesapp.com/images/l37220210424184951.png",
+                          );
+                        }),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  ListenRow(
+                    title: "Recently Played",
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    height: 140,
+                    child: ListView.builder(
+                        itemCount: 4,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          return MusicCard(
+                            songName: "Song Name",
+                            artistName: "Artist Name",
+                            imageUrl:
+                                "https://i.cdn.newsbytesapp.com/images/l37220210424184951.png",
+                          );
+                        }),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  ListenRow(
+                    title: "Album",
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    height: 140,
+                    child: ListView.builder(
+                        itemCount: 4,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          return MusicCard(
+                            songName: "Song Name",
+                            artistName: "Artist Name",
+                            imageUrl:
+                                "https://i.cdn.newsbytesapp.com/images/l37220210424184951.png",
+                          );
+                        }),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  ListenRow(
+                    title: "Artist",
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    height: 110,
+                    child: ListView.builder(
+                        itemCount: 4,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 4),
+                            child: Column(
+                              children: [
+                                Container(
+                                  height: 90,
+                                  width: 90,
+                                  decoration: BoxDecoration(
+                                      // color: Colors.redAccent,
+                                      borderRadius: BorderRadius.circular(45)),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(45),
+                                    child: Image.network(
+                                      "https://i.cdn.newsbytesapp.com/images/l37220210424184951.png",
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
                                 ),
-                              ),
+                                SizedBox(
+                                  height: 4,
+                                ),
+                                Text(
+                                  "artistName",
+                                  style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold),
+                                )
+                              ],
                             ),
-                            SizedBox(
-                              height: 4,
-                            ),
-                            Text(
-                              "artistName",
-                              style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold),
-                            )
-                          ],
-                        ),
-                      );
-                    }),
+                          );
+                        }),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       )),
     );
