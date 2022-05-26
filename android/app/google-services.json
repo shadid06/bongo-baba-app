@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:595191073826:android:3b463219029c3034e3ce7b",
         "android_client_info": {
-          "package_name": "com.bongobaba.androidapp"
+          "package_name": "com.ayatapp.android"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "595191073826-frtv4phf8t4o9d4clv9nhe42mm9ddf6k.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.bongobaba.androidapp",
+            "package_name": "com.ayatapp.android",
             "certificate_hash": "a82d9d10c0641dc6875f8fc6eede7029d09d3552"
           }
         },

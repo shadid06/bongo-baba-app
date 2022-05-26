@@ -4,9 +4,9 @@ import 'package:flutter/foundation.dart';
 import 'dart:convert';
 
 class PrayerTimeRepository {
-  Future<PrayerTimeResponse> getPrayer() async {
+  Future<PrayerTimeResponse> getPrayer({var latitude, var longitude}) async {
     Uri url = Uri.parse(
-        "http://api.aladhan.com/v1/timings/1398332113?latitude=23.8103&longitude=90.4125&method=8");
+        "http://api.aladhan.com/v1/timings/1398332113?latitude=$latitude&longitude=$longitude&method=11");
     final response = await http.get(url);
     print(response.body.toString());
 

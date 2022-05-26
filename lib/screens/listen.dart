@@ -11,9 +11,11 @@ import 'package:active_ecommerce_flutter/ui_sections/drawer.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_html/shims/dart_ui_real.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:intl/intl.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:geolocator/geolocator.dart';
 
 class Listen extends StatefulWidget {
   Listen({Key key, this.title, this.show_back_button = false, go_back = true})
@@ -49,12 +51,12 @@ class _ListenState extends State<Listen> {
   var currentTimeSplit;
   var currentHour;
   var currentMinute;
-  var selectedYakt;
+  var selectedYakt = "";
   var selectedYaktTimeDifference;
   var selectedHour;
   var countDownHour;
   var countDownMinute;
-  var differenInMinute;
+  var differenInMinute = 1;
   var magribCmpHour;
   var ishaCmpHour;
   var totalAnimationTime;
@@ -69,6 +71,10 @@ class _ListenState extends State<Listen> {
   var fajarCmpMinute;
   var sunriseCmpMinute;
   var currentDate;
+  String address = 'Dhaka,bngladesh';
+  var latitude = 23.8103;
+  var longitude = 90.4125;
+  bool enableLocation = false;
 
   @override
   void initState() {
@@ -77,8 +83,54 @@ class _ListenState extends State<Listen> {
     showTime();
   }
 
+  Future<Position> _getGeoLocationPosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the
+      // App to enable the location services.
+      await Geolocator.openLocationSettings();
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
+    return await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+  }
+
+  Future<void> GetAddressFromLatLong(Position position) async {
+    List<Placemark> placemarks =
+        await placemarkFromCoordinates(position.latitude, position.longitude);
+    print(placemarks);
+    Placemark place = placemarks[0];
+    // address =
+    //     '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
+    address = '${place.locality},${place.country}';
+    setState(() {});
+  }
+
   fetchPrayerTime() async {
-    prayerTimeResponse = await PrayerTimeRepository().getPrayer();
+    prayerTimeResponse = await PrayerTimeRepository()
+        .getPrayer(latitude: latitude, longitude: longitude);
 
     timeConvert();
 
@@ -158,13 +210,15 @@ class _ListenState extends State<Listen> {
   }
 
   yaktSelector() {
-    if (currentHour >= zhurCmpHour && currentHour <= asarCmpHour) {
+    if ((currentHour >= zhurCmpHour && currentMinute > asarCmpMinute) &&
+        currentHour <= asarCmpHour) {
       selectedYakt = "যোহর";
       // setState(() {});
       var difHour = asarCmpHour - currentHour;
       differenInMinute = ((difHour * 60) + asarCmpMinute) - currentMinute;
       // totalAnimationTime = differenInMinute * 60000;
       setState(() {});
+      print("zhur diff:$differenInMinute");
       // countDownHour = (differenInMinute / 60).floor();
       // countDownMinute = (differenInMinute % 60);
       // print(differenInMinute);
@@ -198,7 +252,12 @@ class _ListenState extends State<Listen> {
       selectedYakt = "বাকি";
       setState(() {});
       var difHour = zhurCmpHour - currentHour;
-      differenInMinute = ((difHour * 60) + zhurCmpMinute) - currentMinute;
+      if (difHour > 0) {
+        differenInMinute = ((difHour * 60) + zhurCmpMinute) - currentMinute;
+      } else {
+        differenInMinute = zhurCmpMinute - currentMinute;
+      }
+      print("zhur min $zhurCmpMinute");
     }
   }
 
@@ -220,51 +279,54 @@ class _ListenState extends State<Listen> {
 
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: Color(0xffeafbf0),
+      // backgroundColor: Color(0xffeafbf0),
+      // backgroundColor: Color(0xff66E1E3),
+
       // appBar: buildAppBar(statusBarHeight, context),
 
       drawer: MainDrawer(),
-      body: SafeArea(
-          child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              height: 210,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.redAccent,
-                image: DecorationImage(
-                  image: AssetImage("assets/ayat back.png"),
-                  fit: BoxFit.cover,
-                ),
-                // borderRadius: BorderRadius.circular(10)
-              ),
-              child: isTimes == false
-                  ? Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [Icon(Icons.notifications_outlined)],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 8),
-                          child: Row(
-                            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
+      body: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/ayat back.png"),
+            fit: BoxFit.cover,
+          ),
+          // borderRadius: BorderRadius.circular(10)
+        ),
+        child: SafeArea(
+            child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Stack(children: [
+                Column(
+                  children: [
+                    isTimes == false
+                        ? Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage("assets/ayat back.png"),
+                                fit: BoxFit.cover,
+                              ),
+                              // borderRadius: BorderRadius.circular(10)
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 8),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Container(
-                                    height: 100,
-                                    width: 120,
-                                    child: Center(
-                                      child: CircularPercentIndicator(
-                                        radius: 62.0,
+                                  Column(
+                                    children: [
+                                      CircularPercentIndicator(
+                                        radius: 55.0,
                                         animation: true,
 
                                         animationDuration:
                                             differenInMinute * 60000,
-                                        lineWidth: 6.0,
+                                        lineWidth: 7.0,
                                         percent: 100 / 100,
 
                                         // center: new Text(
@@ -278,7 +340,13 @@ class _ListenState extends State<Listen> {
                                             SizedBox(
                                               height: 20,
                                             ),
-                                            Text(selectedYakt),
+                                            Text(
+                                              selectedYakt,
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.w700,
+                                                  fontSize: 14),
+                                            ),
                                             TweenAnimationBuilder<Duration>(
                                                 duration: Duration(
                                                     minutes: differenInMinute),
@@ -312,13 +380,16 @@ class _ListenState extends State<Listen> {
                                                         style: TextStyle(
                                                             // color: Color(0xff5DAE7B),
                                                             // fontFamily: balooDa2,
-                                                            color: Colors.white,
+                                                            color: Colors.white
+                                                                .withOpacity(
+                                                                    0.9),
                                                             fontSize: 14,
                                                             fontWeight:
                                                                 FontWeight
                                                                     .w600),
                                                       ));
                                                 }),
+                                            Icon(Icons.notifications_outlined),
                                           ],
                                         ),
                                         circularStrokeCap:
@@ -326,394 +397,461 @@ class _ListenState extends State<Listen> {
                                         backgroundColor: Colors.amberAccent,
                                         progressColor: Colors.white,
                                       ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 15,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        Icons.calendar_today,
-                                        size: 15,
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Row(
+                                        children: [
+                                          Icon(
+                                            Icons.calendar_today,
+                                            size: 15,
+                                          ),
+                                          SizedBox(
+                                            width: 15,
+                                          ),
+                                          Text(currentDate,
+                                              style: TextStyle(
+                                                  color: Colors.white
+                                                      .withOpacity(0.9))),
+                                        ],
                                       ),
                                       SizedBox(
-                                        width: 15,
+                                        height: 4,
                                       ),
-                                      Text(currentDate,
-                                          style:
-                                              TextStyle(color: Colors.white)),
+                                      Row(
+                                        children: [
+                                          Icon(
+                                            Icons.location_on_rounded,
+                                            size: 15,
+                                            color: Colors.red,
+                                          ),
+                                          SizedBox(
+                                            width: 4,
+                                          ),
+                                          Text(address,
+                                              style: TextStyle(
+                                                  color: Colors.white
+                                                      .withOpacity(0.9))),
+                                        ],
+                                      )
                                     ],
                                   ),
                                   SizedBox(
-                                    height: 4,
+                                    width: 6,
                                   ),
-                                  Row(
+                                  Column(
+                                    // crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Icon(
-                                        Icons.location_on_rounded,
-                                        size: 15,
-                                        color: Colors.red,
+                                      //যোহর আছর মাগরিব ইশা সাহরি	ইফতার সূর্যোদয় সূর্যাস্ত
+
+                                      Row(
+                                        children: [
+                                          Container(
+                                            height: 30,
+                                            width: 96,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                                border: Border.all(
+                                                    width: 2,
+                                                    color: Colors.white
+                                                        .withOpacity(0.65))),
+                                            child: Center(
+                                              child: Text(
+                                                "ফজর: ${prayerTimeResponse.data.timings.fajr} AM",
+                                                style: TextStyle(
+                                                    color: Colors.white
+                                                        .withOpacity(0.9),
+                                                    fontSize: 12,
+                                                    fontWeight:
+                                                        FontWeight.w800),
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Container(
+                                              height: 30,
+                                              width: 108,
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                  border: Border.all(
+                                                      width: 2,
+                                                      color: Colors.white
+                                                          .withOpacity(0.65))),
+                                              child: Center(
+                                                child: Text(
+                                                  "সূর্যোদয়: ${prayerTimeResponse.data.timings.sunrise} AM",
+                                                  style: TextStyle(
+                                                      color: Colors.white
+                                                          .withOpacity(0.9),
+                                                      fontSize: 12,
+                                                      fontWeight:
+                                                          FontWeight.w800),
+                                                ),
+                                              ))
+                                        ],
                                       ),
                                       SizedBox(
-                                        width: 4,
+                                        height: 5,
                                       ),
-                                      Text("Dhaka, Bangladesh",
-                                          style:
-                                              TextStyle(color: Colors.white)),
+                                      Row(
+                                        children: [
+                                          Container(
+                                            height: 30,
+                                            width: 96,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                                border: Border.all(
+                                                    width: 2,
+                                                    color: Colors.white
+                                                        .withOpacity(0.65))),
+                                            child: Center(
+                                              child: Text(
+                                                zhurCmp < 12
+                                                    ? "যোহর: ${prayerTimeResponse.data.timings.dhuhr} AM"
+                                                    : "যোহর: 0${zhurCmp}:${zhur[1]} PM",
+                                                style: TextStyle(
+                                                    color: Colors.white
+                                                        .withOpacity(0.9),
+                                                    fontSize: 12,
+                                                    fontWeight:
+                                                        FontWeight.w800),
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Container(
+                                              height: 30,
+                                              width: 108,
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                  border: Border.all(
+                                                      width: 2,
+                                                      color: Colors.white
+                                                          .withOpacity(0.65))),
+                                              child: Center(
+                                                child: Text(
+                                                  "আছর: 0${asarCmp}:${asar[1]} PM",
+                                                  style: TextStyle(
+                                                      color: Colors.white
+                                                          .withOpacity(0.9),
+                                                      fontSize: 12,
+                                                      fontWeight:
+                                                          FontWeight.w800),
+                                                ),
+                                              ))
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Row(
+                                        children: [
+                                          Container(
+                                            height: 30,
+                                            width: 96,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                                border: Border.all(
+                                                    width: 2,
+                                                    color: Colors.white
+                                                        .withOpacity(0.65))),
+                                            child: Center(
+                                              child: Text(
+                                                "সূর্যাস্ত: 0${sunsetCmp}:${sunset[1]} PM",
+                                                style: TextStyle(
+                                                    color: Colors.white
+                                                        .withOpacity(0.9),
+                                                    fontSize: 12,
+                                                    fontWeight:
+                                                        FontWeight.w800),
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Container(
+                                              height: 30,
+                                              width: 108,
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                  border: Border.all(
+                                                      width: 2,
+                                                      color: Colors.white
+                                                          .withOpacity(0.65))),
+                                              child: Center(
+                                                child: Text(
+                                                  "মাগরিব: 0${magribCmp}:${magrib[1]} PM",
+                                                  style: TextStyle(
+                                                      color: Colors.white
+                                                          .withOpacity(0.9),
+                                                      fontSize: 12,
+                                                      fontWeight:
+                                                          FontWeight.w800),
+                                                ),
+                                              ))
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Container(
+                                          height: 30,
+                                          width: 96,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                              border: Border.all(
+                                                  width: 2,
+                                                  color: Colors.white
+                                                      .withOpacity(0.65))),
+                                          child: Center(
+                                            child: Text(
+                                              "ইশা: 0${ishaCmp}:${isha[1]} PM",
+                                              style: TextStyle(
+                                                  color: Colors.white
+                                                      .withOpacity(0.9),
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w800),
+                                            ),
+                                          )),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      enableLocation == false
+                                          ? GestureDetector(
+                                              onTap: () async {
+                                                Position position =
+                                                    await _getGeoLocationPosition();
+                                                GetAddressFromLatLong(position);
+                                                latitude = position.latitude;
+                                                longitude = position.longitude;
+                                                enableLocation = true;
+                                                fetchPrayerTime();
+
+                                                setState(() {});
+                                                print(latitude);
+                                                print(longitude);
+                                              },
+                                              child: Container(
+                                                  height: 30,
+                                                  width: 96,
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.white,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20),
+                                                      border: Border.all(
+                                                          width: 2,
+                                                          color: Colors.white
+                                                              .withOpacity(
+                                                                  0.65))),
+                                                  child: Center(
+                                                    child: Row(
+                                                      children: [
+                                                        SizedBox(
+                                                          width: 15,
+                                                        ),
+                                                        Icon(
+                                                          Icons
+                                                              .location_on_rounded,
+                                                          size: 15,
+                                                          color: Colors.red,
+                                                        ),
+                                                        SizedBox(
+                                                          width: 5,
+                                                        ),
+                                                        Text(
+                                                          "Enable",
+                                                          style: TextStyle(
+                                                              color: Colors
+                                                                  .lightBlueAccent,
+                                                              fontSize: 12,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w800),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  )),
+                                            )
+                                          : Text(""),
                                     ],
                                   )
                                 ],
                               ),
-                              SizedBox(
-                                width: 6,
-                              ),
-                              Column(
-                                // crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  //যোহর আছর মাগরিব ইশা সাহরি	ইফতার সূর্যোদয় সূর্যাস্ত
-                                  Row(
-                                    children: [
-                                      Container(
-                                        height: 30,
-                                        width: 96,
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(20),
-                                            border: Border.all(
-                                                width: 2,
-                                                color: Colors.white
-                                                    .withOpacity(0.65))),
-                                        child: Center(
-                                          child: Text(
-                                            "ফজর ${prayerTimeResponse.data.timings.fajr} AM",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w800),
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Container(
-                                          height: 30,
-                                          width: 108,
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(20),
-                                              border: Border.all(
-                                                  width: 2,
-                                                  color: Colors.white
-                                                      .withOpacity(0.65))),
-                                          child: Center(
-                                            child: Text(
-                                              "সূর্যোদয় ${prayerTimeResponse.data.timings.sunrise} AM",
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.w800),
-                                            ),
-                                          ))
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Container(
-                                        height: 30,
-                                        width: 96,
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(20),
-                                            border: Border.all(
-                                                width: 2,
-                                                color: Colors.white
-                                                    .withOpacity(0.65))),
-                                        child: Center(
-                                          child: Text(
-                                            zhurCmp < 12
-                                                ? "যোহর ${prayerTimeResponse.data.timings.dhuhr} AM"
-                                                : "যোহর 0${zhurCmp}:${zhur[1]} PM",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w800),
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Container(
-                                          height: 30,
-                                          width: 108,
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(20),
-                                              border: Border.all(
-                                                  width: 2,
-                                                  color: Colors.white
-                                                      .withOpacity(0.65))),
-                                          child: Center(
-                                            child: Text(
-                                              "আছর 0${asarCmp}:${asar[1]} PM",
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.w800),
-                                            ),
-                                          ))
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Container(
-                                        height: 30,
-                                        width: 96,
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(20),
-                                            border: Border.all(
-                                                width: 2,
-                                                color: Colors.white
-                                                    .withOpacity(0.65))),
-                                        child: Center(
-                                          child: Text(
-                                            "সূর্যাস্ত 0${sunsetCmp}:${sunset[1]} PM",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w800),
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Container(
-                                          height: 30,
-                                          width: 108,
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(20),
-                                              border: Border.all(
-                                                  width: 2,
-                                                  color: Colors.white
-                                                      .withOpacity(0.65))),
-                                          child: Center(
-                                            child: Text(
-                                              "মাগরিব 0${magribCmp}:${magrib[1]} PM",
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.w800),
-                                            ),
-                                          ))
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  Container(
-                                      height: 30,
-                                      width: 96,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                          border: Border.all(
-                                              width: 2,
-                                              color: Colors.white
-                                                  .withOpacity(0.65))),
-                                      child: Center(
-                                        child: Text(
-                                          "ইশা 0${ishaCmp}:${isha[1]} PM",
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w800),
-                                        ),
-                                      )),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  Container(
-                                      height: 30,
-                                      width: 96,
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                          border: Border.all(
-                                              width: 2,
-                                              color: Colors.white
-                                                  .withOpacity(0.65))),
-                                      child: Center(
-                                        child: Text(
-                                          "Enable",
-                                          style: TextStyle(
-                                              color: Colors.lightBlueAccent,
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w800),
-                                        ),
-                                      )),
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
-                    )
-                  : Container(
-                      color: Colors.black,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 5.0, right: 5.0),
-                        child: Shimmer.fromColors(
-                          baseColor: MyTheme.shimmer_base,
-                          highlightColor: MyTheme.shimmer_highlighted,
-                          child: Container(
-                            height: 140,
-                            width: double.infinity,
+                            ),
+                          )
+                        : Container(
                             color: Colors.black,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 5.0, right: 5.0),
+                              child: Shimmer.fromColors(
+                                baseColor: MyTheme.shimmer_base,
+                                highlightColor: MyTheme.shimmer_highlighted,
+                                child: Container(
+                                  height: 140,
+                                  width: double.infinity,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
                           ),
+                    Container(
+                      // height: 40,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(20),
+                              topRight: Radius.circular(20))),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 8),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              height: 20,
+                            ),
+                            ListenRow(
+                              title: "Trending Song",
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              height: 140,
+                              child: ListView.builder(
+                                  itemCount: 4,
+                                  scrollDirection: Axis.horizontal,
+                                  itemBuilder: (context, index) {
+                                    return MusicCard(
+                                      songName: "Song Name",
+                                      artistName: "Artist Name",
+                                      imageUrl:
+                                          "https://i.cdn.newsbytesapp.com/images/l37220210424184951.png",
+                                    );
+                                  }),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            ListenRow(
+                              title: "Recently Played",
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              height: 140,
+                              child: ListView.builder(
+                                  itemCount: 4,
+                                  scrollDirection: Axis.horizontal,
+                                  itemBuilder: (context, index) {
+                                    return MusicCard(
+                                      songName: "Song Name",
+                                      artistName: "Artist Name",
+                                      imageUrl:
+                                          "https://i.cdn.newsbytesapp.com/images/l37220210424184951.png",
+                                    );
+                                  }),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            ListenRow(
+                              title: "Album",
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              height: 140,
+                              child: ListView.builder(
+                                  itemCount: 4,
+                                  scrollDirection: Axis.horizontal,
+                                  itemBuilder: (context, index) {
+                                    return MusicCard(
+                                      songName: "Song Name",
+                                      artistName: "Artist Name",
+                                      imageUrl:
+                                          "https://i.cdn.newsbytesapp.com/images/l37220210424184951.png",
+                                    );
+                                  }),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            ListenRow(
+                              title: "Artist",
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              height: 110,
+                              child: ListView.builder(
+                                  itemCount: 4,
+                                  scrollDirection: Axis.horizontal,
+                                  itemBuilder: (context, index) {
+                                    return Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 4),
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                            height: 90,
+                                            width: 90,
+                                            decoration: BoxDecoration(
+                                                // color: Colors.redAccent,
+                                                borderRadius:
+                                                    BorderRadius.circular(45)),
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(45),
+                                              child: Image.network(
+                                                "https://i.cdn.newsbytesapp.com/images/l37220210424184951.png",
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 4,
+                                          ),
+                                          Text(
+                                            "artistName",
+                                            style: TextStyle(
+                                                color: Colors.grey,
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold),
+                                          )
+                                        ],
+                                      ),
+                                    );
+                                  }),
+                            ),
+                          ],
                         ),
                       ),
-                    ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: 20,
-                  ),
-                  ListenRow(
-                    title: "Trending Song",
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                    height: 140,
-                    child: ListView.builder(
-                        itemCount: 4,
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (context, index) {
-                          return MusicCard(
-                            songName: "Song Name",
-                            artistName: "Artist Name",
-                            imageUrl:
-                                "https://i.cdn.newsbytesapp.com/images/l37220210424184951.png",
-                          );
-                        }),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  ListenRow(
-                    title: "Recently Played",
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                    height: 140,
-                    child: ListView.builder(
-                        itemCount: 4,
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (context, index) {
-                          return MusicCard(
-                            songName: "Song Name",
-                            artistName: "Artist Name",
-                            imageUrl:
-                                "https://i.cdn.newsbytesapp.com/images/l37220210424184951.png",
-                          );
-                        }),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  ListenRow(
-                    title: "Album",
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                    height: 140,
-                    child: ListView.builder(
-                        itemCount: 4,
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (context, index) {
-                          return MusicCard(
-                            songName: "Song Name",
-                            artistName: "Artist Name",
-                            imageUrl:
-                                "https://i.cdn.newsbytesapp.com/images/l37220210424184951.png",
-                          );
-                        }),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  ListenRow(
-                    title: "Artist",
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                    height: 110,
-                    child: ListView.builder(
-                        itemCount: 4,
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 4),
-                            child: Column(
-                              children: [
-                                Container(
-                                  height: 90,
-                                  width: 90,
-                                  decoration: BoxDecoration(
-                                      // color: Colors.redAccent,
-                                      borderRadius: BorderRadius.circular(45)),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(45),
-                                    child: Image.network(
-                                      "https://i.cdn.newsbytesapp.com/images/l37220210424184951.png",
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 4,
-                                ),
-                                Text(
-                                  "artistName",
-                                  style: TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold),
-                                )
-                              ],
-                            ),
-                          );
-                        }),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      )),
+                    )
+                  ],
+                ),
+              ]),
+            ],
+          ),
+        )),
+      ),
     );
   }
 
