@@ -6,7 +6,7 @@ import 'dart:convert';
 class PrayerTimeRepository {
   Future<PrayerTimeResponse> getPrayer({var latitude, var longitude}) async {
     Uri url = Uri.parse(
-        "http://api.aladhan.com/v1/timings/1398332113?latitude=$latitude&longitude=$longitude&method=11");
+        "http://api.aladhan.com/v1/timings/1398332113?latitude=$latitude&longitude=$longitude&method=8");
     final response = await http.get(url);
     print(response.body.toString());
 

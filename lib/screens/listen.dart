@@ -75,6 +75,7 @@ class _ListenState extends State<Listen> {
   var latitude = 23.8103;
   var longitude = 90.4125;
   bool enableLocation = false;
+  var progressTimeDifference;
 
   @override
   void initState() {
@@ -207,6 +208,14 @@ class _ListenState extends State<Listen> {
       ishaCmp = ishaCmp - 12;
     }
     yaktSelector();
+    progressTimePicker();
+  }
+
+  progressTimePicker() {
+    var diff = magribCmpHour - asarCmpHour;
+    progressTimeDifference = ((diff * 60) + magribCmpMinute) - asarCmpMinute;
+    setState(() {});
+    print('progresstime: $progressTimeDifference');
   }
 
   yaktSelector() {
@@ -276,6 +285,9 @@ class _ListenState extends State<Listen> {
   @override
   Widget build(BuildContext context) {
     final double statusBarHeight = MediaQuery.of(context).padding.top;
+    final size = MediaQuery.of(context).size;
+    print(size.height);
+    print(size.width);
 
     return Scaffold(
       key: _scaffoldKey,
@@ -289,7 +301,7 @@ class _ListenState extends State<Listen> {
         width: double.infinity,
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/ayat back.png"),
+            image: AssetImage("assets/payertime_back-min.png"),
             fit: BoxFit.cover,
           ),
           // borderRadius: BorderRadius.circular(10)
@@ -306,20 +318,23 @@ class _ListenState extends State<Listen> {
                             width: double.infinity,
                             decoration: BoxDecoration(
                               image: DecorationImage(
-                                image: AssetImage("assets/ayat back.png"),
+                                image:
+                                    AssetImage("assets/payertime_back-min.png"),
                                 fit: BoxFit.cover,
                               ),
                               // borderRadius: BorderRadius.circular(10)
                             ),
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 8),
+                              padding: const EdgeInsets.only(
+                                  left: 8, right: 8, top: 20, bottom: 8),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Column(
                                     children: [
+                                      SizedBox(height: 10),
                                       CircularPercentIndicator(
                                         radius: 55.0,
                                         animation: true,
@@ -389,7 +404,10 @@ class _ListenState extends State<Listen> {
                                                                     .w600),
                                                       ));
                                                 }),
-                                            Icon(Icons.notifications_outlined),
+                                            Icon(
+                                              Icons.notifications_outlined,
+                                              color: Colors.white,
+                                            ),
                                           ],
                                         ),
                                         circularStrokeCap:
@@ -397,48 +415,14 @@ class _ListenState extends State<Listen> {
                                         backgroundColor: Colors.amberAccent,
                                         progressColor: Colors.white,
                                       ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      Row(
-                                        children: [
-                                          Icon(
-                                            Icons.calendar_today,
-                                            size: 15,
-                                          ),
-                                          SizedBox(
-                                            width: 15,
-                                          ),
-                                          Text(currentDate,
-                                              style: TextStyle(
-                                                  color: Colors.white
-                                                      .withOpacity(0.9))),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 4,
-                                      ),
-                                      Row(
-                                        children: [
-                                          Icon(
-                                            Icons.location_on_rounded,
-                                            size: 15,
-                                            color: Colors.red,
-                                          ),
-                                          SizedBox(
-                                            width: 4,
-                                          ),
-                                          Text(address,
-                                              style: TextStyle(
-                                                  color: Colors.white
-                                                      .withOpacity(0.9))),
-                                        ],
-                                      )
+                                      // SizedBox(
+                                      //   height: 5,
+                                      // ),
                                     ],
                                   ),
-                                  SizedBox(
-                                    width: 6,
-                                  ),
+                                  // SizedBox(
+                                  //   width: 6,
+                                  // ),
                                   Column(
                                     // crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
@@ -447,8 +431,8 @@ class _ListenState extends State<Listen> {
                                       Row(
                                         children: [
                                           Container(
-                                            height: 30,
-                                            width: 96,
+                                            height: size.height / 20.2,
+                                            width: size.width / 3.38,
                                             decoration: BoxDecoration(
                                                 borderRadius:
                                                     BorderRadius.circular(20),
@@ -472,8 +456,8 @@ class _ListenState extends State<Listen> {
                                             width: 10,
                                           ),
                                           Container(
-                                              height: 30,
-                                              width: 108,
+                                              height: size.height / 20.2,
+                                              width: size.width / 3.38,
                                               decoration: BoxDecoration(
                                                   borderRadius:
                                                       BorderRadius.circular(20),
@@ -482,14 +466,18 @@ class _ListenState extends State<Listen> {
                                                       color: Colors.white
                                                           .withOpacity(0.65))),
                                               child: Center(
-                                                child: Text(
-                                                  "সূর্যোদয়: ${prayerTimeResponse.data.timings.sunrise} AM",
-                                                  style: TextStyle(
-                                                      color: Colors.white
-                                                          .withOpacity(0.9),
-                                                      fontSize: 12,
-                                                      fontWeight:
-                                                          FontWeight.w800),
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(4.0),
+                                                  child: Text(
+                                                    "সূর্যোদয়: ${prayerTimeResponse.data.timings.sunrise} AM",
+                                                    style: TextStyle(
+                                                        color: Colors.white
+                                                            .withOpacity(0.9),
+                                                        fontSize: 11,
+                                                        fontWeight:
+                                                            FontWeight.w800),
+                                                  ),
                                                 ),
                                               ))
                                         ],
@@ -500,8 +488,8 @@ class _ListenState extends State<Listen> {
                                       Row(
                                         children: [
                                           Container(
-                                            height: 30,
-                                            width: 96,
+                                            height: size.height / 20.2,
+                                            width: size.width / 3.38,
                                             decoration: BoxDecoration(
                                                 borderRadius:
                                                     BorderRadius.circular(20),
@@ -527,8 +515,8 @@ class _ListenState extends State<Listen> {
                                             width: 10,
                                           ),
                                           Container(
-                                              height: 30,
-                                              width: 108,
+                                              height: size.height / 20.2,
+                                              width: size.width / 3.38,
                                               decoration: BoxDecoration(
                                                   borderRadius:
                                                       BorderRadius.circular(20),
@@ -554,34 +542,60 @@ class _ListenState extends State<Listen> {
                                       ),
                                       Row(
                                         children: [
+                                          // Container(
+                                          //   height: 30,
+                                          //   width: 96,
+                                          //   decoration: BoxDecoration(
+                                          //       borderRadius:
+                                          //           BorderRadius.circular(20),
+                                          //       border: Border.all(
+                                          //           width: 2,
+                                          //           color: Colors.white
+                                          //               .withOpacity(0.65))),
+                                          //   child: Center(
+                                          //     child: Text(
+                                          //       "সূর্যাস্ত: 0${sunsetCmp}:${sunset[1]} PM",
+                                          //       style: TextStyle(
+                                          //           color: Colors.white
+                                          //               .withOpacity(0.9),
+                                          //           fontSize: 12,
+                                          //           fontWeight:
+                                          //               FontWeight.w800),
+                                          //     ),
+                                          //   ),
+                                          // ),
+
                                           Container(
-                                            height: 30,
-                                            width: 96,
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(20),
-                                                border: Border.all(
-                                                    width: 2,
-                                                    color: Colors.white
-                                                        .withOpacity(0.65))),
-                                            child: Center(
-                                              child: Text(
-                                                "সূর্যাস্ত: 0${sunsetCmp}:${sunset[1]} PM",
-                                                style: TextStyle(
-                                                    color: Colors.white
-                                                        .withOpacity(0.9),
-                                                    fontSize: 12,
-                                                    fontWeight:
-                                                        FontWeight.w800),
-                                              ),
-                                            ),
-                                          ),
+                                              height: size.height / 20.2,
+                                              width: size.width / 3.38,
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                  border: Border.all(
+                                                      width: 2,
+                                                      color: Colors.white
+                                                          .withOpacity(0.65))),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(4.0),
+                                                child: Center(
+                                                  child: Text(
+                                                    "মাগরিব: 0${magribCmp}:${magrib[1]} PM",
+                                                    style: TextStyle(
+                                                        color: Colors.white
+                                                            .withOpacity(0.9),
+                                                        fontSize: 11,
+                                                        fontWeight:
+                                                            FontWeight.w800),
+                                                  ),
+                                                ),
+                                              )),
                                           SizedBox(
                                             width: 10,
                                           ),
                                           Container(
-                                              height: 30,
-                                              width: 108,
+                                              height: size.height / 20.2,
+                                              width: size.width / 3.38,
                                               decoration: BoxDecoration(
                                                   borderRadius:
                                                       BorderRadius.circular(20),
@@ -591,7 +605,7 @@ class _ListenState extends State<Listen> {
                                                           .withOpacity(0.65))),
                                               child: Center(
                                                 child: Text(
-                                                  "মাগরিব: 0${magribCmp}:${magrib[1]} PM",
+                                                  "ইশা: 0${ishaCmp}:${isha[1]} PM",
                                                   style: TextStyle(
                                                       color: Colors.white
                                                           .withOpacity(0.9),
@@ -599,32 +613,10 @@ class _ListenState extends State<Listen> {
                                                       fontWeight:
                                                           FontWeight.w800),
                                                 ),
-                                              ))
+                                              )),
                                         ],
                                       ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      Container(
-                                          height: 30,
-                                          width: 96,
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(20),
-                                              border: Border.all(
-                                                  width: 2,
-                                                  color: Colors.white
-                                                      .withOpacity(0.65))),
-                                          child: Center(
-                                            child: Text(
-                                              "ইশা: 0${ishaCmp}:${isha[1]} PM",
-                                              style: TextStyle(
-                                                  color: Colors.white
-                                                      .withOpacity(0.9),
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.w800),
-                                            ),
-                                          )),
+
                                       SizedBox(
                                         height: 5,
                                       ),
@@ -645,9 +637,10 @@ class _ListenState extends State<Listen> {
                                               },
                                               child: Container(
                                                   height: 30,
-                                                  width: 96,
+                                                  // width: 96,
                                                   decoration: BoxDecoration(
-                                                      color: Colors.white,
+                                                      color: Colors.white
+                                                          .withOpacity(0.95),
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                               20),
@@ -660,7 +653,7 @@ class _ListenState extends State<Listen> {
                                                     child: Row(
                                                       children: [
                                                         SizedBox(
-                                                          width: 15,
+                                                          width: 5,
                                                         ),
                                                         Icon(
                                                           Icons
@@ -668,24 +661,72 @@ class _ListenState extends State<Listen> {
                                                           size: 15,
                                                           color: Colors.red,
                                                         ),
-                                                        SizedBox(
-                                                          width: 5,
-                                                        ),
-                                                        Text(
-                                                          "Enable",
-                                                          style: TextStyle(
-                                                              color: Colors
-                                                                  .lightBlueAccent,
-                                                              fontSize: 12,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w800),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .symmetric(
+                                                                  horizontal:
+                                                                      4),
+                                                          child: Text(
+                                                            "Enable Your Location  ",
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .lightBlueAccent,
+                                                                fontSize: 12,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w800),
+                                                          ),
                                                         ),
                                                       ],
                                                     ),
                                                   )),
                                             )
-                                          : Text(""),
+                                          : Column(
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    Icon(
+                                                      Icons.calendar_today,
+                                                      size: 15,
+                                                      color: Colors.white,
+                                                    ),
+                                                    SizedBox(
+                                                      width: 15,
+                                                    ),
+                                                    Text(currentDate,
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            color: Colors.white
+                                                                .withOpacity(
+                                                                    0.9))),
+                                                  ],
+                                                ),
+                                                SizedBox(
+                                                  height: 4,
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    Icon(
+                                                      Icons.location_on_rounded,
+                                                      size: 15,
+                                                      color: Colors.red,
+                                                    ),
+                                                    SizedBox(
+                                                      width: 4,
+                                                    ),
+                                                    Text(address,
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.w700,
+                                                            color: Colors.white
+                                                                .withOpacity(
+                                                                    0.9))),
+                                                  ],
+                                                )
+                                              ],
+                                            ),
                                     ],
                                   )
                                 ],
