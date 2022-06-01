@@ -16,6 +16,7 @@ import 'package:intl/intl.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class Listen extends StatefulWidget {
   Listen({Key key, this.title, this.show_back_button = false, go_back = true})
@@ -76,12 +77,107 @@ class _ListenState extends State<Listen> {
   var longitude = 90.4125;
   bool enableLocation = false;
   var progressTimeDifference;
+  FlutterLocalNotificationsPlugin fltrNotification;
+  var notificationTime;
+  var notificationTitle;
+  var notificationBody;
 
   @override
   void initState() {
     super.initState();
     fetchPrayerTime();
     showTime();
+
+    initializeNotification();
+    notificationTimeSelect();
+  }
+
+  notificationTimeSelect() {
+    // var now = DateTime.now();
+    // currentDate = DateFormat('dd-MM-yyyy').format(now);
+    // currentTime = DateFormat('HH:mm').format(now);
+    DateTime current = DateTime.now();
+    Stream timer = Stream.periodic(Duration(minutes: 1), (i) {
+      current = current.add(Duration(minutes: 1));
+      return current;
+    });
+
+    timer.listen((data) {
+      var time = DateFormat('HH:mm').format(data);
+      if (time == prayerTimeResponse.data.timings.fajr) {
+        notificationTime = time;
+        notificationTitle = "Fajar";
+        notificationBody = "yakt suru";
+        setState(() {});
+        _showNotification();
+      } else if (time == prayerTimeResponse.data.timings.sunrise) {
+        notificationTime = time;
+        notificationTitle = "sunrise";
+        notificationBody = "yakt suru";
+        setState(() {});
+        _showNotification();
+      } else if (time == prayerTimeResponse.data.timings.dhuhr) {
+        notificationTime = time;
+        notificationTitle = "Zhur";
+        notificationBody = "yakt suru";
+        setState(() {});
+        _showNotification();
+      } else if (time == prayerTimeResponse.data.timings.asr) {
+        notificationTime = time;
+        notificationTitle = "asar";
+        notificationBody = "yakt suru";
+        setState(() {});
+        _showNotification();
+      } else if (time == prayerTimeResponse.data.timings.maghrib) {
+        notificationTime = time;
+        notificationTitle = "magrib";
+        notificationBody = "yakt suru";
+        setState(() {});
+        _showNotification();
+      } else if (time == prayerTimeResponse.data.timings.isha) {
+        notificationTime = time;
+        notificationTitle = "isha";
+        notificationBody = "yakt suru";
+        setState(() {});
+        _showNotification();
+      }
+    });
+  }
+
+  initializeNotification() async {
+    fltrNotification = FlutterLocalNotificationsPlugin();
+    var androidInitilize = new AndroidInitializationSettings('app_logo');
+    var iOSinitilize = new IOSInitializationSettings();
+    var initilizationsSettings = new InitializationSettings(
+        android: androidInitilize, iOS: iOSinitilize);
+
+    await fltrNotification.initialize(initilizationsSettings,
+        onSelectNotification: notificationSelected);
+  }
+
+  Future _showNotification() async {
+    var androidDetails = new AndroidNotificationDetails(
+        "Channel ID", "ayat app",
+        channelDescription: "This is my channel", importance: Importance.max);
+    var iSODetails = new IOSNotificationDetails();
+    var generalNotificationDetails =
+        new NotificationDetails(android: androidDetails, iOS: iSODetails);
+
+    // await fltrNotification.show(
+    //     0, "Task", "You created a Task", generalNotificationDetails,
+    //     payload: "Task");
+    // var scheduledTime = DateTime.now().add(Duration(seconds: 5));
+    fltrNotification.schedule(1, notificationBody, notificationTitle,
+        notificationTime, generalNotificationDetails);
+  }
+
+  Future notificationSelected(String payload) async {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: Text("Notification : $payload"),
+      ),
+    );
   }
 
   Future<Position> _getGeoLocationPosition() async {
@@ -236,36 +332,41 @@ class _ListenState extends State<Listen> {
       //যোহর আছর মাগরিব ইশা সাহরি	ইফতার সূর্যোদয় সূর্যাস্ত চলছে
     } else if (currentHour >= asarCmpHour && currentHour <= magribCmpHour) {
       selectedYakt = "আছর";
-      setState(() {});
+
       var difHour = magribCmpHour - currentHour;
       differenInMinute = ((difHour * 60) + magribCmpMinute) - currentMinute;
+      setState(() {});
+      print("asar diff:$differenInMinute");
       // totalAnimationTime = differenInMinute * 60000;
     } else if (currentHour >= magribCmpHour && currentHour <= ishaCmpHour) {
       selectedYakt = "মাগরিব";
-      setState(() {});
+
       var difHour = ishaCmpHour - currentHour;
       differenInMinute = ((difHour * 60) + ishaCmpMinute) - currentMinute;
       // totalAnimationTime = differenInMinute * 60000;
-
+      setState(() {});
     } else if (currentHour >= ishaCmpHour || currentHour <= fajarCmpHour) {
       selectedYakt = "ইশা";
-      setState(() {});
+
       var difHour = fajarCmpHour - currentHour;
       differenInMinute = ((difHour * 60) + fajarCmpMinute) - currentMinute;
+      setState(() {});
     } else if (currentHour >= fajarCmpHour && currentHour <= sunriseCmpHour) {
       selectedYakt = "ফজর";
-      setState(() {});
+
       var difHour = sunriseCmpHour - currentHour;
       differenInMinute = ((difHour * 60) + sunriseCmpMinute) - currentMinute;
+      setState(() {});
     } else if (currentHour >= sunriseCmpHour && currentHour <= zhurCmpHour) {
       selectedYakt = "বাকি";
-      setState(() {});
+
       var difHour = zhurCmpHour - currentHour;
       if (difHour > 0) {
         differenInMinute = ((difHour * 60) + zhurCmpMinute) - currentMinute;
       } else {
         differenInMinute = zhurCmpMinute - currentMinute;
       }
+      setState(() {});
       print("zhur min $zhurCmpMinute");
     }
   }
@@ -404,9 +505,14 @@ class _ListenState extends State<Listen> {
                                                                     .w600),
                                                       ));
                                                 }),
-                                            Icon(
-                                              Icons.notifications_outlined,
-                                              color: Colors.white,
+                                            GestureDetector(
+                                              onTap: () {
+                                                _showNotification();
+                                              },
+                                              child: Icon(
+                                                Icons.notifications_outlined,
+                                                color: Colors.white,
+                                              ),
                                             ),
                                           ],
                                         ),
