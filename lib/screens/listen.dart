@@ -4,6 +4,7 @@ import 'package:active_ecommerce_flutter/custom/listen_row.dart';
 import 'package:active_ecommerce_flutter/custom/music_card.dart';
 import 'package:active_ecommerce_flutter/custom/toast_component.dart';
 import 'package:active_ecommerce_flutter/data_model/prayer_time_response.dart';
+import 'package:active_ecommerce_flutter/data_model/salah_time_response.dart';
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 import 'package:active_ecommerce_flutter/my_theme.dart';
 import 'package:active_ecommerce_flutter/repositories/prayertime_repository.dart';
@@ -17,6 +18,8 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 class Listen extends StatefulWidget {
   Listen({Key key, this.title, this.show_back_button = false, go_back = true})
@@ -81,22 +84,30 @@ class _ListenState extends State<Listen> {
   var notificationTime;
   var notificationTitle;
   var notificationBody;
+  String locality = "ঢাকা";
+  SalahTimeModel _salahTimeModel;
+  var salahItem;
+  bool isSalahTime = true;
 
   @override
   void initState() {
     super.initState();
     fetchPrayerTime();
+    fetchSalahTime();
     showTime();
 
     initializeNotification();
-    notificationTimeSelect();
+    // notificationTimeSelect();
+    tz.initializeTimeZones();
+    _showNotification();
   }
 
   notificationTimeSelect() {
     // var now = DateTime.now();
     // currentDate = DateFormat('dd-MM-yyyy').format(now);
     // currentTime = DateFormat('HH:mm').format(now);
-    DateTime current = DateTime.now();
+    // DateTime current = DateTime.now();
+    DateTime current = tz.TZDateTime.now(tz.local);
     Stream timer = Stream.periodic(Duration(minutes: 1), (i) {
       current = current.add(Duration(minutes: 1));
       return current;
@@ -104,43 +115,51 @@ class _ListenState extends State<Listen> {
 
     timer.listen((data) {
       var time = DateFormat('HH:mm').format(data);
-      if (time == prayerTimeResponse.data.timings.fajr) {
-        notificationTime = time;
+      print(time);
+      if (time.compareTo('11:44') == 0) {
+        notificationTime = DateTime.now();
         notificationTitle = "Fajar";
         notificationBody = "yakt suru";
         setState(() {});
         _showNotification();
-      } else if (time == prayerTimeResponse.data.timings.sunrise) {
-        notificationTime = time;
-        notificationTitle = "sunrise";
-        notificationBody = "yakt suru";
-        setState(() {});
-        _showNotification();
-      } else if (time == prayerTimeResponse.data.timings.dhuhr) {
-        notificationTime = time;
-        notificationTitle = "Zhur";
-        notificationBody = "yakt suru";
-        setState(() {});
-        _showNotification();
-      } else if (time == prayerTimeResponse.data.timings.asr) {
-        notificationTime = time;
-        notificationTitle = "asar";
-        notificationBody = "yakt suru";
-        setState(() {});
-        _showNotification();
-      } else if (time == prayerTimeResponse.data.timings.maghrib) {
-        notificationTime = time;
-        notificationTitle = "magrib";
-        notificationBody = "yakt suru";
-        setState(() {});
-        _showNotification();
-      } else if (time == prayerTimeResponse.data.timings.isha) {
-        notificationTime = time;
-        notificationTitle = "isha";
-        notificationBody = "yakt suru";
-        setState(() {});
-        _showNotification();
       }
+      // if (time == prayerTimeResponse.data.timings.fajr) {
+      // notificationTime = time;
+      // notificationTitle = "Fajar";
+      // notificationBody = "yakt suru";
+      // setState(() {});
+      // _showNotification();
+      // } else if (time == prayerTimeResponse.data.timings.sunrise) {
+      //   notificationTime = time;
+      //   notificationTitle = "sunrise";
+      //   notificationBody = "yakt suru";
+      //   setState(() {});
+      //   _showNotification();
+      // } else if (time == prayerTimeResponse.data.timings.dhuhr) {
+      //   notificationTime = time;
+      //   notificationTitle = "Zhur";
+      //   notificationBody = "yakt suru";
+      //   setState(() {});
+      //   _showNotification();
+      // } else if (time == prayerTimeResponse.data.timings.asr) {
+      //   notificationTime = time;
+      //   notificationTitle = "asar";
+      //   notificationBody = "yakt suru";
+      //   setState(() {});
+      //   _showNotification();
+      // } else if (time == prayerTimeResponse.data.timings.maghrib) {
+      //   notificationTime = time;
+      //   notificationTitle = "magrib";
+      //   notificationBody = "yakt suru";
+      //   setState(() {});
+      //   _showNotification();
+      // } else if (time == prayerTimeResponse.data.timings.isha) {
+      //   notificationTime = time;
+      //   notificationTitle = "isha";
+      //   notificationBody = "yakt suru";
+      //   setState(() {});
+      //   _showNotification();
+      // }
     });
   }
 
@@ -167,8 +186,26 @@ class _ListenState extends State<Listen> {
     //     0, "Task", "You created a Task", generalNotificationDetails,
     //     payload: "Task");
     // var scheduledTime = DateTime.now().add(Duration(seconds: 5));
-    fltrNotification.schedule(1, notificationBody, notificationTitle,
-        notificationTime, generalNotificationDetails);
+    // fltrNotification.schedule(1, notificationBody, notificationTitle,
+    //     notificationTime, generalNotificationDetails,
+    //     androidAllowWhileIdle: true);
+    // var nowtime;
+    // var time = DateFormat('HH:mm').format(tz.TZDateTime.now(tz.local));
+    // if (time.compareTo('12:26') == 0) {
+    //   nowtime = tz.TZDateTime.now(tz.local);
+    // }
+    fltrNotification.zonedSchedule(
+        0,
+        'scheduled title',
+        'scheduled body',
+        tz.TZDateTime.now(tz.local).add(const Duration(seconds: 120)),
+        // nowtime,
+        const NotificationDetails(
+            android: AndroidNotificationDetails('1', 'ayat',
+                channelDescription: 'your channel description')),
+        androidAllowWhileIdle: true,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime);
   }
 
   Future notificationSelected(String payload) async {
@@ -221,15 +258,28 @@ class _ListenState extends State<Listen> {
     Placemark place = placemarks[0];
     // address =
     //     '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
+    locality = place.locality;
     address = '${place.locality},${place.country}';
     setState(() {});
+  }
+
+  fetchSalahTime() async {
+    _salahTimeModel =
+        await PrayerTimeRepository().getSalahTime(locality: locality);
+
+    isSalahTime = false;
+
+    setState(() {});
+    salahItem = _salahTimeModel.items;
+    setState(() {});
+    timeConvert();
   }
 
   fetchPrayerTime() async {
     prayerTimeResponse = await PrayerTimeRepository()
         .getPrayer(latitude: latitude, longitude: longitude);
 
-    timeConvert();
+    //timeConvert();
 
     isTimes = false;
     setState(() {});
@@ -238,73 +288,86 @@ class _ListenState extends State<Listen> {
   showTime() {
     var now = DateTime.now();
     currentDate = DateFormat('dd-MM-yyyy').format(now);
-    currentTime = DateFormat('HH:mm').format(now);
-    currentTimeSplit = currentTime.split(':');
+    currentTime = DateFormat('h:mm').format(now);
+    currentTimeSplit = currentTime.split(
+      ':',
+    );
 
     currentHour = int.parse(currentTimeSplit[0]);
     currentMinute = int.parse(currentTimeSplit[1]);
     // if (currentHour > zhurCmpHour && currentHour < asarCmpHour) {}
-    print(currentTime); //HH:mm:ss
+    print('current time$currentTime'); //HH:mm:ss
     print(currentHour);
+    print(currentMinute);
   }
 
   timeConvert() {
-    fajar = prayerTimeResponse.data.timings.fajr.split(':');
-    sunrise = prayerTimeResponse.data.timings.sunrise.split(':');
-    zhur = prayerTimeResponse.data.timings.dhuhr.split(':');
-    asar = prayerTimeResponse.data.timings.asr.split(':');
-    sunset = prayerTimeResponse.data.timings.sunset.split(':');
-    magrib = prayerTimeResponse.data.timings.maghrib.split(':');
-    isha = prayerTimeResponse.data.timings.isha.split(':');
+    fajar = salahItem[0].fajr.split(':');
+    sunrise = salahItem[0].shurooq.split(':');
+    zhur = salahItem[0].dhuhr.split(':');
+    asar = salahItem[0].asr.split(':');
+    // sunset = prayerTimeResponse.data.timings.sunset.split(':');
+    magrib = salahItem[0].maghrib.split(':');
+    isha = salahItem[0].isha.split(':');
     fajarCmpHour = int.parse(fajar[0]);
+    var fjr = fajar[1].split(' ');
+
     fajarCmp = int.parse(fajar[0]);
-    fajarCmpMinute = int.parse(fajar[1]);
+    fajarCmpMinute = int.parse(fjr[0]);
+    print('fjr min $fajarCmpMinute');
     sunriseCmpHour = int.parse(sunrise[0]);
     sunriseCmp = int.parse(sunrise[0]);
-    sunriseCmpMinute = int.parse(sunrise[1]);
+    var snr = sunrise[1].split(' ');
+    sunriseCmpMinute = int.parse(snr[0]);
 
     var zh;
     zh = zhur[0];
     zhurCmpHour = int.parse(zh);
     zhurCmp = int.parse(zh);
-    zhurCmpMinute = int.parse(zhur[1]);
-    if (zhurCmp >= 12) {
-      zhurCmp = zhurCmp - 12;
-    }
+    var zhr = zhur[1].split(' ');
+    zhurCmpMinute = int.parse(zhr[0]);
+    // if (zhurCmp >= 12) {
+    //   zhurCmp = zhurCmp - 12;
+    // }
     var as;
     as = asar[0];
     asarCmpHour = int.parse(as);
     print(asarCmpHour);
-    asarCmpMinute = int.parse(asar[1]);
+    var asr = asar[1].split(' ');
+    print('asar min: $asr');
+    asarCmpMinute = int.parse(asr[0]);
+
     asarCmp = int.parse(as);
-    if (asarCmp >= 12) {
-      asarCmp = asarCmp - 12;
-    }
-    var sn;
-    sn = sunset[0];
-    sunsetCmp = int.parse(sn);
-    if (sunsetCmp >= 12) {
-      sunsetCmp = sunsetCmp - 12;
-    }
+    // if (asarCmp >= 12) {
+    //   asarCmp = asarCmp - 12;
+    // }
+    // var sn;
+    // sn = sunset[0];
+    // sunsetCmp = int.parse(sn);
+    // if (sunsetCmp >= 12) {
+    //   sunsetCmp = sunsetCmp - 12;
+    // }
     var mg;
     mg = magrib[0];
     magribCmpHour = int.parse(mg);
     magribCmp = int.parse(mg);
-    magribCmpMinute = int.parse(magrib[1]);
+    var mgr = magrib[1].split(' ');
+    magribCmpMinute = int.parse(mgr[0]);
     // print(magribCmpHour);
-    if (magribCmp >= 12) {
-      magribCmp = magribCmp - 12;
-    }
+    // if (magribCmp >= 12) {
+    //   magribCmp = magribCmp - 12;
+    // }
     var ish;
     ish = isha[0];
     ishaCmpHour = int.parse(ish);
     ishaCmp = int.parse(ish);
-    ishaCmpMinute = int.parse(isha[1]);
-    if (ishaCmp >= 12) {
-      ishaCmp = ishaCmp - 12;
-    }
+    var isr = isha[1].split(' ');
+    ishaCmpMinute = int.parse(isr[0]);
+    // if (ishaCmp >= 12) {
+    //   ishaCmp = ishaCmp - 12;
+    // }
     yaktSelector();
-    progressTimePicker();
+    // progressTimePicker();
   }
 
   progressTimePicker() {
@@ -414,7 +477,7 @@ class _ListenState extends State<Listen> {
               Stack(children: [
                 Column(
                   children: [
-                    isTimes == false
+                    isSalahTime == false
                         ? Container(
                             width: double.infinity,
                             decoration: BoxDecoration(
@@ -548,7 +611,8 @@ class _ListenState extends State<Listen> {
                                                         .withOpacity(0.65))),
                                             child: Center(
                                               child: Text(
-                                                "ফজর: ${prayerTimeResponse.data.timings.fajr} AM",
+                                                // "ফজর: ${prayerTimeResponse.data.timings.fajr} AM",
+                                                "ফজর: ${_salahTimeModel.items[0].fajr}",
                                                 style: TextStyle(
                                                     color: Colors.white
                                                         .withOpacity(0.9),
@@ -576,7 +640,7 @@ class _ListenState extends State<Listen> {
                                                   padding:
                                                       const EdgeInsets.all(4.0),
                                                   child: Text(
-                                                    "সূর্যোদয়: ${prayerTimeResponse.data.timings.sunrise} AM",
+                                                    "সূর্যোদয়: ${_salahTimeModel.items[0].shurooq}",
                                                     style: TextStyle(
                                                         color: Colors.white
                                                             .withOpacity(0.9),
@@ -605,9 +669,7 @@ class _ListenState extends State<Listen> {
                                                         .withOpacity(0.65))),
                                             child: Center(
                                               child: Text(
-                                                zhurCmp < 12
-                                                    ? "যোহর: ${prayerTimeResponse.data.timings.dhuhr} AM"
-                                                    : "যোহর: 0${zhurCmp}:${zhur[1]} PM",
+                                                "যোহর: ${_salahTimeModel.items[0].dhuhr}",
                                                 style: TextStyle(
                                                     color: Colors.white
                                                         .withOpacity(0.9),
@@ -632,7 +694,7 @@ class _ListenState extends State<Listen> {
                                                           .withOpacity(0.65))),
                                               child: Center(
                                                 child: Text(
-                                                  "আছর: 0${asarCmp}:${asar[1]} PM",
+                                                  "আছর: ${_salahTimeModel.items[0].asr}",
                                                   style: TextStyle(
                                                       color: Colors.white
                                                           .withOpacity(0.9),
@@ -686,7 +748,7 @@ class _ListenState extends State<Listen> {
                                                     const EdgeInsets.all(4.0),
                                                 child: Center(
                                                   child: Text(
-                                                    "মাগরিব: 0${magribCmp}:${magrib[1]} PM",
+                                                    "মাগরিব: ${_salahTimeModel.items[0].maghrib}",
                                                     style: TextStyle(
                                                         color: Colors.white
                                                             .withOpacity(0.9),
@@ -711,7 +773,7 @@ class _ListenState extends State<Listen> {
                                                           .withOpacity(0.65))),
                                               child: Center(
                                                 child: Text(
-                                                  "ইশা: 0${ishaCmp}:${isha[1]} PM",
+                                                  "ইশা: 0${_salahTimeModel.items[0].isha}",
                                                   style: TextStyle(
                                                       color: Colors.white
                                                           .withOpacity(0.9),
@@ -840,18 +902,14 @@ class _ListenState extends State<Listen> {
                             ),
                           )
                         : Container(
-                            color: Colors.black,
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 5.0, right: 5.0),
-                              child: Shimmer.fromColors(
-                                baseColor: MyTheme.shimmer_base,
-                                highlightColor: MyTheme.shimmer_highlighted,
-                                child: Container(
-                                  height: 140,
-                                  width: double.infinity,
-                                  color: Colors.black,
-                                ),
+                            //color: Colors.black,
+                            child: Shimmer.fromColors(
+                              baseColor: MyTheme.shimmer_base,
+                              highlightColor: MyTheme.shimmer_highlighted,
+                              child: Container(
+                                height: 140,
+                                width: double.infinity,
+                                color: Colors.black,
                               ),
                             ),
                           ),
