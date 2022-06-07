@@ -37,30 +37,30 @@ class SalahTimeModel {
     this.statusDescription,
   });
 
-  String title;
-  String query;
-  String salahTimeModelFor;
-  int method;
-  String prayerMethodName;
-  int daylight;
-  int timezone;
-  String mapImage;
-  String sealevel;
+  var title;
+  var query;
+  var salahTimeModelFor;
+  var method;
+  var prayerMethodName;
+  var daylight;
+  var timezone;
+  var mapImage;
+  var sealevel;
   TodayWeather todayWeather;
-  String link;
-  String qiblaDirection;
-  String latitude;
-  String longitude;
-  String address;
-  String city;
-  String state;
-  String postalCode;
-  String country;
-  String countryCode;
+  var link;
+  var qiblaDirection;
+  var latitude;
+  var longitude;
+  var address;
+  var city;
+  var state;
+  var postalCode;
+  var country;
+  var countryCode;
   List<Item> items;
-  int statusValid;
-  int statusCode;
-  String statusDescription;
+  var statusValid;
+  var statusCode;
+  var statusDescription;
 
   factory SalahTimeModel.fromJson(Map<String, dynamic> json) => SalahTimeModel(
         title: json["title"],

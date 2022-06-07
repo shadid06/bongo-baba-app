@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:active_ecommerce_flutter/custom/CommonFunctoins.dart';
 import 'package:active_ecommerce_flutter/my_theme.dart';
+import 'package:active_ecommerce_flutter/quran_app/screen/sura_name.dart';
 import 'package:active_ecommerce_flutter/screens/cart.dart';
 import 'package:active_ecommerce_flutter/screens/category_list.dart';
 
@@ -36,7 +37,8 @@ class _MainState extends State<Main> {
     CategoryList(
       is_base_category: true,
     ),
-    Home(),
+    // Home(),
+    SuraName(),
     Cart(has_bottomnav: true),
     Profile(),
 
@@ -95,11 +97,15 @@ class _MainState extends State<Main> {
                       icon: new Image.asset('assets/square_logo.png'),
                       tooltip: 'Action',
                       onPressed: () {
+                        // Navigator.push(context,
+                        //     MaterialPageRoute(builder: (context) {
+                        //   return Filter2(
+                        //     selected_filter: "Products",
+                        //   );
+                        // }));
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
-                          return Filter2(
-                            selected_filter: "Products",
-                          );
+                          return SuraName();
                         }));
                       })),
               elevation: 10.0,

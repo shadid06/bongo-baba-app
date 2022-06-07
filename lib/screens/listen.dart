@@ -92,7 +92,7 @@ class _ListenState extends State<Listen> {
   @override
   void initState() {
     super.initState();
-    fetchPrayerTime();
+    //fetchPrayerTime();
     fetchSalahTime();
     showTime();
 
@@ -378,8 +378,7 @@ class _ListenState extends State<Listen> {
   }
 
   yaktSelector() {
-    if ((currentHour >= zhurCmpHour && currentMinute > asarCmpMinute) &&
-        currentHour <= asarCmpHour) {
+    if (currentHour >= zhurCmpHour && currentHour <= asarCmpHour) {
       selectedYakt = "যোহর";
       // setState(() {});
       var difHour = asarCmpHour - currentHour;
@@ -408,7 +407,7 @@ class _ListenState extends State<Listen> {
       differenInMinute = ((difHour * 60) + ishaCmpMinute) - currentMinute;
       // totalAnimationTime = differenInMinute * 60000;
       setState(() {});
-    } else if (currentHour >= ishaCmpHour || currentHour <= fajarCmpHour) {
+    } else if (currentHour >= ishaCmpHour && currentHour <= fajarCmpHour) {
       selectedYakt = "ইশা";
 
       var difHour = fajarCmpHour - currentHour;
@@ -426,8 +425,10 @@ class _ListenState extends State<Listen> {
       var difHour = zhurCmpHour - currentHour;
       if (difHour > 0) {
         differenInMinute = ((difHour * 60) + zhurCmpMinute) - currentMinute;
+        print('baki: $differenInMinute');
       } else {
         differenInMinute = zhurCmpMinute - currentMinute;
+        print('baki: $differenInMinute');
       }
       setState(() {});
       print("zhur min $zhurCmpMinute");
@@ -534,10 +535,10 @@ class _ListenState extends State<Listen> {
                                                         minutes:
                                                             differenInMinute),
                                                     end: Duration.zero),
-                                                onEnd: () async {
+                                                onEnd: () {
                                                   print('Timer ended');
-                                                  await showTime();
-                                                  await yaktSelector();
+                                                  showTime();
+                                                  yaktSelector();
                                                   setState(() {});
                                                 },
                                                 builder: (BuildContext context,
