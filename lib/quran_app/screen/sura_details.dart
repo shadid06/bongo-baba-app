@@ -87,21 +87,21 @@ class _SuraDetailsState extends State<SuraDetails> {
 
   getLastpath() async {
     lastPathModel = await DBHelper().getLastPath();
-    savedId = lastPathModel[0].VerseIDAr;
+    // savedId = lastPathModel[0].VerseIDAr;
     setState(() {});
-    print(lastPathModel[0].VerseIDAr);
+    // print(lastPathModel[0].VerseIDAr);
     return lastPathModel;
   }
 
-  match() {
-    for (int i = 0; i < suraArList.length; i++) {
-      if (suraArList[i]['VerseIDAr'] == savedId) {
-        print("matched");
-      } else {
-        print("does not matched");
-      }
-    }
-  }
+  // match() {
+  //   for (int i = 0; i < suraArList.length; i++) {
+  //     if (suraArList[i]['VerseIDAr'] == savedId) {
+  //       print("matched");
+  //     } else {
+  //       print("does not matched");
+  //     }
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

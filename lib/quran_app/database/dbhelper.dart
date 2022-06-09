@@ -277,6 +277,8 @@ class DBHelper {
     final db = await initDb();
     var re = await db.update(LASTPATH_TABLE, lastPathModel.toJson(),
         where: '$sura    = ?', whereArgs: [lastPathModel.sura]);
+    print("updated");
+    print(lastPathModel.VerseIDAr);
     return re;
   }
 }
