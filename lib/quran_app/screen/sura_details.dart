@@ -105,9 +105,18 @@ class _SuraDetailsState extends State<SuraDetails> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blueGrey,
+        // backgroundColor: Colors.blueGrey,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xff8aed93), Color(0xff00CED1)],
+              stops: [0.15, 1.0],
+            ),
+          ),
+        ),
         centerTitle: true,
         title: isSearch
             ? Container(
@@ -191,10 +200,13 @@ class _SuraDetailsState extends State<SuraDetails> {
                                                 child: Text(
                                                     suraArList[index]["ayat"],
                                                     style: TextStyle(
-                                                        fontSize: fontsize + 2,
+                                                        fontSize: fontsize + 4,
                                                         color: Colors.black))),
                                           ],
                                         ),
+                                      ),
+                                      SizedBox(
+                                        height: 10,
                                       ),
                                       Container(
                                         width: double.infinity,
@@ -292,13 +304,18 @@ class _SuraDetailsState extends State<SuraDetails> {
         ),
         isshow
             ? Positioned(
-                top: 400,
+                top: size.height / 1.6,
                 right: 5,
                 child: Container(
                     decoration: BoxDecoration(
-                        color: Colors.blueGrey.withOpacity(.8),
+                        gradient: LinearGradient(
+                          colors: [Color(0xff8aed93), Color(0xff00CED1)],
+                          stops: [0.15, 1.0],
+                        ),
+
+                        // color: Colors.blueGrey.withOpacity(.8),
                         borderRadius: BorderRadius.circular(10)),
-                    width: 160,
+                    width: 130,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
@@ -312,7 +329,7 @@ class _SuraDetailsState extends State<SuraDetails> {
                               }
                             },
                             icon: Container(
-                                padding: EdgeInsets.only(bottom: 28),
+                                padding: EdgeInsets.only(bottom: 20),
                                 child: Icon(
                                   Icons.minimize,
                                   color: Colors.white,
@@ -340,18 +357,31 @@ class _SuraDetailsState extends State<SuraDetails> {
             : Container()
       ]),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.blueGrey,
+        // backgroundColor: Colors.blueGrey,
+
         onPressed: () {},
-        child: IconButton(
-          onPressed: () {
-            setState(() {
-              isshow = !isshow;
-            });
-          },
-          icon: isshow
-              ? Container(
-                  padding: EdgeInsets.only(bottom: 0), child: Icon(Icons.close))
-              : Icon(Icons.add),
+        child: Container(
+          height: 60,
+          width: 60,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(30),
+            gradient: LinearGradient(
+              colors: [Color(0xff8aed93), Color(0xff00CED1)],
+              stops: [0.15, 1.0],
+            ),
+          ),
+          child: IconButton(
+            onPressed: () {
+              setState(() {
+                isshow = !isshow;
+              });
+            },
+            icon: isshow
+                ? Container(
+                    padding: EdgeInsets.only(bottom: 0),
+                    child: Icon(Icons.close))
+                : Icon(Icons.add),
+          ),
         ),
       ),
     );
@@ -451,17 +481,27 @@ class _SuraDetailsState extends State<SuraDetails> {
                   ),
                   GestureDetector(
                     onTap: () async {
-                      lastPathModel.isEmpty
-                          ? await DBHelper().saveToLastPath(LastPathModel(
-                              sura: uniqId,
-                              sura_name: suraNama.toString(),
-                              VerseIDAr: verseIDar,
-                            ))
-                          : await DBHelper().updateLastpath(LastPathModel(
-                              sura: uniqId,
-                              sura_name: suraNama.toString(),
-                              VerseIDAr: verseIDar,
-                            ));
+                      if (lastPathModel.isNotEmpty) {
+                        await DBHelper().deleteLastPath();
+                        await DBHelper().saveToLastPath(LastPathModel(
+                          sura: uniqId,
+                          sura_name: suraNama.toString(),
+                          VerseIDAr: verseIDar,
+                        ));
+                      } else {
+                        await DBHelper().saveToLastPath(LastPathModel(
+                          sura: uniqId,
+                          sura_name: suraNama.toString(),
+                          VerseIDAr: verseIDar,
+                        ));
+                      }
+
+                      // await DBHelper().updateLastpath(LastPathModel(
+                      //   sura: uniqId,
+                      //   sura_name: suraNama.toString(),
+                      //   VerseIDAr: verseIDar,
+                      // ));
+
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text('সর্বশেষ পাঠ সংরক্ষন করা হয়েছে'),
                       ));

@@ -74,19 +74,43 @@ class _SuraNameState extends State<SuraName> {
     final size = MediaQuery.of(context).size;
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.blueGrey,
-        onPressed: () {},
-        child: IconButton(
-          onPressed: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => ShowData()));
-          },
-          icon: Icon(Icons.bookmark),
+        // backgroundColor: Colors.blueGrey,
+
+        onPressed: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => ShowData()));
+        },
+        child: Container(
+          height: 60,
+          width: 60,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(30),
+            gradient: LinearGradient(
+              colors: [Color(0xff8aed93), Color(0xff00CED1)],
+              stops: [0.15, 1.0],
+            ),
+          ),
+          child: Icon(Icons.bookmark),
         ),
+        // child: IconButton(
+        //   onPressed: () {
+        // Navigator.push(
+        //     context, MaterialPageRoute(builder: (context) => ShowData()));
+        //   },
+        //   icon: Icon(Icons.bookmark),
+        // ),
       ),
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: Colors.blueGrey,
+        // backgroundColor: Colors.blueGrey,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xff8aed93), Color(0xff00CED1)],
+              stops: [0.15, 1.0],
+            ),
+          ),
+        ),
         title: isSearch
             ? Container(
                 height: 40,
@@ -122,7 +146,7 @@ class _SuraNameState extends State<SuraName> {
       ),
       body: Stack(children: [
         Padding(
-          padding: const EdgeInsets.all(25),
+          padding: const EdgeInsets.only(top: 10),
           child: Column(
             children: [
               // ElevatedButton(
@@ -132,7 +156,7 @@ class _SuraNameState extends State<SuraName> {
 
               // Display the data loaded from sample.json
               SizedBox(
-                height: 10,
+                height: 16,
               ),
               _SuraName.isEmpty
                   ? Center(
@@ -157,41 +181,75 @@ class _SuraNameState extends State<SuraName> {
                                                   _SuraName[index]["sura_no"]),
                                             )));
                               },
-                              child: Card(
-                                // margin: const EdgeInsets.symmetric(10),
-                                child: ListTile(
-                                  leading: Padding(
-                                    padding:
-                                        const EdgeInsets.symmetric(vertical: 8),
-                                    child: Container(
-                                      height: 30,
-                                      width: 30,
-                                      decoration: BoxDecoration(
-                                          color: Colors.teal,
+                              child: Column(
+                                children: [
+                                  ListTile(
+                                    leading: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 8),
+                                      child: Card(
+                                        shape: RoundedRectangleBorder(
                                           borderRadius:
-                                              BorderRadius.circular(15)),
-                                      child: Center(
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(5.0),
-                                          child:
-                                              Text(_SuraName[index]["sura_no"]),
+                                              BorderRadius.circular(15),
+                                        ),
+                                        child: Container(
+                                          height: 30,
+                                          width: 30,
+                                          decoration: BoxDecoration(
+                                              gradient: LinearGradient(
+                                                colors: [
+                                                  Color(0xff8aed93),
+                                                  Color(0xff00CED1)
+                                                ],
+                                                stops: [0.15, 1.0],
+                                              ),
+                                              // color: int.parse(_SuraName[index]
+                                              //                 ["sura_no"]) %
+                                              //             2 ==
+                                              //         0
+                                              //     ? Color(0xff00CED1)
+                                              //     : Color(0xff8aed93),
+                                              borderRadius:
+                                                  BorderRadius.circular(15)),
+                                          child: Center(
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(5.0),
+                                              child: Text(
+                                                _SuraName[index]["sura_no"],
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                              ),
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ),
+                                    title: Text(
+                                      _SuraName[index]["sura_name"],
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w300),
+                                    ),
+                                    subtitle: Row(
+                                      children: [
+                                        Text(
+                                            'আয়ত - ${_SuraName[index]["total_ayat"]} টি,'),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text(
+                                            'পারা - ${_SuraName[index]["para"]}'),
+                                      ],
+                                    ),
                                   ),
-                                  title: Text(_SuraName[index]["sura_name"]),
-                                  subtitle: Row(
-                                    children: [
-                                      Text(
-                                          'আয়ত - ${_SuraName[index]["total_ayat"]} টি'),
-                                      SizedBox(
-                                        width: 15,
-                                      ),
-                                      Text(
-                                          'পারা - ${_SuraName[index]["para"]}'),
-                                    ],
-                                  ),
-                                ),
+                                  Divider(
+                                    color: Colors.grey,
+                                    height: 1,
+                                  )
+                                ],
                               ),
                             );
                           } else if (_SuraName[index]["sura_name"]
@@ -211,23 +269,55 @@ class _SuraNameState extends State<SuraName> {
                                                   _SuraName[index]["sura_no"]),
                                             )));
                               },
-                              child: Card(
-                                margin: const EdgeInsets.all(10),
-                                child: ListTile(
-                                  leading: Text(_SuraName[index]["sura_no"]),
-                                  title: Text(_SuraName[index]["sura_name"]),
-                                  subtitle: Row(
-                                    children: [
-                                      Text(
-                                          'আয়ত - ${_SuraName[index]["total_ayat"]} টি'),
-                                      SizedBox(
-                                        width: 15,
+                              child: Column(
+                                children: [
+                                  ListTile(
+                                    leading: Card(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(15),
                                       ),
-                                      Text(
-                                          'পারা - ${_SuraName[index]["para"]}'),
-                                    ],
+                                      child: Container(
+                                        height: 30,
+                                        width: 30,
+                                        decoration: BoxDecoration(
+                                            color: Colors.teal,
+                                            borderRadius:
+                                                BorderRadius.circular(15)),
+                                        child: Center(
+                                            child: Padding(
+                                          padding: const EdgeInsets.all(5.0),
+                                          child: Text(
+                                            _SuraName[index]["sura_no"],
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                        )),
+                                      ),
+                                    ),
+                                    title: Text(
+                                      _SuraName[index]["sura_name"],
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w300),
+                                    ),
+                                    subtitle: Row(
+                                      children: [
+                                        Text(
+                                            'আয়ত - ${_SuraName[index]["total_ayat"]} টি,'),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text(
+                                            'পারা - ${_SuraName[index]["para"]}'),
+                                      ],
+                                    ),
                                   ),
-                                ),
+                                  Divider(
+                                    color: Colors.grey,
+                                    height: 1,
+                                  )
+                                ],
                               ),
                             );
                           }
@@ -240,7 +330,7 @@ class _SuraNameState extends State<SuraName> {
         ),
         isLastPath
             ? Positioned(
-                top: 10,
+                top: 4,
                 left: size.width / 3.3,
                 child: lastPathModel.isEmpty
                     ? Container()
@@ -249,12 +339,20 @@ class _SuraNameState extends State<SuraName> {
                         padding:
                             EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                         decoration: BoxDecoration(
-                            color: Colors.blueGrey.withOpacity(.8),
-                            borderRadius: BorderRadius.circular(10)),
+                            // color: Colors.blueGrey.withOpacity(.8),
+                            gradient: LinearGradient(
+                              colors: [Color(0xff8aed93), Color(0xff00CED1)],
+                              stops: [0.15, 1.0],
+                            ),
+                            borderRadius: BorderRadius.circular(12)),
                         // width: 160,
                         child: Center(
                             child: Text(
-                                'সর্বশেষ পাঠ: ${lastPathModel[0].sura_name} -আয়ত: ${lastPathModel[0].VerseIDAr}'))),
+                          'সর্বশেষ পাঠ: ${lastPathModel[0].sura_name} -আয়ত: ${lastPathModel[0].VerseIDAr}',
+                          style: TextStyle(
+                              color: Color(0xfff2f2f2),
+                              fontWeight: FontWeight.w500),
+                        ))),
               )
             : Container(),
         // isshow

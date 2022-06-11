@@ -281,4 +281,10 @@ class DBHelper {
     print(lastPathModel.VerseIDAr);
     return re;
   }
+
+  Future deleteLastPath() async {
+    final db = await initDb();
+    await db.delete(LASTPATH_TABLE);
+    print("deleted");
+  }
 }
