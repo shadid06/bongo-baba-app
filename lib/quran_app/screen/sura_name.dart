@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:active_ecommerce_flutter/providers/locale_provider.dart';
 import 'package:active_ecommerce_flutter/quran_app/database/dbhelper.dart';
 import 'package:active_ecommerce_flutter/quran_app/database/last_path_model.dart';
 import 'package:active_ecommerce_flutter/quran_app/screen/bookmark.dart';
@@ -7,6 +8,7 @@ import 'package:active_ecommerce_flutter/quran_app/screen/sura_details.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 class SuraName extends StatefulWidget {
   const SuraName({Key key}) : super(key: key);
@@ -51,6 +53,7 @@ class _SuraNameState extends State<SuraName> {
   @override
   void initState() {
     // TODO: implement initState
+    localeProvider = Provider.of<LocaleProvider>(context, listen: false);
     getLastpath();
     suraName(controller.text);
   }
@@ -60,8 +63,11 @@ class _SuraNameState extends State<SuraName> {
   bool isshow = false;
   bool isLastPath = false;
   List<LastPathModel> lastPathModel = [];
+  LocaleProvider localeProvider;
   getLastpath() async {
     lastPathModel = await DBHelper().getLastPath();
+    localeProvider.lastPathProvider = lastPathModel;
+    localeProvider.setLastpathProvider(localeProvider.lastPathProvider);
     setState(() {
       isLastPath = true;
     });
@@ -332,7 +338,7 @@ class _SuraNameState extends State<SuraName> {
             ? Positioned(
                 top: 4,
                 left: size.width / 3.3,
-                child: lastPathModel.isEmpty
+                child: localeProvider.lastPathProvider.isEmpty
                     ? Container()
                     : Container(
                         alignment: Alignment.center,
@@ -346,12 +352,15 @@ class _SuraNameState extends State<SuraName> {
                             ),
                             borderRadius: BorderRadius.circular(12)),
                         // width: 160,
-                        child: Center(
-                            child: Text(
-                          'সর্বশেষ পাঠ: ${lastPathModel[0].sura_name} -আয়ত: ${lastPathModel[0].VerseIDAr}',
-                          style: TextStyle(
-                              color: Color(0xfff2f2f2),
-                              fontWeight: FontWeight.w500),
+                        child: Center(child: Consumer<LocaleProvider>(
+                          builder: ((context, localeProvider, child) {
+                            return Text(
+                              'সর্বশেষ পাঠ: ${localeProvider.lastPathProvider[0].sura_name} -আয়ত: ${localeProvider.lastPathProvider[0].VerseIDAr}',
+                              style: TextStyle(
+                                  color: Color(0xfff2f2f2),
+                                  fontWeight: FontWeight.w500),
+                            );
+                          }),
                         ))),
               )
             : Container(),

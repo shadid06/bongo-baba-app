@@ -1,10 +1,12 @@
 import 'dart:convert';
 
+import 'package:active_ecommerce_flutter/providers/locale_provider.dart';
 import 'package:active_ecommerce_flutter/quran_app/database/db_model.dart';
 import 'package:active_ecommerce_flutter/quran_app/database/dbhelper.dart';
 import 'package:active_ecommerce_flutter/quran_app/database/last_path_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 import 'bookmark.dart';
 
@@ -66,6 +68,7 @@ class _SuraDetailsState extends State<SuraDetails> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    localeProvider = Provider.of<LocaleProvider>(context, listen: false);
     getLastpath();
     suraAr(controller.text);
     suraBn();
@@ -84,9 +87,12 @@ class _SuraDetailsState extends State<SuraDetails> {
   var savedId;
   List<LastPathModel> lastPathModel = [];
   TextEditingController controller = TextEditingController();
+  LocaleProvider localeProvider;
 
   getLastpath() async {
     lastPathModel = await DBHelper().getLastPath();
+    localeProvider.lastPathProvider = lastPathModel;
+    localeProvider.setLastpathProvider(localeProvider.lastPathProvider);
     // savedId = lastPathModel[0].VerseIDAr;
     setState(() {});
     // print(lastPathModel[0].VerseIDAr);
@@ -488,12 +494,14 @@ class _SuraDetailsState extends State<SuraDetails> {
                           sura_name: suraNama.toString(),
                           VerseIDAr: verseIDar,
                         ));
+                        await getLastpath();
                       } else {
                         await DBHelper().saveToLastPath(LastPathModel(
                           sura: uniqId,
                           sura_name: suraNama.toString(),
                           VerseIDAr: verseIDar,
                         ));
+                        await getLastpath();
                       }
 
                       // await DBHelper().updateLastpath(LastPathModel(

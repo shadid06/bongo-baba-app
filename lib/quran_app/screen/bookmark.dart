@@ -1,6 +1,8 @@
+import 'package:active_ecommerce_flutter/providers/locale_provider.dart';
 import 'package:active_ecommerce_flutter/quran_app/database/db_model.dart';
 import 'package:active_ecommerce_flutter/quran_app/database/dbhelper.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ShowData extends StatefulWidget {
   const ShowData({Key key}) : super(key: key);
@@ -12,9 +14,11 @@ class ShowData extends StatefulWidget {
 class _ShowDataState extends State<ShowData> {
   List<AddAddressModel> addresses = [];
   bool isLoading = true;
+
   @override
   void initState() {
     // TODO: implement initState
+
     super.initState();
     getAddresse();
   }
@@ -23,6 +27,7 @@ class _ShowDataState extends State<ShowData> {
     var ad = await DBHelper().getAddresses();
     setState(() {
       addresses = ad;
+
       isLoading = false;
     });
     print(addresses);
@@ -36,8 +41,16 @@ class _ShowDataState extends State<ShowData> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: Colors.blueGrey,
+        // backgroundColor: Colors.blueGrey,
         title: Text("বুকমার্ক "),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xff8aed93), Color(0xff00CED1)],
+              stops: [0.15, 1.0],
+            ),
+          ),
+        ),
       ),
       body: SafeArea(
           child: SingleChildScrollView(
