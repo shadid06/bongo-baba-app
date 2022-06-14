@@ -119,24 +119,39 @@ class _SuraNameState extends State<SuraName> {
         ),
         title: isSearch
             ? Container(
-                height: 40,
-                margin: EdgeInsets.only(top: 10, bottom: 10),
-                child: TextField(
-                  controller: controller,
-                  decoration: InputDecoration(
+                height: 30,
+                width: size.width / 1.5,
+
+                //margin: EdgeInsets.only(top: 10, bottom: 10),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Center(
+                  child: TextField(
+                    controller: controller,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
                       hintText: 'Enter Sura No. Or Sura Name',
-                      hintStyle: TextStyle(fontSize: 15),
-                      filled: true,
-                      suffixIcon: IconButton(
-                          onPressed: () {
+                      hintStyle: TextStyle(fontSize: 12),
+                      //filled: true,
+                      suffixIcon: GestureDetector(
+                          onTap: () {
                             suraName(controller.text);
                           },
-                          icon: Icon(Icons.search)),
+                          child: Icon(Icons.search)),
+                      // suffixIcon: IconButton(
+                      //     onPressed: () {
+                      //       suraName(controller.text);
+                      //     },
+                      //     icon: Icon(Icons.search)),
                       fillColor: Colors.white,
-                      contentPadding: EdgeInsets.all(5),
-                      border: OutlineInputBorder(
-                        gapPadding: 5,
-                      )),
+                      contentPadding: EdgeInsets.only(bottom: 18, left: 16),
+                      // border: OutlineInputBorder(
+                      //   gapPadding: 5,
+                      // )
+                    ),
+                  ),
                 ),
               )
             : Text('বাংলা কুরআন'),
