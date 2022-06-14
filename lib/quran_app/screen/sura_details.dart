@@ -185,11 +185,36 @@ class _SuraDetailsState extends State<SuraDetails> {
                                 margin: const EdgeInsets.all(10),
                                 child: ListTile(
                                   //  leading: Text(suraArList[index]["sura_no"]),
-                                  title: Text(
-                                      '${suraArList[index]["VerseIDAr"]}',
-                                      style: TextStyle(
-                                          fontSize: fontsize,
-                                          color: Colors.black)),
+                                  title: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        '${suraArList[index]["VerseIDAr"]}',
+                                        style: TextStyle(
+                                            fontSize: fontsize,
+                                            color: Colors.black),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          _showText(context);
+                                          textar = suraArList[index]["ayat"];
+                                          textbn = suraBnList[index]["text"];
+                                          verseIDar =
+                                              suraArList[index]["VerseIDAr"];
+                                          suraNo = suraArList[index]["sura"];
+                                          suraNama = widget.suraname;
+                                          uniqId = suraArList[index]['id'];
+                                          print(textar);
+                                          print(textbn);
+                                          print(uniqId);
+                                        },
+                                        child: Icon(
+                                          Icons.more_horiz_outlined,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                   subtitle: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -464,6 +489,7 @@ class _SuraDetailsState extends State<SuraDetails> {
                           // mobileNo: mobileNoCtlr.text
 
                           ));
+                      Navigator.pop(context);
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text('বুকমার্ক এ সংরক্ষন করা হয়েছে'),
                       ));
@@ -494,6 +520,7 @@ class _SuraDetailsState extends State<SuraDetails> {
                           sura_name: suraNama.toString(),
                           VerseIDAr: verseIDar,
                         ));
+
                         await getLastpath();
                       } else {
                         await DBHelper().saveToLastPath(LastPathModel(
@@ -501,6 +528,7 @@ class _SuraDetailsState extends State<SuraDetails> {
                           sura_name: suraNama.toString(),
                           VerseIDAr: verseIDar,
                         ));
+
                         await getLastpath();
                       }
 
@@ -509,7 +537,7 @@ class _SuraDetailsState extends State<SuraDetails> {
                       //   sura_name: suraNama.toString(),
                       //   VerseIDAr: verseIDar,
                       // ));
-
+                      Navigator.pop(context);
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text('সর্বশেষ পাঠ সংরক্ষন করা হয়েছে'),
                       ));
@@ -527,20 +555,20 @@ class _SuraDetailsState extends State<SuraDetails> {
                 ],
               ),
             ),
-            actions: <Widget>[
-              Card(
-                shadowColor: Colors.black,
-                elevation: 20,
-                child: new FlatButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: new Text("OK"),
-                    )),
-              )
-            ],
+            // actions: <Widget>[
+            //   Card(
+            //     shadowColor: Colors.black,
+            //     elevation: 20,
+            //     child: new FlatButton(
+            //         onPressed: () {
+            //           Navigator.of(context).pop();
+            //         },
+            //         child: Padding(
+            //           padding: const EdgeInsets.all(10.0),
+            //           child: new Text("OK"),
+            //         )),
+            //   )
+            // ],
           );
         });
   }
