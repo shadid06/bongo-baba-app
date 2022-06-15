@@ -14,7 +14,7 @@ import 'bookmark.dart';
 
 class SuraDetails extends StatefulWidget {
   String suraname;
-  int suraNo;
+  String suraNo;
 
   SuraDetails({
     this.suraname,
@@ -28,6 +28,8 @@ class SuraDetails extends StatefulWidget {
 class _SuraDetailsState extends State<SuraDetails> {
   List suraArList = [];
   List suraBnList = [];
+  List data = [];
+  List data2 = [];
   double fontsize = 16;
   Future<void> suraAr() async {
     // final String response = await rootBundle.loadString('assets/ayats_ar.json');
@@ -35,16 +37,21 @@ class _SuraDetailsState extends State<SuraDetails> {
     // setState(() {
     //   // _items = data;
     // });
+    // final String response = await rootBundle.loadString('assets/ayats_ar.json');
     final String response = await rootBundle.loadString('assets/ayats_ar.json');
-    final data = await json.decode(response);
-    //print(data);
-
-    setState(() {
-      suraArList = data;
-    });
+    data = await json.decode(response);
+    // print(widget.suraNo);
+    // print(data);
+    for (int i = 0; i < data.length; i++) {
+      if (widget.suraNo.compareTo(data[i]["sura"]) == 0) {
+        // suraArList = data[i];
+        suraArList.add(data[i]);
+      }
+    }
 
     setState(() {});
-    print(suraArList);
+
+    print("ar: ${suraArList.length}");
   }
 
   Future<void> suraBn() async {
@@ -54,16 +61,21 @@ class _SuraDetailsState extends State<SuraDetails> {
     //   // _items = data;
     // });
     final String response = await rootBundle.loadString('assets/ayats_bn.json');
-    final data = await json.decode(response);
+    data2 = await json.decode(response);
     // print(data);
+    for (int i = 0; i < data2.length; i++) {
+      if (widget.suraNo.compareTo(data2[i]["sura"]) == 0) {
+        // suraArList = data[i];
+        suraBnList.add(data2[i]);
+      }
+    }
 
-    setState(() {
-      suraBnList = data;
-    });
+    setState(() {});
     //  match();
     //  setState(() {
 
     //  });
+    print("bn: ${suraBnList.length}");
   }
 
   @override
@@ -158,7 +170,7 @@ class _SuraDetailsState extends State<SuraDetails> {
                           onTap: () {
                             // suraAr(controller.text);
 
-                            searchIndex = int.parse(controller.text) + 6;
+                            searchIndex = int.parse(controller.text) - 1;
                             _scrollToIndex(searchIndex);
                             print(searchIndex);
                             setState(() {});
@@ -176,9 +188,8 @@ class _SuraDetailsState extends State<SuraDetails> {
                       // )
                     ),
                     onChanged: (val) {
-                      searchIndex = int.parse(val) + 6;
+                      searchIndex = int.parse(val) - 1;
                       _scrollToIndex(searchIndex);
-                      setState(() {});
                     },
                   ),
                 ),
@@ -427,20 +438,16 @@ class _SuraDetailsState extends State<SuraDetails> {
                   ),
                   GestureDetector(
                     onTap: () {
+                      _copyToClipboard();
                       Navigator.pop(context);
                     },
-                    child: GestureDetector(
-                      onTap: () {
-                        _copyToClipboard();
-                      },
-                      child: Card(
-                          shadowColor: Colors.black,
-                          elevation: 10,
-                          child: Container(
-                              width: 200,
-                              padding: EdgeInsets.all(10),
-                              child: Center(child: Text('কপি করুন')))),
-                    ),
+                    child: Card(
+                        shadowColor: Colors.black,
+                        elevation: 10,
+                        child: Container(
+                            width: 200,
+                            padding: EdgeInsets.all(10),
+                            child: Center(child: Text('কপি করুন')))),
                   ),
                   SizedBox(
                     height: 15,

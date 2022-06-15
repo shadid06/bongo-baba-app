@@ -237,9 +237,8 @@ class _SuraNameState extends State<SuraName> {
                                       builder: (context) => SuraDetails(
                                             suraname: _SuraName[indexGlobal]
                                                 ["sura_name"],
-                                            suraNo: int.parse(
-                                                _SuraName[indexGlobal]
-                                                    ["sura_no"]),
+                                            suraNo: _SuraName[indexGlobal]
+                                                ["sura_no"],
                                           )));
                             },
                             child: Column(
