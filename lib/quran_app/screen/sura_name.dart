@@ -36,7 +36,7 @@ class _SuraNameState extends State<SuraName> {
   //   });
 
   // }
-  Future<void> suraName(name) async {
+  Future<void> suraName() async {
     // final String response = await rootBundle.loadString('assets/ayats_ar.json');
     // final data = await json.decode(response);
     // setState(() {
@@ -55,7 +55,7 @@ class _SuraNameState extends State<SuraName> {
     // TODO: implement initState
     localeProvider = Provider.of<LocaleProvider>(context, listen: false);
     getLastpath();
-    suraName(controller.text);
+    suraName();
   }
 
   bool isSearch = false;
@@ -64,6 +64,8 @@ class _SuraNameState extends State<SuraName> {
   bool isLastPath = false;
   List<LastPathModel> lastPathModel = [];
   LocaleProvider localeProvider;
+  int searchIndex;
+  int indexGlobal = 0;
   getLastpath() async {
     lastPathModel = await DBHelper().getLastPath();
     localeProvider.lastPathProvider = lastPathModel;
@@ -73,6 +75,13 @@ class _SuraNameState extends State<SuraName> {
     });
     print(lastPathModel);
     return lastPathModel;
+  }
+
+  final double _height = 80;
+  final _scrollController = ScrollController();
+  void _scrollToIndex(index) {
+    _scrollController.animateTo(_height * index,
+        duration: const Duration(seconds: 2), curve: Curves.easeIn);
   }
 
   @override
@@ -132,12 +141,31 @@ class _SuraNameState extends State<SuraName> {
                     controller: controller,
                     decoration: InputDecoration(
                       border: InputBorder.none,
-                      hintText: 'Enter Sura No. Or Sura Name',
+                      hintText: 'সূরা নাম অথবা সূরা নম্বর',
                       hintStyle: TextStyle(fontSize: 12),
                       //filled: true,
                       suffixIcon: GestureDetector(
                           onTap: () {
-                            suraName(controller.text);
+                            // suraName(controller.text);
+                            //_SuraName = null;
+                            try {
+                              searchIndex = int.parse(controller.text);
+                              searchIndex = searchIndex - 1;
+                              _scrollToIndex(searchIndex);
+                              //suraName();
+                              // indexGlobal = searchIndex;
+                              print(searchIndex);
+
+                              setState(() {});
+                            } on FormatException {
+                              searchIndex = _SuraName.indexWhere((element) =>
+                                  element["sura_name"] == controller.text);
+                              _scrollToIndex(searchIndex);
+                              setState(() {});
+                            }
+                            // if (_SuraName.contains(controller.text)) {
+
+                            // }
                           },
                           child: Icon(Icons.search)),
                       // suffixIcon: IconButton(
@@ -151,6 +179,16 @@ class _SuraNameState extends State<SuraName> {
                       //   gapPadding: 5,
                       // )
                     ),
+                    onChanged: (val) {
+                      try {
+                        searchIndex = int.parse(val) - 1;
+                        _scrollToIndex(searchIndex);
+                      } on FormatException {
+                        searchIndex = _SuraName.indexWhere(
+                            (element) => element["sura_name"] == val);
+                        _scrollToIndex(searchIndex);
+                      }
+                    },
                   ),
                 ),
               )
@@ -179,7 +217,7 @@ class _SuraNameState extends State<SuraName> {
               SizedBox(
                 height: 16,
               ),
-              _SuraName.isEmpty
+              _SuraName == null
                   ? Center(
                       child: CircularProgressIndicator(
                         color: Colors.blue,
@@ -187,35 +225,42 @@ class _SuraNameState extends State<SuraName> {
                     )
                   : Expanded(
                       child: ListView.builder(
+                        controller: _scrollController,
                         itemCount: _SuraName.length,
-                        itemBuilder: (context, index) {
-                          if (controller.text.isEmpty) {
-                            return GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => SuraDetails(
-                                              suraname: _SuraName[index]
-                                                  ["sura_name"],
-                                              suraNo: int.parse(
-                                                  _SuraName[index]["sura_no"]),
-                                            )));
-                              },
-                              child: Column(
-                                children: [
-                                  ListTile(
+                        itemBuilder: (context, indexGlobal) {
+                          print('ind: $indexGlobal');
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => SuraDetails(
+                                            suraname: _SuraName[indexGlobal]
+                                                ["sura_name"],
+                                            suraNo: int.parse(
+                                                _SuraName[indexGlobal]
+                                                    ["sura_no"]),
+                                          )));
+                            },
+                            child: Column(
+                              children: [
+                                Container(
+                                  height: _height,
+                                  color: searchIndex == indexGlobal
+                                      ? Colors.grey[300]
+                                      : Colors.white,
+                                  child: ListTile(
                                     leading: Padding(
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 8),
                                       child: Card(
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
-                                              BorderRadius.circular(15),
+                                              BorderRadius.circular(17),
                                         ),
                                         child: Container(
-                                          height: 30,
-                                          width: 30,
+                                          height: 34,
+                                          width: 34,
                                           decoration: BoxDecoration(
                                               gradient: LinearGradient(
                                                 colors: [
@@ -231,13 +276,14 @@ class _SuraNameState extends State<SuraName> {
                                               //     ? Color(0xff00CED1)
                                               //     : Color(0xff8aed93),
                                               borderRadius:
-                                                  BorderRadius.circular(15)),
+                                                  BorderRadius.circular(17)),
                                           child: Center(
                                             child: Padding(
                                               padding:
                                                   const EdgeInsets.all(5.0),
                                               child: Text(
-                                                _SuraName[index]["sura_no"],
+                                                _SuraName[indexGlobal]
+                                                    ["sura_no"],
                                                 style: TextStyle(
                                                     color: Colors.white,
                                                     fontWeight:
@@ -249,7 +295,7 @@ class _SuraNameState extends State<SuraName> {
                                       ),
                                     ),
                                     title: Text(
-                                      _SuraName[index]["sura_name"],
+                                      _SuraName[indexGlobal]["sura_name"],
                                       style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w300),
@@ -257,92 +303,23 @@ class _SuraNameState extends State<SuraName> {
                                     subtitle: Row(
                                       children: [
                                         Text(
-                                            'আয়ত - ${_SuraName[index]["total_ayat"]} টি,'),
+                                            'আয়ত - ${_SuraName[indexGlobal]["total_ayat"]} টি,'),
                                         SizedBox(
                                           width: 5,
                                         ),
                                         Text(
-                                            'পারা - ${_SuraName[index]["para"]}'),
+                                            'পারা - ${_SuraName[indexGlobal]["para"]}'),
                                       ],
                                     ),
                                   ),
-                                  Divider(
-                                    color: Colors.grey,
-                                    height: 1,
-                                  )
-                                ],
-                              ),
-                            );
-                          } else if (_SuraName[index]["sura_name"]
-                                  .contains(controller.text) ||
-                              _SuraName[index]["sura_no"]
-                                  .contains(controller.text) ||
-                              isSearch == false) {
-                            return GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => SuraDetails(
-                                              suraname: _SuraName[index]
-                                                  ["sura_name"],
-                                              suraNo: int.parse(
-                                                  _SuraName[index]["sura_no"]),
-                                            )));
-                              },
-                              child: Column(
-                                children: [
-                                  ListTile(
-                                    leading: Card(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(15),
-                                      ),
-                                      child: Container(
-                                        height: 30,
-                                        width: 30,
-                                        decoration: BoxDecoration(
-                                            color: Colors.teal,
-                                            borderRadius:
-                                                BorderRadius.circular(15)),
-                                        child: Center(
-                                            child: Padding(
-                                          padding: const EdgeInsets.all(5.0),
-                                          child: Text(
-                                            _SuraName[index]["sura_no"],
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.w500),
-                                          ),
-                                        )),
-                                      ),
-                                    ),
-                                    title: Text(
-                                      _SuraName[index]["sura_name"],
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w300),
-                                    ),
-                                    subtitle: Row(
-                                      children: [
-                                        Text(
-                                            'আয়ত - ${_SuraName[index]["total_ayat"]} টি,'),
-                                        SizedBox(
-                                          width: 5,
-                                        ),
-                                        Text(
-                                            'পারা - ${_SuraName[index]["para"]}'),
-                                      ],
-                                    ),
-                                  ),
-                                  Divider(
-                                    color: Colors.grey,
-                                    height: 1,
-                                  )
-                                ],
-                              ),
-                            );
-                          }
-                          return Container();
+                                ),
+                                Divider(
+                                  color: Colors.grey,
+                                  height: 1,
+                                )
+                              ],
+                            ),
+                          );
                         },
                       ),
                     )

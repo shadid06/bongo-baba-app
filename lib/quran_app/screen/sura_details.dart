@@ -7,6 +7,8 @@ import 'package:active_ecommerce_flutter/quran_app/database/last_path_model.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'dart:math';
 
 import 'bookmark.dart';
 
@@ -27,7 +29,7 @@ class _SuraDetailsState extends State<SuraDetails> {
   List suraArList = [];
   List suraBnList = [];
   double fontsize = 16;
-  Future<void> suraAr(VerseIDAr) async {
+  Future<void> suraAr() async {
     // final String response = await rootBundle.loadString('assets/ayats_ar.json');
     // final data = await json.decode(response);
     // setState(() {
@@ -70,7 +72,7 @@ class _SuraDetailsState extends State<SuraDetails> {
     super.initState();
     localeProvider = Provider.of<LocaleProvider>(context, listen: false);
     getLastpath();
-    suraAr(controller.text);
+    suraAr();
     suraBn();
 
     // print(suraBn());
@@ -85,6 +87,7 @@ class _SuraDetailsState extends State<SuraDetails> {
   var suraNama;
   var uniqId;
   var savedId;
+  int searchIndex;
   List<LastPathModel> lastPathModel = [];
   TextEditingController controller = TextEditingController();
   LocaleProvider localeProvider;
@@ -99,6 +102,15 @@ class _SuraDetailsState extends State<SuraDetails> {
     return lastPathModel;
   }
 
+  final ItemScrollController _itemScrollController = ItemScrollController();
+
+  // This function will be triggered when the user presses the floating button
+  void _scrollToIndex(int index) {
+    _itemScrollController.scrollTo(
+        index: index,
+        duration: const Duration(seconds: 2),
+        curve: Curves.easeInOutCubic);
+  }
   // match() {
   //   for (int i = 0; i < suraArList.length; i++) {
   //     if (suraArList[i]['VerseIDAr'] == savedId) {
@@ -139,12 +151,17 @@ class _SuraDetailsState extends State<SuraDetails> {
                     controller: controller,
                     decoration: InputDecoration(
                       border: InputBorder.none,
-                      hintText: 'Enter Sura No. Or Sura Name',
+                      hintText: 'আয়াত নম্বর',
                       hintStyle: TextStyle(fontSize: 12),
                       //filled: true,
                       suffixIcon: GestureDetector(
                           onTap: () {
-                            suraAr(controller.text);
+                            // suraAr(controller.text);
+
+                            searchIndex = int.parse(controller.text) + 6;
+                            _scrollToIndex(searchIndex);
+                            print(searchIndex);
+                            setState(() {});
                           },
                           child: Icon(Icons.search)),
                       // suffixIcon: IconButton(
@@ -158,6 +175,11 @@ class _SuraDetailsState extends State<SuraDetails> {
                       //   gapPadding: 5,
                       // )
                     ),
+                    onChanged: (val) {
+                      searchIndex = int.parse(val) + 6;
+                      _scrollToIndex(searchIndex);
+                      setState(() {});
+                    },
                   ),
                 ),
               )
@@ -175,124 +197,63 @@ class _SuraDetailsState extends State<SuraDetails> {
       body: Stack(children: [
         Column(
           children: [
-            suraArList.isNotEmpty
+            suraArList != null
                 ? Expanded(
-                    child: ListView.builder(
-                      itemCount: suraArList.length,
-                      itemBuilder: (context, index) {
-                        if (widget.suraNo.toString() ==
-                            (suraArList[index]["sura"])) {
-                          if (controller.text.isEmpty) {
-                            return GestureDetector(
-                              onLongPress: () {
-                                _showText(context);
-                                textar = suraArList[index]["ayat"];
-                                textbn = suraBnList[index]["text"];
-                                verseIDar = suraArList[index]["VerseIDAr"];
-                                suraNo = suraArList[index]["sura"];
-                                suraNama = widget.suraname;
-                                uniqId = suraArList[index]['id'];
-                                print(textar);
-                                print(textbn);
-                                print(uniqId);
-                              },
-                              child: Card(
-                                margin: const EdgeInsets.all(10),
-                                child: ListTile(
-                                  //  leading: Text(suraArList[index]["sura_no"]),
-                                  title: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        '${suraArList[index]["VerseIDAr"]}',
-                                        style: TextStyle(
-                                            fontSize: fontsize,
-                                            color: Colors.black),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          _showText(context);
-                                          textar = suraArList[index]["ayat"];
-                                          textbn = suraBnList[index]["text"];
-                                          verseIDar =
-                                              suraArList[index]["VerseIDAr"];
-                                          suraNo = suraArList[index]["sura"];
-                                          suraNama = widget.suraname;
-                                          uniqId = suraArList[index]['id'];
-                                          print(textar);
-                                          print(textbn);
-                                          print(uniqId);
-                                        },
-                                        child: Icon(
-                                          Icons.more_horiz_outlined,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  subtitle: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        width: double.infinity,
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.end,
-                                          children: [
-                                            Directionality(
-                                                textDirection:
-                                                    TextDirection.rtl,
-                                                child: Text(
-                                                    suraArList[index]["ayat"],
-                                                    style: TextStyle(
-                                                        fontSize: fontsize + 4,
-                                                        color: Colors.black))),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      Container(
-                                        width: double.infinity,
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              suraBnList.isEmpty
-                                                  ? ""
-                                                  : suraBnList[index]["text"],
-                                              style: TextStyle(
-                                                  fontSize: fontsize,
-                                                  color: Colors.black),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      //     SizedBox(
-                                      //       width: 15,
-                                      //     ),
-                                      //     Text('পারা - ${suraArList[index]["para"]}'),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            );
-                          } else if (suraArList[index]["VerseIDAr"]
-                                  .contains(controller.text) ||
-                              isSearch == false) {
-                            return Card(
+                    child: ScrollablePositionedList.builder(
+                        itemScrollController: _itemScrollController,
+                        itemCount: suraArList.length,
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onLongPress: () {
+                              _showText(context);
+                              textar = suraArList[index]["ayat"];
+                              textbn = suraBnList[index]["text"];
+                              verseIDar = suraArList[index]["VerseIDAr"];
+                              suraNo = suraArList[index]["sura"];
+                              suraNama = widget.suraname;
+                              uniqId = suraArList[index]['id'];
+                              print(textar);
+                              print(textbn);
+                              print(uniqId);
+                            },
+                            child: Card(
+                              key: ValueKey(suraArList[index]),
                               margin: const EdgeInsets.all(10),
+                              color: searchIndex == index
+                                  ? Colors.grey[300]
+                                  : Colors.white,
                               child: ListTile(
                                 //  leading: Text(suraArList[index]["sura_no"]),
-                                title: Text(suraArList[index]["VerseIDAr"],
-                                    style: TextStyle(
-                                        fontSize: fontsize,
-                                        color: Colors.black)),
+                                title: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      '${suraArList[index]["VerseIDAr"]}',
+                                      style: TextStyle(
+                                          fontSize: fontsize,
+                                          color: Colors.black),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        _showText(context);
+                                        textar = suraArList[index]["ayat"];
+                                        textbn = suraBnList[index]["text"];
+                                        verseIDar =
+                                            suraArList[index]["VerseIDAr"];
+                                        suraNo = suraArList[index]["sura"];
+                                        suraNama = widget.suraname;
+                                        uniqId = suraArList[index]['id'];
+                                        print(textar);
+                                        print(textbn);
+                                        print(uniqId);
+                                      },
+                                      child: Icon(
+                                        Icons.more_horiz_outlined,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                                 subtitle: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -307,10 +268,13 @@ class _SuraDetailsState extends State<SuraDetails> {
                                               child: Text(
                                                   suraArList[index]["ayat"],
                                                   style: TextStyle(
-                                                      fontSize: fontsize,
+                                                      fontSize: fontsize + 4,
                                                       color: Colors.black))),
                                         ],
                                       ),
+                                    ),
+                                    SizedBox(
+                                      height: 10,
                                     ),
                                     Container(
                                       width: double.infinity,
@@ -321,7 +285,9 @@ class _SuraDetailsState extends State<SuraDetails> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            suraBnList[index]["text"],
+                                            suraBnList.isEmpty
+                                                ? ""
+                                                : suraBnList[index]["text"],
                                             style: TextStyle(
                                                 fontSize: fontsize,
                                                 color: Colors.black),
@@ -336,12 +302,9 @@ class _SuraDetailsState extends State<SuraDetails> {
                                   ],
                                 ),
                               ),
-                            );
-                          }
-                        }
-                        return Container();
-                      },
-                    ),
+                            ),
+                          );
+                        }),
                   )
                 : Center(
                     child: CircularProgressIndicator(),
