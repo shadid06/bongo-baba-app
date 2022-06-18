@@ -88,6 +88,13 @@ class _ListenState extends State<Listen> {
   SalahTimeModel _salahTimeModel;
   var salahItem;
   bool isSalahTime = true;
+  DateTime fajarTime,
+      sunriseTime,
+      zhurTime,
+      asarTime,
+      magribTime,
+      ishaTime,
+      currentDateTime;
 
   @override
   void initState() {
@@ -286,8 +293,9 @@ class _ListenState extends State<Listen> {
   }
 
   showTime() {
+    currentDateTime = DateTime.now();
     var now = DateTime.now();
-    currentDate = DateFormat('dd-MM-yyyy').format(now);
+    currentDate = DateFormat('yyyy-MM-dd').format(now);
     currentTime = DateFormat('h:mm').format(now);
     currentTimeSplit = currentTime.split(
       ':',
@@ -296,6 +304,8 @@ class _ListenState extends State<Listen> {
     currentHour = int.parse(currentTimeSplit[0]);
     currentMinute = int.parse(currentTimeSplit[1]);
     // if (currentHour > zhurCmpHour && currentHour < asarCmpHour) {}
+    print('current date time: $currentDateTime');
+    print('current date: $currentDate');
     print('current time$currentTime'); //HH:mm:ss
     print(currentHour);
     print(currentMinute);
@@ -303,12 +313,32 @@ class _ListenState extends State<Listen> {
 
   timeConvert() {
     fajar = salahItem[0].fajr.split(':');
+    var f = salahItem[0].fajr.split(' ');
+    var f0 = f[0];
+    print(f0);
+    fajarTime = DateTime.parse("$currentDate 0$f0:00");
+    print('fajar converted: ${fajarTime}');
     sunrise = salahItem[0].shurooq.split(':');
+    var s = salahItem[0].shurooq.split(' ');
+    var s0 = s[0];
+    sunriseTime = DateTime.parse("$currentDate 0$s0:00");
     zhur = salahItem[0].dhuhr.split(':');
+    var z = salahItem[0].dhuhr.split(' ');
+    var z0 = z[0];
+    zhurTime = DateTime.parse("$currentDate $z0:00");
     asar = salahItem[0].asr.split(':');
+    var a = salahItem[0].asr.split(' ');
+    var a0 = a[0];
+    asarTime = DateTime.parse("$currentDate 0$a0:00");
     // sunset = prayerTimeResponse.data.timings.sunset.split(':');
     magrib = salahItem[0].maghrib.split(':');
+    var m = salahItem[0].maghrib.split(' ');
+    var m0 = m[0];
+    magribTime = DateTime.parse("$currentDate 0$m0:00");
     isha = salahItem[0].isha.split(':');
+    var i = salahItem[0].isha.split(' ');
+    var i0 = a[0];
+    ishaTime = DateTime.parse("$currentDate 0$i0:00");
     fajarCmpHour = int.parse(fajar[0]);
     var fjr = fajar[1].split(' ');
 
@@ -378,61 +408,77 @@ class _ListenState extends State<Listen> {
   }
 
   yaktSelector() {
-    if (currentHour >= zhurCmpHour && currentHour <= asarCmpHour) {
-      selectedYakt = "যোহর";
-      // setState(() {});
-      var difHour = asarCmpHour - currentHour;
-      differenInMinute = ((difHour * 60) + asarCmpMinute) - currentMinute;
-      // totalAnimationTime = differenInMinute * 60000;
-      setState(() {});
-      print("zhur diff:$differenInMinute");
-      // countDownHour = (differenInMinute / 60).floor();
-      // countDownMinute = (differenInMinute % 60);
-      // print(differenInMinute);
-      // print(countDownHour);
-      // print(countDownMinute);
-      //যোহর আছর মাগরিব ইশা সাহরি	ইফতার সূর্যোদয় সূর্যাস্ত চলছে
-    } else if (currentHour >= asarCmpHour && currentHour <= magribCmpHour) {
-      selectedYakt = "আছর";
-
-      var difHour = magribCmpHour - currentHour;
-      differenInMinute = ((difHour * 60) + magribCmpMinute) - currentMinute;
-      setState(() {});
-      print("asar diff:$differenInMinute");
-      // totalAnimationTime = differenInMinute * 60000;
-    } else if (currentHour >= magribCmpHour && currentHour <= ishaCmpHour) {
-      selectedYakt = "মাগরিব";
-
-      var difHour = ishaCmpHour - currentHour;
-      differenInMinute = ((difHour * 60) + ishaCmpMinute) - currentMinute;
-      // totalAnimationTime = differenInMinute * 60000;
-      setState(() {});
-    } else if (currentHour >= ishaCmpHour && currentHour <= fajarCmpHour) {
-      selectedYakt = "ইশা";
-
-      var difHour = fajarCmpHour - currentHour;
-      differenInMinute = ((difHour * 60) + fajarCmpMinute) - currentMinute;
-      setState(() {});
-    } else if (currentHour >= fajarCmpHour && currentHour <= sunriseCmpHour) {
-      selectedYakt = "ফজর";
-
-      var difHour = sunriseCmpHour - currentHour;
-      differenInMinute = ((difHour * 60) + sunriseCmpMinute) - currentMinute;
-      setState(() {});
-    } else if (currentHour >= sunriseCmpHour && currentHour <= zhurCmpHour) {
-      selectedYakt = "বাকি";
-
-      var difHour = zhurCmpHour - currentHour;
-      if (difHour > 0) {
-        differenInMinute = ((difHour * 60) + zhurCmpMinute) - currentMinute;
-        print('baki: $differenInMinute');
-      } else {
-        differenInMinute = zhurCmpMinute - currentMinute;
-        print('baki: $differenInMinute');
-      }
-      setState(() {});
-      print("zhur min $zhurCmpMinute");
+    if ((currentDateTime.isAfter(zhurTime)) &&
+        (currentDateTime.isBefore(asarTime))) {
+      print("zhur cholse");
     }
+    // if (currentDateTime.compareTo(zhurTime) >= 0 &&
+    //     currentDateTime.compareTo(asarTime) < 0) {
+    //   selectedYakt = "যোহর";
+    //   print("zhur");
+    //   setState(() {
+    //     var difHour = asarCmpHour - currentHour;
+    //     differenInMinute = ((difHour * 60) + asarCmpMinute) - currentMinute;
+    //     // totalAnimationTime = differenInMinute * 60000;
+    //     setState(() {});
+    //   });
+    // }
+    // if (currentHour >= zhurCmpHour && currentHour <= asarCmpHour) {
+    //   selectedYakt = "যোহর";
+    //   // setState(() {});
+    //   var difHour = asarCmpHour - currentHour;
+    //   differenInMinute = ((difHour * 60) + asarCmpMinute) - currentMinute;
+    //   // totalAnimationTime = differenInMinute * 60000;
+    //   setState(() {});
+    //   print("zhur diff:$differenInMinute");
+    //   // countDownHour = (differenInMinute / 60).floor();
+    //   // countDownMinute = (differenInMinute % 60);
+    //   // print(differenInMinute);
+    //   // print(countDownHour);
+    //   // print(countDownMinute);
+    //   //যোহর আছর মাগরিব ইশা সাহরি	ইফতার সূর্যোদয় সূর্যাস্ত চলছে
+    // }
+    // else if (currentHour >= asarCmpHour && currentHour <= magribCmpHour) {
+    //   selectedYakt = "আছর";
+
+    //   var difHour = magribCmpHour - currentHour;
+    //   differenInMinute = ((difHour * 60) + magribCmpMinute) - currentMinute;
+    //   setState(() {});
+    //   print("asar diff:$differenInMinute");
+    //   // totalAnimationTime = differenInMinute * 60000;
+    // } else if (currentHour >= magribCmpHour && currentHour <= ishaCmpHour) {
+    //   selectedYakt = "মাগরিব";
+
+    //   var difHour = ishaCmpHour - currentHour;
+    //   differenInMinute = ((difHour * 60) + ishaCmpMinute) - currentMinute;
+    //   // totalAnimationTime = differenInMinute * 60000;
+    //   setState(() {});
+    // } else if (currentHour >= ishaCmpHour && currentHour <= fajarCmpHour) {
+    //   selectedYakt = "ইশা";
+
+    //   var difHour = fajarCmpHour - currentHour;
+    //   differenInMinute = ((difHour * 60) + fajarCmpMinute) - currentMinute;
+    //   setState(() {});
+    // } else if (currentHour >= fajarCmpHour && currentHour <= sunriseCmpHour) {
+    //   selectedYakt = "ফজর";
+
+    //   var difHour = sunriseCmpHour - currentHour;
+    //   differenInMinute = ((difHour * 60) + sunriseCmpMinute) - currentMinute;
+    //   setState(() {});
+    // } else if (currentHour >= sunriseCmpHour && currentHour <= zhurCmpHour) {
+    //   selectedYakt = "বাকি";
+
+    //   var difHour = zhurCmpHour - currentHour;
+    //   if (difHour > 0) {
+    //     differenInMinute = ((difHour * 60) + zhurCmpMinute) - currentMinute;
+    //     print('baki: $differenInMinute');
+    //   } else {
+    //     differenInMinute = zhurCmpMinute - currentMinute;
+    //     print('baki: $differenInMinute');
+    //   }
+    //   setState(() {});
+    //   print("zhur min $zhurCmpMinute");
+    // }
   }
 
   double progress = 0;
