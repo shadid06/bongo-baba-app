@@ -293,8 +293,11 @@ class _ListenState extends State<Listen> {
   }
 
   showTime() {
-    currentDateTime = DateTime.now();
+    // currentDateTime = DateTime.now();
     var now = DateTime.now();
+    var format12 = DateFormat('yyyy-MM-dd kk:mm:ss').format(now);
+    currentDateTime = DateTime.parse(format12);
+    print('format12: $currentDateTime');
     currentDate = DateFormat('yyyy-MM-dd').format(now);
     currentTime = DateFormat('h:mm').format(now);
     currentTimeSplit = currentTime.split(
@@ -408,9 +411,46 @@ class _ListenState extends State<Listen> {
   }
 
   yaktSelector() {
-    if ((currentDateTime.isAfter(zhurTime)) &&
-        (currentDateTime.isBefore(asarTime))) {
+    if ((currentDateTime.isAtSameMomentAs(sunriseTime) ||
+            currentDateTime.isAfter(sunriseTime)) &&
+        currentDateTime.isBefore(zhurTime)) {
+      print("zhur baki");
+      selectedYakt = "বাকি";
+      differenInMinute = zhurTime.difference(currentDateTime).inMinutes;
+      setState(() {});
+    } else if ((currentDateTime.isAtSameMomentAs(zhurTime) ||
+            currentDateTime.isAfter(zhurTime)) &&
+        currentDateTime.isBefore(asarTime)) {
+      selectedYakt = "যোহর";
       print("zhur cholse");
+      print("asarTime: $asarTime");
+      differenInMinute = asarTime.difference(currentDateTime).inMinutes;
+      print('zhur diff n: $differenInMinute');
+      setState(() {});
+    } else if ((currentDateTime.isAtSameMomentAs(asarTime) ||
+            currentDateTime.isAfter(asarTime)) &&
+        currentDateTime.isBefore(magribTime)) {
+      selectedYakt = "আছর";
+      differenInMinute = magribTime.difference(currentDateTime).inMinutes;
+      setState(() {});
+    } else if ((currentDateTime.isAtSameMomentAs(magribTime) ||
+            currentDateTime.isAfter(magribTime)) &&
+        currentDateTime.isBefore(ishaTime)) {
+      selectedYakt = "মাগরিব";
+      differenInMinute = ishaTime.difference(currentDateTime).inMinutes;
+      setState(() {});
+    } else if ((currentDateTime.isAtSameMomentAs(ishaTime) ||
+            currentDateTime.isAfter(ishaTime)) &&
+        currentDateTime.isBefore(fajarTime)) {
+      selectedYakt = "ইশা";
+      differenInMinute = fajarTime.difference(currentDateTime).inMinutes;
+      setState(() {});
+    } else if ((currentDateTime.isAtSameMomentAs(fajarTime) ||
+            currentDateTime.isAfter(fajarTime)) &&
+        currentDateTime.isBefore(sunriseTime)) {
+      selectedYakt = "ফজর";
+      differenInMinute = sunriseTime.difference(currentDateTime).inMinutes;
+      setState(() {});
     }
     // if (currentDateTime.compareTo(zhurTime) >= 0 &&
     //     currentDateTime.compareTo(asarTime) < 0) {
@@ -582,9 +622,11 @@ class _ListenState extends State<Listen> {
                                                             differenInMinute),
                                                     end: Duration.zero),
                                                 onEnd: () {
-                                                  print('Timer ended');
+                                                  isSalahTime = true;
+                                                  setState(() {});
+                                                  fetchSalahTime();
                                                   showTime();
-                                                  yaktSelector();
+                                                  timeConvert();
                                                   setState(() {});
                                                 },
                                                 builder: (BuildContext context,
