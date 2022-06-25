@@ -3,10 +3,12 @@ import 'dart:async';
 import 'package:active_ecommerce_flutter/custom/listen_row.dart';
 import 'package:active_ecommerce_flutter/custom/music_card.dart';
 import 'package:active_ecommerce_flutter/custom/toast_component.dart';
+import 'package:active_ecommerce_flutter/data_model/artist_response.dart';
 import 'package:active_ecommerce_flutter/data_model/prayer_time_response.dart';
 import 'package:active_ecommerce_flutter/data_model/salah_time_response.dart';
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 import 'package:active_ecommerce_flutter/my_theme.dart';
+import 'package:active_ecommerce_flutter/repositories/audio_repository.dart';
 import 'package:active_ecommerce_flutter/repositories/prayertime_repository.dart';
 import 'package:active_ecommerce_flutter/ui_sections/drawer.dart';
 
@@ -96,17 +98,27 @@ class _ListenState extends State<Listen> {
       ishaTime,
       currentDateTime;
 
+  ArtistResponse artistResponse;
+  var artistList = [];
+
   @override
   void initState() {
     super.initState();
     //fetchPrayerTime();
     fetchSalahTime();
+    getArtist();
     showTime();
 
     initializeNotification();
     // notificationTimeSelect();
     tz.initializeTimeZones();
     _showNotification();
+  }
+
+  getArtist() async {
+    artistResponse = await AudioRepository().getArtistList();
+    artistList.addAll(artistResponse.data);
+    setState(() {});
   }
 
   notificationTimeSelect() {
@@ -268,6 +280,8 @@ class _ListenState extends State<Listen> {
     locality = place.locality;
     address = '${place.locality},${place.country}';
     setState(() {});
+    print(
+        "${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}, ${place.name}");
   }
 
   fetchSalahTime() async {
@@ -328,11 +342,15 @@ class _ListenState extends State<Listen> {
     zhur = salahItem[0].dhuhr.split(':');
     var z = salahItem[0].dhuhr.split(' ');
     var z0 = z[0];
+
     zhurTime = DateTime.parse("$currentDate $z0:00");
     asar = salahItem[0].asr.split(':');
     var a = salahItem[0].asr.split(' ');
-    var a0 = a[0];
-    asarTime = DateTime.parse("$currentDate 0$a0:00");
+    //var a0 = a[0].split(' ');
+    //var a1 = a0.toString();
+    //asarTime = DateTime.parse("$currentDate 0$a1:00");
+    var ass = a[0].split(':');
+    print('asarTime ${ass[0]}');
     // sunset = prayerTimeResponse.data.timings.sunset.split(':');
     magrib = salahItem[0].maghrib.split(':');
     var m = salahItem[0].maghrib.split(' ');
@@ -1094,46 +1112,57 @@ class _ListenState extends State<Listen> {
                               height: 10,
                             ),
                             Container(
-                              height: 110,
-                              child: ListView.builder(
-                                  itemCount: 4,
-                                  scrollDirection: Axis.horizontal,
-                                  itemBuilder: (context, index) {
-                                    return Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 4),
-                                      child: Column(
-                                        children: [
-                                          Container(
-                                            height: 90,
-                                            width: 90,
-                                            decoration: BoxDecoration(
-                                                // color: Colors.redAccent,
-                                                borderRadius:
-                                                    BorderRadius.circular(45)),
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(45),
-                                              child: Image.network(
-                                                "https://i.cdn.newsbytesapp.com/images/l37220210424184951.png",
-                                                fit: BoxFit.cover,
+                              height: 135,
+                              child: artistList.isEmpty
+                                  ? Text("Loading......")
+                                  : ListView.builder(
+                                      itemCount: artistList.length,
+                                      scrollDirection: Axis.horizontal,
+                                      itemBuilder: (context, index) {
+                                        return Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 4),
+                                          child: Column(
+                                            children: [
+                                              Container(
+                                                height: 89,
+                                                width: 90,
+                                                decoration: BoxDecoration(
+                                                    // color: Colors.redAccent,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            45)),
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(45),
+                                                  child: Image.network(
+                                                    // "https://i.cdn.newsbytesapp.com/images/l37220210424184951.png",
+                                                    "https://ayat-app.com/public/" +
+                                                        artistList[index].image,
+
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ),
                                               ),
-                                            ),
+                                              SizedBox(
+                                                height: 4,
+                                              ),
+                                              Container(
+                                                width: 100,
+                                                child: Text(
+                                                  artistList[index].name,
+                                                  maxLines: 2,
+                                                  style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 12,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              )
+                                            ],
                                           ),
-                                          SizedBox(
-                                            height: 4,
-                                          ),
-                                          Text(
-                                            "artistName",
-                                            style: TextStyle(
-                                                color: Colors.grey,
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.bold),
-                                          )
-                                        ],
-                                      ),
-                                    );
-                                  }),
+                                        );
+                                      }),
                             ),
                           ],
                         ),
