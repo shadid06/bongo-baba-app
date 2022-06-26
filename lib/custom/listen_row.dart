@@ -1,3 +1,4 @@
+import 'package:active_ecommerce_flutter/screens/mp3_screen.dart';
 import 'package:active_ecommerce_flutter/screens/music_list.dart';
 import 'package:flutter/material.dart';
 
@@ -29,7 +30,7 @@ class ListenRow extends StatelessWidget {
         GestureDetector(
           onTap: () {
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => MusicList()));
+                context, MaterialPageRoute(builder: (context) => Mp3Screen()));
           },
           child: Card(
             elevation: 0.01,

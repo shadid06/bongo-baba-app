@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:active_ecommerce_flutter/custom/listen_row.dart';
 import 'package:active_ecommerce_flutter/custom/music_card.dart';
 import 'package:active_ecommerce_flutter/custom/toast_component.dart';
+import 'package:active_ecommerce_flutter/data_model/album_response.dart';
 import 'package:active_ecommerce_flutter/data_model/artist_response.dart';
+import 'package:active_ecommerce_flutter/data_model/generic_response.dart';
 import 'package:active_ecommerce_flutter/data_model/prayer_time_response.dart';
 import 'package:active_ecommerce_flutter/data_model/salah_time_response.dart';
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
@@ -100,12 +102,18 @@ class _ListenState extends State<Listen> {
 
   ArtistResponse artistResponse;
   var artistList = [];
+  AlbumResponse albumResponse;
+  var albumList = [];
+  GenericResponse genericResponse;
+  var genericList = [];
 
   @override
   void initState() {
     super.initState();
     //fetchPrayerTime();
     fetchSalahTime();
+    getGeneric();
+    getAlbum();
     getArtist();
     showTime();
 
@@ -118,6 +126,18 @@ class _ListenState extends State<Listen> {
   getArtist() async {
     artistResponse = await AudioRepository().getArtistList();
     artistList.addAll(artistResponse.data);
+    setState(() {});
+  }
+
+  getAlbum() async {
+    albumResponse = await AudioRepository().getAlbumList();
+    albumList.addAll(albumResponse.data);
+    setState(() {});
+  }
+
+  getGeneric() async {
+    genericResponse = await AudioRepository().getGenericList();
+    genericList.addAll(genericResponse.data);
     setState(() {});
   }
 
@@ -350,16 +370,26 @@ class _ListenState extends State<Listen> {
     //var a1 = a0.toString();
     //asarTime = DateTime.parse("$currentDate 0$a1:00");
     var ass = a[0].split(':');
-    print('asarTime ${ass[0]}');
+    var as24 = int.parse(ass[0]) + 12;
+    String as24s = as24.toString();
+
+    asarTime = DateTime.parse("$currentDate $as24s:${ass[1]}:00");
+    print('asarTime ${asarTime}');
     // sunset = prayerTimeResponse.data.timings.sunset.split(':');
     magrib = salahItem[0].maghrib.split(':');
     var m = salahItem[0].maghrib.split(' ');
-    var m0 = m[0];
-    magribTime = DateTime.parse("$currentDate 0$m0:00");
+    var m0 = m[0].split(':');
+    var magribint = int.parse(m0[0]) + 12;
+    String magribStr = magribint.toString();
+    magribTime = DateTime.parse("$currentDate $magribStr:${m0[1]}:00");
+    print('magribTime: $magribTime');
     isha = salahItem[0].isha.split(':');
     var i = salahItem[0].isha.split(' ');
-    var i0 = a[0];
-    ishaTime = DateTime.parse("$currentDate 0$i0:00");
+    var i0 = i[0].split(':');
+    var ishaInt = int.parse(i0[0]) + 12;
+    var ishaStr = ishaInt.toString();
+    ishaTime = DateTime.parse("$currentDate $ishaStr:${i0[1]}:00");
+    print('ishaTime: $ishaTime');
     fajarCmpHour = int.parse(fajar[0]);
     var fjr = fajar[1].split(' ');
 
@@ -1083,6 +1113,32 @@ class _ListenState extends State<Listen> {
                               height: 20,
                             ),
                             ListenRow(
+                              title: "Generic",
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              height: 140,
+                              child: genericList.isEmpty
+                                  ? Text('')
+                                  : ListView.builder(
+                                      itemCount: genericList.length,
+                                      scrollDirection: Axis.horizontal,
+                                      itemBuilder: (context, index) {
+                                        return MusicCard(
+                                          songName: genericList[index].name,
+                                          artistName: "",
+                                          imageUrl:
+                                              "https://ayat-app.com/public/" +
+                                                  genericList[index].coverArt,
+                                        );
+                                      }),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            ListenRow(
                               title: "Album",
                             ),
                             SizedBox(
@@ -1090,17 +1146,20 @@ class _ListenState extends State<Listen> {
                             ),
                             Container(
                               height: 140,
-                              child: ListView.builder(
-                                  itemCount: 4,
-                                  scrollDirection: Axis.horizontal,
-                                  itemBuilder: (context, index) {
-                                    return MusicCard(
-                                      songName: "Song Name",
-                                      artistName: "Artist Name",
-                                      imageUrl:
-                                          "https://i.cdn.newsbytesapp.com/images/l37220210424184951.png",
-                                    );
-                                  }),
+                              child: albumList.isEmpty
+                                  ? Text('')
+                                  : ListView.builder(
+                                      itemCount: albumList.length,
+                                      scrollDirection: Axis.horizontal,
+                                      itemBuilder: (context, index) {
+                                        return MusicCard(
+                                          songName: albumList[index].name,
+                                          artistName: "",
+                                          imageUrl:
+                                              "https://ayat-app.com/public/" +
+                                                  albumList[index].coverArt,
+                                        );
+                                      }),
                             ),
                             SizedBox(
                               height: 20,
