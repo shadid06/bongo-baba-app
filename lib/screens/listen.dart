@@ -6,6 +6,7 @@ import 'package:active_ecommerce_flutter/custom/toast_component.dart';
 import 'package:active_ecommerce_flutter/data_model/album_response.dart';
 import 'package:active_ecommerce_flutter/data_model/artist_response.dart';
 import 'package:active_ecommerce_flutter/data_model/generic_response.dart';
+import 'package:active_ecommerce_flutter/data_model/mp3_response.dart';
 import 'package:active_ecommerce_flutter/data_model/prayer_time_response.dart';
 import 'package:active_ecommerce_flutter/data_model/salah_time_response.dart';
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
@@ -18,6 +19,7 @@ import 'package:active_ecommerce_flutter/screens/all_generic.dart';
 import 'package:active_ecommerce_flutter/screens/all_mp3.dart';
 import 'package:active_ecommerce_flutter/screens/music_list.dart';
 import 'package:active_ecommerce_flutter/ui_sections/drawer.dart';
+import 'package:assets_audio_player/assets_audio_player.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_html/shims/dart_ui_real.dart';
@@ -111,12 +113,16 @@ class _ListenState extends State<Listen> {
   var albumList = [];
   GenericResponse genericResponse;
   var genericList = [];
+  Mp3Response mp3response;
+  List<Audio> audioList = [];
+  var mp3List = [];
 
   @override
   void initState() {
     super.initState();
     //fetchPrayerTime();
     fetchSalahTime();
+    getFeaturedMp3();
     getGeneric();
     getAlbum();
     getArtist();
@@ -126,6 +132,26 @@ class _ListenState extends State<Listen> {
     // notificationTimeSelect();
     tz.initializeTimeZones();
     _showNotification();
+  }
+
+  getFeaturedMp3() async {
+    mp3response = await AudioRepository().getFeaturesMp3List();
+    mp3List.addAll(mp3response.data);
+    for (int i = 0; i < mp3List.length; i++) {
+      //urlList.add("https://ayat-app.com/public/" + mp3List[i].file);
+      audioList.add(
+        Audio.network(
+          "https://ayat-app.com/public/" + mp3List[i].file,
+          metas: Metas(
+              title: mp3List[i].name,
+              id: "https://ayat-app.com/public/" + mp3List[i].coverArt,
+              album: mp3List[i].description,
+              artist: mp3List[i].listens.toString()),
+        ),
+      );
+    }
+
+    setState(() {});
   }
 
   getArtist() async {
@@ -1080,14 +1106,13 @@ class _ListenState extends State<Listen> {
                             Container(
                               height: 140,
                               child: ListView.builder(
-                                  itemCount: 4,
+                                  itemCount: audioList.length,
                                   scrollDirection: Axis.horizontal,
                                   itemBuilder: (context, index) {
                                     return MusicCard(
-                                      songName: "Song Name",
+                                      songName: audioList[index].metas.title,
                                       artistName: "",
-                                      imageUrl:
-                                          "https://i.cdn.newsbytesapp.com/images/l37220210424184951.png",
+                                      imageUrl: audioList[index].metas.id,
                                     );
                                   }),
                             ),

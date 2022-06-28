@@ -55,4 +55,11 @@ class AudioRepository {
     print('album mp3:${response.body}');
     return mp3ResponseFromJson(response.body);
   }
+
+  Future<Mp3Response> getFeaturesMp3List() async {
+    Uri url = Uri.parse("https://ayat-app.com/api/v2/featuredMp3");
+    final response = await http.get(url);
+    print('album mp3:${response.body}');
+    return mp3ResponseFromJson(response.body);
+  }
 }
