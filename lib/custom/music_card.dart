@@ -10,6 +10,7 @@ class MusicCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             height: 100,
@@ -28,12 +29,18 @@ class MusicCard extends StatelessWidget {
           SizedBox(
             height: 4,
           ),
-          Text(
-            songName,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-                color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold),
+          Container(
+            // height: 60,
+            width: 130,
+            child: Text(
+              songName,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold),
+            ),
           ),
           Text(
             artistName,

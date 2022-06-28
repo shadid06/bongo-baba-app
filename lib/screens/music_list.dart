@@ -1,114 +1,695 @@
 import 'package:active_ecommerce_flutter/custom/play_animation_button.dart';
+import 'package:active_ecommerce_flutter/data_model/mp3_response.dart';
+import 'package:active_ecommerce_flutter/repositories/audio_repository.dart';
+import 'package:active_ecommerce_flutter/screens/audio_player_file/loop_controll.dart';
+import 'package:active_ecommerce_flutter/screens/audio_player_file/position_seek_widget.dart';
+import 'package:active_ecommerce_flutter/ui_sections/custom_text.dart';
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
-import 'dart:math' show pi;
+import 'dart:math' show Random, pi;
 
 class MusicList extends StatefulWidget {
-  const MusicList({Key key}) : super(key: key);
+  var id, checker;
+  MusicList({Key key, this.id, this.checker}) : super(key: key);
 
   @override
   State<MusicList> createState() => _MusicListState();
 }
 
 class _MusicListState extends State<MusicList> {
+  Mp3Response mp3response;
+  var mp3List = [];
+  final AssetsAudioPlayer audioPlayer = AssetsAudioPlayer.withId("0");
+  Audio selectedAudio;
+  List<Audio> audioList = [];
+  int globalIndex = 0;
+  List<String> urlList = [];
+  bool isNavShow = false;
+  Random rnd = new Random();
+  bool isShuffle = false;
+  bool isLoop = false;
+  LoopMode loopMode;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print(widget.id);
+    if (widget.checker == 1) {
+      getArtistMp3();
+    } else if (widget.checker == 2) {
+      getGenreMp3();
+    } else if (widget.checker == 3) {
+      getAlbumMp3();
+    }
+  }
+
+  void setUpPlayer() async {
+    await audioPlayer.open(
+      Playlist(audios: audioList),
+      showNotification: true,
+      autoStart: false,
+      notificationSettings: NotificationSettings(
+        customPrevAction: (player) {
+          if (globalIndex > 0) {
+            globalIndex--;
+            setState(() {});
+            selectedAudio = audioList[globalIndex];
+            setState(() {});
+            player.playlistPlayAtIndex(globalIndex);
+            setState(() {});
+          } else if (globalIndex == 0) {
+            globalIndex = audioList.length - 1;
+            setState(() {});
+            selectedAudio = audioList[globalIndex];
+            setState(() {});
+            // player.previous(keepLoopMode: false);
+            player.playlistPlayAtIndex(globalIndex);
+            setState(() {});
+          }
+        },
+        customNextAction: (player) {
+          if (globalIndex == (audioList.length - 1)) {
+            globalIndex = 0;
+            setState(() {});
+            selectedAudio = audioList[globalIndex];
+            setState(() {});
+          } else if (globalIndex < audioList.length - 1) {
+            globalIndex++;
+            setState(() {});
+            selectedAudio = audioList[globalIndex];
+            setState(() {});
+          }
+          player.next();
+        },
+      ),
+    );
+  }
+
+  playMusic() async {
+    // await audioPlayer.play();
+    await audioPlayer.playlistPlayAtIndex(globalIndex);
+  }
+
+  pauseMusic() async {
+    await audioPlayer.pause();
+  }
+
+  skipPrevious() async {
+    await audioPlayer.previous();
+    // await audioPlayer.prev();
+  }
+
+  skipNext() async {
+    await audioPlayer.next(keepLoopMode: true);
+    // globalIndex++;
+    // setState(() {});
+  }
+
+  getArtistMp3() async {
+    mp3List.clear();
+    audioList.clear();
+    mp3response = await AudioRepository().getArtistMp3List(widget.id);
+    mp3List.addAll(mp3response.data);
+    for (int i = 0; i < mp3List.length; i++) {
+      //urlList.add("https://ayat-app.com/public/" + mp3List[i].file);
+      audioList.add(
+        Audio.network(
+          "https://ayat-app.com/public/" + mp3List[i].file,
+          metas: Metas(
+              title: mp3List[i].name,
+              id: "https://ayat-app.com/public/" + mp3List[i].coverArt,
+              album: mp3List[i].description,
+              artist: mp3List[i].listens.toString()),
+        ),
+      );
+    }
+
+    setState(() {});
+    setUpPlayer();
+    setState(() {});
+  }
+
+  getGenreMp3() async {
+    mp3List.clear();
+    audioList.clear();
+    mp3response = await AudioRepository().getGenreMp3List(widget.id);
+    mp3List.addAll(mp3response.data);
+    for (int i = 0; i < mp3List.length; i++) {
+      //urlList.add("https://ayat-app.com/public/" + mp3List[i].file);
+      audioList.add(
+        Audio.network(
+          "https://ayat-app.com/public/" + mp3List[i].file,
+          metas: Metas(
+              title: mp3List[i].name,
+              id: "https://ayat-app.com/public/" + mp3List[i].coverArt,
+              album: mp3List[i].description,
+              artist: mp3List[i].listens.toString()),
+        ),
+      );
+    }
+
+    setState(() {});
+    setUpPlayer();
+    setState(() {});
+  }
+
+  getAlbumMp3() async {
+    mp3List.clear();
+    audioList.clear();
+    mp3response = await AudioRepository().getAlbumMp3List(widget.id);
+    mp3List.addAll(mp3response.data);
+    for (int i = 0; i < mp3List.length; i++) {
+      //urlList.add("https://ayat-app.com/public/" + mp3List[i].file);
+      audioList.add(
+        Audio.network(
+          "https://ayat-app.com/public/" + mp3List[i].file,
+          metas: Metas(
+              title: mp3List[i].name,
+              id: "https://ayat-app.com/public/" + mp3List[i].coverArt,
+              album: mp3List[i].description,
+              artist: mp3List[i].listens.toString()),
+        ),
+      );
+    }
+
+    setState(() {});
+    setUpPlayer();
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: SafeArea(
-          child: Column(
-        children: [
-          Container(
-            height: 70,
-            width: double.infinity,
-            // color: Colors.greenAccent,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 8,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        height: 50,
-                        width: 70,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(4),
-                          child: Image.network(
-                            "https://i.cdn.newsbytesapp.com/images/l37220210424184951.png",
-                            fit: BoxFit.cover,
-                          ),
-                        ),
+        appBar: AppBar(),
+        body: SafeArea(
+            child: ListView.builder(
+                itemCount: audioList.length,
+                itemBuilder: (context, index) {
+                  return Container(
+                    height: 70,
+                    width: double.infinity,
+                    // color: Colors.greenAccent,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
                       ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            "tum hi ho - ashiqi 2",
-                            style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w800,
-                                color: Colors.black54),
-                          ),
-                          Text(
-                            "Bollywood song",
-                            style: TextStyle(fontSize: 12, color: Colors.grey),
-                          ),
-                          SizedBox(
-                            height: 4,
-                          ),
                           Row(
                             children: [
-                              Icon(
-                                Icons.remove_red_eye,
-                                color: Colors.amber,
-                                size: 12,
+                              Container(
+                                height: 50,
+                                width: 70,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(4),
+                                  child: Image.network(
+                                    audioList[index].metas.id,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
                               ),
                               SizedBox(
-                                width: 5,
+                                width: 10,
                               ),
-                              Text(
-                                "980",
-                                style: TextStyle(
-                                    fontSize: 10, color: Colors.black54),
-                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    audioList[index].metas.title,
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w800,
+                                        color: Colors.black54),
+                                  ),
+                                  Text(
+                                    "",
+                                    style: TextStyle(
+                                        fontSize: 12, color: Colors.grey),
+                                  ),
+                                  SizedBox(
+                                    height: 4,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        Icons.remove_red_eye,
+                                        color: Colors.amber,
+                                        size: 12,
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Text(
+                                        audioList[index].metas.artist,
+                                        style: TextStyle(
+                                            fontSize: 10,
+                                            color: Colors.black54),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              )
                             ],
-                          )
+                          ),
+                          audioPlayer.builderIsPlaying(
+                              builder: (context, isPlaying) {
+                            return SizedBox(
+                              height: 33,
+                              width: 46,
+                              child: PlayButton(
+                                pauseIcon: isPlaying
+                                    ? Icon(Icons.pause,
+                                        color: Colors.black, size: 15)
+                                    : Icon(Icons.play_arrow,
+                                        color: Colors.black, size: 15),
+                                playIcon: Icon(Icons.play_arrow,
+                                    color: Colors.black, size: 15),
+                                onPressed: () {
+                                  globalIndex = index;
+                                  setState(() {});
+                                  selectedAudio = audioList[globalIndex];
+                                  isNavShow = true;
+                                  print(globalIndex);
+                                  setState(() {});
+                                  isPlaying ? pauseMusic() : playMusic();
+                                  print("play");
+                                },
+                              ),
+                            );
+                          })
                         ],
-                      )
-                    ],
-                  ),
-                  SizedBox(
-                    height: 33,
-                    width: 46,
-                    child: PlayButton(
-                      pauseIcon:
-                          Icon(Icons.pause, color: Colors.black, size: 15),
-                      playIcon:
-                          Icon(Icons.play_arrow, color: Colors.black, size: 15),
-                      onPressed: () {},
+                      ),
                     ),
+                  );
+                })),
+        bottomNavigationBar: isNavShow == false
+            ? Container(
+                height: 50,
+              )
+            : audioPlayer.builderIsPlaying(builder: (context, isPlaying) {
+                return GestureDetector(
+                  onTap: () {
+                    showModalBottomSheet(
+                        useRootNavigator: true,
+                        isScrollControlled: true,
+                        context: context,
+                        builder: (context) {
+                          return Container(
+                            child: buildPlayer(),
+                          );
+                        });
+                  },
+                  child: Container(
+                    height: 50,
+                    color: Colors.redAccent,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              child: Image.network(
+                                // selectedMuisc!.imageUrl,
+                                selectedAudio.metas.id,
+                                height: 50,
+                                width: 40,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Text(
+                                  selectedAudio.metas.title,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                // CustomText(
+                                //   // text: selectedMuisc!.title,
+                                //   text: selectedAudio.metas.title,
+                                //   color: Colors.white,
+                                //   fontSize: 12,
+                                //   fontWeight: FontWeight.bold,
+                                // ),
+                                // Text(
+                                //   selectedAudio.metas.artist,
+                                //   style: TextStyle(
+                                //       color: Colors.white,
+                                //       fontWeight: FontWeight.bold),
+                                // ),
+                                // CustomText(
+                                //   // text: selectedMuisc!.lebel,
+                                //   text: selectedAudio.metas.artist,
+                                //   color: Colors.grey,
+                                //   fontSize: 12,
+                                //   fontWeight: FontWeight.bold,
+                                // ),
+                              ],
+                            )
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.favorite_border_outlined,
+                              color: Colors.white,
+                              size: 30,
+                            ),
+                            SizedBox(
+                              width: 12,
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                // audioPlayerState == PlayerState.PLAYING
+                                //     ? pauseMusic()
+                                //     : playMusic();
+                                isPlaying ? pauseMusic() : playMusic();
+                              },
+                              child: Icon(
+                                isPlaying ? Icons.pause : Icons.play_arrow,
+                                color: Colors.white,
+                                size: 30,
+                              ),
+                            ),
+                            // GestureDetector(
+                            //   onTap: () {
+                            //     // audioPlayerState == PlayerState.PLAYING
+                            //     //     ? pauseMusic()
+                            //     //     : playMusic();
+                            //     skipNext();
+                            //     selectedAudio;
+                            //     setState(() {});
+                            //   },
+                            //   child: Icon(
+                            //     Icons.skip_next_rounded,
+                            //     color: Colors.white,
+                            //     size: 30,
+                            //   ),
+                            // ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                );
+              }));
+  }
+
+  Widget buildPlayer() {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
+
+    return StatefulBuilder(
+      builder: ((context, setState) {
+        return audioPlayer.builderIsPlaying(builder: (context, isPlaying) {
+          return Scaffold(
+            backgroundColor: Colors.black,
+            appBar: AppBar(
+              centerTitle: true,
+              backgroundColor: Colors.black,
+              elevation: 0.0,
+              leading: IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: Icon(
+                    Icons.expand_more,
+                    color: Colors.white,
+                    size: 26,
+                  )),
+              title: Column(
+                children: [
+                  CustomText(
+                    text: selectedAudio.metas.title,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.white,
+                  ),
+                  CustomText(
+                    text: selectedAudio.metas.artist,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w800,
+                    color: Colors.white,
                   ),
                 ],
               ),
+              actions: [
+                IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.more_vert,
+                    size: 26,
+                  ),
+                )
+              ],
             ),
-          ),
-          Divider(
-            height: 1,
-            color: Colors.grey,
-          ),
-        ],
-      )),
+            body: SafeArea(
+                child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 40,
+                  ),
+                  Image.network(
+                    selectedAudio.metas.id,
+                    height: height * 0.4,
+                    width: double.infinity,
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CustomText(
+                            text: selectedAudio.metas.title,
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          CustomText(
+                            text: selectedAudio.metas.artist,
+                            color: Colors.grey,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ],
+                      ),
+                      IconButton(
+                          onPressed: () {},
+                          icon: Icon(
+                            Icons.favorite_border_outlined,
+                            size: 30,
+                            color: Colors.white,
+                          ))
+                    ],
+                  ),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      audioPlayer.builderRealtimePlayingInfos(
+                          builder: ((context, infos) {
+                        return Text(
+                          infos.currentPosition.inSeconds < 60
+                              ? '00:${infos.currentPosition.inSeconds}'
+                              : '${(infos.currentPosition.inSeconds / 60).toInt()} : ${(infos.currentPosition.inSeconds % 60).toInt()}',
+                          style: TextStyle(color: Colors.white),
+                        );
+                      })),
+                      Container(
+                        width: 250,
+                        child: audioPlayer.builderRealtimePlayingInfos(
+                          builder: (context, infos) {
+                            return PositionSeekWidget(
+                              currentPosition: infos.currentPosition,
+                              duration: infos.duration,
+                              seekTo: (to) {
+                                audioPlayer.seek(to);
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                      audioPlayer.builderRealtimePlayingInfos(
+                          builder: ((context, infos) {
+                        int minute = (infos.duration.inSeconds / 60).toInt();
+                        int reminder = (infos.duration.inSeconds % 60);
+                        return Text(
+                          // infos.duration.inMinutes.toString(),
+                          '${minute.toString()} : $reminder',
+                          style: TextStyle(color: Colors.white),
+                        );
+                      })),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      IconButton(
+                          onPressed: () {
+                            // if (isShuffle == false) {
+                            //   isShuffle = true;
+
+                            //   int randomIndex =
+                            //       rnd.nextInt((audioList.length - 1) - 0);
+                            //   globalIndex = randomIndex;
+                            //   setState(() {});
+                            //   selectedAudio = audioList[globalIndex];
+                            //   playMusic();
+                            //   setState(() {});
+                            // } else {
+                            //   isNavShow = false;
+                            //   setState(() {});
+                            // }
+                          },
+                          icon: Icon(Icons.shuffle,
+                              size: 28,
+                              color: isShuffle == false
+                                  ? Colors.white
+                                  : Colors.blueGrey)),
+                      IconButton(
+                          onPressed: () {
+                            if (globalIndex > 0) {
+                              globalIndex--;
+                              setState(() {});
+                              selectedAudio = audioList[globalIndex];
+                              setState(() {});
+                              audioPlayer.playlistPlayAtIndex(globalIndex);
+                              setState(() {});
+                            } else if (globalIndex == 0) {
+                              globalIndex = audioList.length - 1;
+                              setState(() {});
+                              selectedAudio = audioList[globalIndex];
+                              setState(() {});
+                              // player.previous(keepLoopMode: false);
+                              audioPlayer.playlistPlayAtIndex(globalIndex);
+                              setState(() {});
+                            }
+                          },
+                          icon: Icon(
+                            Icons.skip_previous,
+                            size: 34,
+                            color: Colors.white,
+                          )),
+                      GestureDetector(
+                        onTap: () {
+                          // audioPlayerState == PlayerState.PLAYING
+                          //     ? pauseMusic()
+                          //     : playMusic();
+                          // setState(() {});
+                          isPlaying ? pauseMusic() : playMusic();
+                        },
+                        child: Icon(
+                          // audioPlayerState == PlayerState.PLAYING
+                          isPlaying
+                              ? Icons.pause_circle_filled_outlined
+                              : Icons.play_circle_fill_outlined,
+                          size: 60,
+                          color: Colors.white,
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          // audioPlayerState == PlayerState.PLAYING
+                          //     ? pauseMusic()
+                          //     : playMusic();
+                          // setState(() {});
+                          audioPlayer.stop();
+                        },
+                        child: Icon(
+                          // audioPlayerState == PlayerState.PLAYING
+                          Icons.stop_sharp,
+                          size: 60,
+                          color: Colors.white,
+                        ),
+                      ),
+                      IconButton(
+                          onPressed: () {
+                            if (globalIndex == (audioList.length - 1)) {
+                              globalIndex = 0;
+                              setState(() {});
+                              selectedAudio = audioList[globalIndex];
+                              setState(() {});
+                            } else if (globalIndex < audioList.length - 1) {
+                              globalIndex++;
+                              setState(() {});
+                              selectedAudio = audioList[globalIndex];
+                              setState(() {});
+                            }
+                            skipNext();
+                          },
+                          icon: Icon(
+                            Icons.skip_next,
+                            size: 34,
+                            color: Colors.white,
+                          )),
+
+                      audioPlayer.builderLoopMode(builder: (context, loop) {
+                        return PlayerBuilder.isPlaying(
+                            player: audioPlayer,
+                            builder: (context, isPlaying) {
+                              return LoopControll(
+                                loopMode: loop,
+                                toggleLoop: () {
+                                  audioPlayer.toggleLoop();
+                                },
+                              );
+                            });
+                      }),
+                      // IconButton(
+                      //     onPressed: () {
+
+                      //       // if (isLoop == false) {
+                      //       //   isLoop = true;
+                      //       //   setState(() {});
+                      //       //   audioPlayer.setLoopMode(LoopMode.single);
+                      //       //   audioPlayer.toggleLoop();
+                      //       // } else {
+                      //       //   isLoop = false;
+                      //       //   setState(() {});
+                      //       // }
+                      //     },
+                      //     icon: Icon(
+                      //       Icons.loop_outlined,
+                      //       size: 28,
+                      //       color: isLoop == false
+                      //           ? Colors.white
+                      //           : Colors.blueGrey,
+                      //     )),
+                    ],
+                  )
+                ],
+              ),
+            )),
+          );
+        });
+      }),
     );
   }
 }

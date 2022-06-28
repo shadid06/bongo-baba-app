@@ -34,4 +34,25 @@ class AudioRepository {
     print('mp3:${response.body}');
     return mp3ResponseFromJson(response.body);
   }
+
+  Future<Mp3Response> getArtistMp3List(var id) async {
+    Uri url = Uri.parse("https://ayat-app.com/api/v2/artistWiseMpThree/$id");
+    final response = await http.get(url);
+    print('artist mp3:${response.body}');
+    return mp3ResponseFromJson(response.body);
+  }
+
+  Future<Mp3Response> getGenreMp3List(var id) async {
+    Uri url = Uri.parse("https://ayat-app.com/api/v2/genreWiseMpThree/$id");
+    final response = await http.get(url);
+    print('genre mp3:${response.body}');
+    return mp3ResponseFromJson(response.body);
+  }
+
+  Future<Mp3Response> getAlbumMp3List(var id) async {
+    Uri url = Uri.parse("https://ayat-app.com/api/v2/albumWiseMpThree/$id");
+    final response = await http.get(url);
+    print('album mp3:${response.body}');
+    return mp3ResponseFromJson(response.body);
+  }
 }

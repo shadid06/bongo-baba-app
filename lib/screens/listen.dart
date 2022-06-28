@@ -12,6 +12,11 @@ import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 import 'package:active_ecommerce_flutter/my_theme.dart';
 import 'package:active_ecommerce_flutter/repositories/audio_repository.dart';
 import 'package:active_ecommerce_flutter/repositories/prayertime_repository.dart';
+import 'package:active_ecommerce_flutter/screens/all_album.dart';
+import 'package:active_ecommerce_flutter/screens/all_artist.dart';
+import 'package:active_ecommerce_flutter/screens/all_generic.dart';
+import 'package:active_ecommerce_flutter/screens/all_mp3.dart';
+import 'package:active_ecommerce_flutter/screens/music_list.dart';
 import 'package:active_ecommerce_flutter/ui_sections/drawer.dart';
 
 import 'package:flutter/material.dart';
@@ -1080,7 +1085,7 @@ class _ListenState extends State<Listen> {
                                   itemBuilder: (context, index) {
                                     return MusicCard(
                                       songName: "Song Name",
-                                      artistName: "Artist Name",
+                                      artistName: "",
                                       imageUrl:
                                           "https://i.cdn.newsbytesapp.com/images/l37220210424184951.png",
                                     );
@@ -1103,7 +1108,7 @@ class _ListenState extends State<Listen> {
                                   itemBuilder: (context, index) {
                                     return MusicCard(
                                       songName: "Song Name",
-                                      artistName: "Artist Name",
+                                      artistName: "",
                                       imageUrl:
                                           "https://i.cdn.newsbytesapp.com/images/l37220210424184951.png",
                                     );
@@ -1114,24 +1119,43 @@ class _ListenState extends State<Listen> {
                             ),
                             ListenRow(
                               title: "Generic",
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Allgeneric()));
+                              },
                             ),
                             SizedBox(
                               height: 10,
                             ),
                             Container(
-                              height: 140,
+                              height: 160,
                               child: genericList.isEmpty
                                   ? Text('')
                                   : ListView.builder(
                                       itemCount: genericList.length,
                                       scrollDirection: Axis.horizontal,
                                       itemBuilder: (context, index) {
-                                        return MusicCard(
-                                          songName: genericList[index].name,
-                                          artistName: "",
-                                          imageUrl:
-                                              "https://ayat-app.com/public/" +
-                                                  genericList[index].coverArt,
+                                        return GestureDetector(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        MusicList(
+                                                          id: genericList[index]
+                                                              .id,
+                                                          checker: 2,
+                                                        )));
+                                          },
+                                          child: MusicCard(
+                                            songName: genericList[index].name,
+                                            artistName: "",
+                                            imageUrl:
+                                                "https://ayat-app.com/public/" +
+                                                    genericList[index].coverArt,
+                                          ),
                                         );
                                       }),
                             ),
@@ -1140,24 +1164,43 @@ class _ListenState extends State<Listen> {
                             ),
                             ListenRow(
                               title: "Album",
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => AllAlbum()));
+                              },
                             ),
                             SizedBox(
                               height: 10,
                             ),
                             Container(
-                              height: 140,
+                              height: 160,
                               child: albumList.isEmpty
                                   ? Text('')
                                   : ListView.builder(
                                       itemCount: albumList.length,
                                       scrollDirection: Axis.horizontal,
                                       itemBuilder: (context, index) {
-                                        return MusicCard(
-                                          songName: albumList[index].name,
-                                          artistName: "",
-                                          imageUrl:
-                                              "https://ayat-app.com/public/" +
-                                                  albumList[index].coverArt,
+                                        return GestureDetector(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        MusicList(
+                                                          id: albumList[index]
+                                                              .id,
+                                                          checker: 3,
+                                                        )));
+                                          },
+                                          child: MusicCard(
+                                            songName: albumList[index].name,
+                                            artistName: "",
+                                            imageUrl:
+                                                "https://ayat-app.com/public/" +
+                                                    albumList[index].coverArt,
+                                          ),
                                         );
                                       }),
                             ),
@@ -1166,6 +1209,12 @@ class _ListenState extends State<Listen> {
                             ),
                             ListenRow(
                               title: "Artist",
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => AllArtist()));
+                              },
                             ),
                             SizedBox(
                               height: 10,
@@ -1178,47 +1227,62 @@ class _ListenState extends State<Listen> {
                                       itemCount: artistList.length,
                                       scrollDirection: Axis.horizontal,
                                       itemBuilder: (context, index) {
-                                        return Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 4),
-                                          child: Column(
-                                            children: [
-                                              Container(
-                                                height: 89,
-                                                width: 90,
-                                                decoration: BoxDecoration(
-                                                    // color: Colors.redAccent,
+                                        return GestureDetector(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        MusicList(
+                                                          id: artistList[index]
+                                                              .id,
+                                                          checker: 1,
+                                                        )));
+                                          },
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 4),
+                                            child: Column(
+                                              children: [
+                                                Container(
+                                                  height: 89,
+                                                  width: 90,
+                                                  decoration: BoxDecoration(
+                                                      // color: Colors.redAccent,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              45)),
+                                                  child: ClipRRect(
                                                     borderRadius:
                                                         BorderRadius.circular(
-                                                            45)),
-                                                child: ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(45),
-                                                  child: Image.network(
-                                                    // "https://i.cdn.newsbytesapp.com/images/l37220210424184951.png",
-                                                    "https://ayat-app.com/public/" +
-                                                        artistList[index].image,
+                                                            45),
+                                                    child: Image.network(
+                                                      // "https://i.cdn.newsbytesapp.com/images/l37220210424184951.png",
+                                                      "https://ayat-app.com/public/" +
+                                                          artistList[index]
+                                                              .image,
 
-                                                    fit: BoxFit.cover,
+                                                      fit: BoxFit.cover,
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                              SizedBox(
-                                                height: 4,
-                                              ),
-                                              Container(
-                                                width: 100,
-                                                child: Text(
-                                                  artistList[index].name,
-                                                  maxLines: 2,
-                                                  style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: 12,
-                                                      fontWeight:
-                                                          FontWeight.bold),
+                                                SizedBox(
+                                                  height: 4,
                                                 ),
-                                              )
-                                            ],
+                                                Container(
+                                                  width: 100,
+                                                  child: Text(
+                                                    artistList[index].name,
+                                                    maxLines: 2,
+                                                    style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                )
+                                              ],
+                                            ),
                                           ),
                                         );
                                       }),

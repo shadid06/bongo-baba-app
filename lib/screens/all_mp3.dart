@@ -1,32 +1,37 @@
-import 'package:active_ecommerce_flutter/custom/listen_row.dart';
 import 'package:active_ecommerce_flutter/custom/music_card.dart';
 import 'package:active_ecommerce_flutter/data_model/mp3_response.dart';
 import 'package:active_ecommerce_flutter/repositories/audio_repository.dart';
-import 'package:active_ecommerce_flutter/ui_sections/custom_text.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 
-class Mp3Screen extends StatefulWidget {
-  const Mp3Screen({Key key}) : super(key: key);
+class AllMp3 extends StatefulWidget {
+  var id, checker;
+  AllMp3({Key key, this.id, this.checker}) : super(key: key);
 
   @override
-  State<Mp3Screen> createState() => _Mp3ScreenState();
+  State<AllMp3> createState() => _AllMp3State();
 }
 
-class _Mp3ScreenState extends State<Mp3Screen> {
+class _AllMp3State extends State<AllMp3> {
   Mp3Response mp3response;
   var mp3List = [];
   final AssetsAudioPlayer audioPlayer = AssetsAudioPlayer.withId("0");
   Audio selectedAudio;
   List<Audio> audioList = [];
-  int globalIndex;
+  int globalIndex = 0;
   List<String> urlList = [];
   bool isNavShow = false;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getMp3();
+    print(widget.id);
+    if (widget.checker == 1) {
+      getArtistMp3();
+    } else if (widget.checker == 2) {
+      getGenreMp3();
+    }
   }
 
   void setUpPlayer() async {
@@ -91,16 +96,44 @@ class _Mp3ScreenState extends State<Mp3Screen> {
     // setState(() {});
   }
 
-  getMp3() async {
-    mp3response = await AudioRepository().getMp3List();
+  getArtistMp3() async {
+    mp3List.clear();
+    audioList.clear();
+    mp3response = await AudioRepository().getArtistMp3List(widget.id);
     mp3List.addAll(mp3response.data);
     for (int i = 0; i < mp3List.length; i++) {
       //urlList.add("https://ayat-app.com/public/" + mp3List[i].file);
       audioList.add(
-        Audio.network("https://ayat-app.com/public/" + mp3List[i].file,
-            metas: Metas(
-                title: mp3List[i].name,
-                id: "https://ayat-app.com/public/" + mp3List[i].coverArt)),
+        Audio.network(
+          "https://ayat-app.com/public/" + mp3List[i].file,
+          metas: Metas(
+              title: mp3List[i].name,
+              id: "https://ayat-app.com/public/" + mp3List[i].coverArt,
+              album: mp3List[i].description),
+        ),
+      );
+    }
+
+    setState(() {});
+    setUpPlayer();
+    setState(() {});
+  }
+
+  getGenreMp3() async {
+    mp3List.clear();
+    audioList.clear();
+    mp3response = await AudioRepository().getGenreMp3List(widget.id);
+    mp3List.addAll(mp3response.data);
+    for (int i = 0; i < mp3List.length; i++) {
+      //urlList.add("https://ayat-app.com/public/" + mp3List[i].file);
+      audioList.add(
+        Audio.network(
+          "https://ayat-app.com/public/" + mp3List[i].file,
+          metas: Metas(
+              title: mp3List[i].name,
+              id: "https://ayat-app.com/public/" + mp3List[i].coverArt,
+              album: mp3List[i].description),
+        ),
       );
     }
 
@@ -120,9 +153,9 @@ class _Mp3ScreenState extends State<Mp3Screen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ListenRow(
-                  title: "Trending Song",
-                ),
+                // ListenRow(
+                //   title: "Trending Song",
+                // ),
                 SizedBox(
                   height: 10,
                 ),
@@ -132,7 +165,7 @@ class _Mp3ScreenState extends State<Mp3Screen> {
                       ? Text('')
                       : ListView.builder(
                           itemCount: audioList.length,
-                          scrollDirection: Axis.horizontal,
+                          scrollDirection: Axis.vertical,
                           itemBuilder: (context, globalIndex) {
                             return GestureDetector(
                               onTap: () async {

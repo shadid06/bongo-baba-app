@@ -3,8 +3,10 @@ import 'package:active_ecommerce_flutter/screens/music_list.dart';
 import 'package:flutter/material.dart';
 
 class ListenRow extends StatelessWidget {
-  ListenRow({Key key, this.title}) : super(key: key);
-  String title;
+  ListenRow({Key key, this.title, this.onPressed}) : super(key: key);
+  String title, seeAll;
+  VoidCallback onPressed;
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -28,10 +30,7 @@ class ListenRow extends StatelessWidget {
           ],
         ),
         GestureDetector(
-          onTap: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Mp3Screen()));
-          },
+          onTap: onPressed,
           child: Card(
             elevation: 0.01,
             shape:
