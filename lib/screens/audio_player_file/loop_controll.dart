@@ -1,23 +1,44 @@
+import 'package:active_ecommerce_flutter/audio_provider/view_model_provider.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
-import 'package:flutter/material.dart';
 
-class LoopControll extends StatelessWidget {
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+class LoopControll extends StatefulWidget {
   final LoopMode loopMode;
   final Function() toggleLoop;
+
   LoopControll({
     this.loopMode,
     this.toggleLoop,
   });
 
+  @override
+  State<LoopControll> createState() => _LoopControllState();
+}
+
+class _LoopControllState extends State<LoopControll> {
+  ViewModelProvider viewModelProvider;
+  bool loopChk = false;
+  @override
+  void initState() {
+    super.initState();
+    viewModelProvider = Provider.of<ViewModelProvider>(context, listen: false);
+  }
+
   Widget _loopIcon(BuildContext context) {
     final iconSize = 34.0;
-    if (loopMode == LoopMode.none) {
+    if (widget.loopMode == LoopMode.none) {
+      loopChk = false;
+      viewModelProvider.setIsLoop(loopChk);
       return Icon(
         Icons.loop,
         size: iconSize,
         color: Colors.grey,
       );
-    } else if (loopMode == LoopMode.playlist) {
+    } else if (widget.loopMode == LoopMode.playlist) {
+      loopChk = true;
+      viewModelProvider.setIsLoop(loopChk);
       return Icon(
         Icons.loop,
         size: iconSize,
@@ -25,6 +46,8 @@ class LoopControll extends StatelessWidget {
       );
     } else {
       //single
+      loopChk = true;
+      viewModelProvider.setIsLoop(loopChk);
       return Stack(
         alignment: Alignment.center,
         children: [
@@ -51,7 +74,7 @@ class LoopControll extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if (toggleLoop != null) toggleLoop();
+        if (widget.toggleLoop != null) widget.toggleLoop();
       },
       child: _loopIcon(context),
     );

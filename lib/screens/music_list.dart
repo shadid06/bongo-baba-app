@@ -1,3 +1,4 @@
+import 'package:active_ecommerce_flutter/audio_provider/view_model_provider.dart';
 import 'package:active_ecommerce_flutter/custom/play_animation_button.dart';
 import 'package:active_ecommerce_flutter/data_model/mp3_response.dart';
 import 'package:active_ecommerce_flutter/repositories/audio_repository.dart';
@@ -7,6 +8,8 @@ import 'package:active_ecommerce_flutter/ui_sections/custom_text.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' show Random, pi;
+
+import 'package:provider/provider.dart';
 
 class MusicList extends StatefulWidget {
   var id, checker;
@@ -22,13 +25,14 @@ class _MusicListState extends State<MusicList> {
   final AssetsAudioPlayer audioPlayer = AssetsAudioPlayer.withId("0");
   Audio selectedAudio;
   List<Audio> audioList = [];
-  int globalIndex = 0;
+  int globalIndex;
   List<String> urlList = [];
   bool isNavShow = false;
   Random rnd = new Random();
   bool isShuffle = false;
   bool isLoop = false;
   LoopMode loopMode;
+  ViewModelProvider viewModelProvider;
 
   @override
   void initState() {
@@ -42,6 +46,35 @@ class _MusicListState extends State<MusicList> {
     } else if (widget.checker == 3) {
       getAlbumMp3();
     }
+    viewModelProvider = Provider.of<ViewModelProvider>(context, listen: false);
+    audioPlayer.playlistAudioFinished.listen(
+      (Playing playing) {
+        print('playlistAudioFinished : $playing');
+        if (viewModelProvider.isLoop == false) {
+          if (globalIndex == (audioList.length - 1)) {
+            globalIndex = 0;
+            setState(() {});
+            selectedAudio = audioList[globalIndex];
+            setState(() {});
+            // audioPlayer.playlistPlayAtIndex(globalIndex);
+            setState(() {});
+          } else if (globalIndex < audioList.length - 1) {
+            globalIndex++;
+            setState(() {});
+            selectedAudio = audioList[globalIndex];
+            setState(() {});
+            //audioPlayer.playlistPlayAtIndex(globalIndex);
+            setState(() {});
+          }
+        }
+
+        //skipNext();
+
+        audioPlayer.play();
+
+//         //audioPlayer.next(keepLoopMode: true);
+      },
+    );
   }
 
   void setUpPlayer() async {
@@ -186,106 +219,124 @@ class _MusicListState extends State<MusicList> {
             child: ListView.builder(
                 itemCount: audioList.length,
                 itemBuilder: (context, index) {
-                  return Container(
-                    height: 70,
-                    width: double.infinity,
-                    // color: Colors.greenAccent,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Container(
-                                height: 50,
-                                width: 70,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(4),
-                                  child: Image.network(
-                                    audioList[index].metas.id,
-                                    fit: BoxFit.cover,
+                  return GestureDetector(
+                    onTap: () {
+                      globalIndex = index;
+                      setState(() {});
+                      selectedAudio = audioList[globalIndex];
+                      isNavShow = true;
+                      print(globalIndex);
+                      setState(() {});
+                      // isPlaying ? pauseMusic() :
+                      playMusic();
+                      print("play");
+                    },
+                    child: Container(
+                      height: 70,
+                      width: double.infinity,
+                      // color: Colors.greenAccent,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Container(
+                                  height: 50,
+                                  width: 70,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(4),
+                                    child: Image.network(
+                                      audioList[index].metas.id,
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  Text(
-                                    audioList[index].metas.title,
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w800,
-                                        color: Colors.black54),
-                                  ),
-                                  Text(
-                                    "",
-                                    style: TextStyle(
-                                        fontSize: 12, color: Colors.grey),
-                                  ),
-                                  SizedBox(
-                                    height: 4,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        Icons.remove_red_eye,
-                                        color: Colors.amber,
-                                        size: 12,
-                                      ),
-                                      SizedBox(
-                                        width: 5,
-                                      ),
-                                      Text(
-                                        audioList[index].metas.artist,
-                                        style: TextStyle(
-                                            fontSize: 10,
-                                            color: Colors.black54),
-                                      ),
-                                    ],
-                                  )
-                                ],
-                              )
-                            ],
-                          ),
-                          audioPlayer.builderIsPlaying(
-                              builder: (context, isPlaying) {
-                            return SizedBox(
-                              height: 33,
-                              width: 46,
-                              child: PlayButton(
-                                pauseIcon: isPlaying
-                                    ? Icon(Icons.pause,
-                                        color: Colors.black, size: 15)
-                                    : Icon(Icons.play_arrow,
-                                        color: Colors.black, size: 15),
-                                playIcon: Icon(Icons.play_arrow,
-                                    color: Colors.black, size: 15),
-                                onPressed: () {
-                                  globalIndex = index;
-                                  setState(() {});
-                                  selectedAudio = audioList[globalIndex];
-                                  isNavShow = true;
-                                  print(globalIndex);
-                                  setState(() {});
-                                  isPlaying ? pauseMusic() : playMusic();
-                                  print("play");
-                                },
-                              ),
-                            );
-                          })
-                        ],
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text(
+                                      audioList[index].metas.title,
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w800,
+                                          color: Colors.black54),
+                                    ),
+                                    Text(
+                                      "Ayat-App",
+                                      style: TextStyle(
+                                          fontSize: 12, color: Colors.grey),
+                                    ),
+                                    SizedBox(
+                                      height: 4,
+                                    ),
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          Icons.remove_red_eye,
+                                          color: Colors.amber,
+                                          size: 12,
+                                        ),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text(
+                                          audioList[index].metas.artist,
+                                          style: TextStyle(
+                                              fontSize: 10,
+                                              color: Colors.black54),
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                )
+                              ],
+                            ),
+                            globalIndex == index
+                                ? Image.asset('assets/play.gif',
+                                    width: 60.0, height: 60.0)
+                                : Text('')
+                            // audioPlayer.builderIsPlaying(
+                            //     builder: (context, isPlaying) {
+                            //   return SizedBox(
+                            //     height: 33,
+                            //     width: 46,
+                            //     child: PlayButton(
+                            //       pauseIcon: isPlaying
+                            //           ? Icon(Icons.pause,
+                            //               color: Colors.black, size: 15)
+                            //           : Icon(Icons.play_arrow,
+                            //               color: Colors.black, size: 15),
+                            //       playIcon: Icon(Icons.play_arrow,
+                            //           color: Colors.black, size: 15),
+                            //       onPressed: () {
+                            //         globalIndex = index;
+                            //         setState(() {});
+                            //         selectedAudio = audioList[globalIndex];
+                            //         isNavShow = true;
+                            //         print(globalIndex);
+                            //         setState(() {});
+                            //         // isPlaying ? pauseMusic() :
+                            //         playMusic();
+                            //         print("play");
+                            //       },
+                            //     ),
+                            //   );
+                            // })
+                          ],
+                        ),
                       ),
                     ),
                   );
@@ -366,10 +417,30 @@ class _MusicListState extends State<MusicList> {
                         ),
                         Row(
                           children: [
-                            Icon(
-                              Icons.favorite_border_outlined,
-                              color: Colors.white,
-                              size: 30,
+                            GestureDetector(
+                              onTap: () {
+                                if (globalIndex > 0) {
+                                  globalIndex--;
+                                  setState(() {});
+                                  selectedAudio = audioList[globalIndex];
+                                  setState(() {});
+                                  audioPlayer.playlistPlayAtIndex(globalIndex);
+                                  setState(() {});
+                                } else if (globalIndex == 0) {
+                                  globalIndex = audioList.length - 1;
+                                  setState(() {});
+                                  selectedAudio = audioList[globalIndex];
+                                  setState(() {});
+                                  // player.previous(keepLoopMode: false);
+                                  audioPlayer.playlistPlayAtIndex(globalIndex);
+                                  setState(() {});
+                                }
+                              },
+                              child: Icon(
+                                Icons.skip_previous,
+                                color: Colors.white,
+                                size: 30,
+                              ),
                             ),
                             SizedBox(
                               width: 12,
@@ -386,6 +457,33 @@ class _MusicListState extends State<MusicList> {
                                 color: Colors.white,
                                 size: 30,
                               ),
+                            ),
+                            SizedBox(
+                              width: 12,
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                if (globalIndex == (audioList.length - 1)) {
+                                  globalIndex = 0;
+                                  setState(() {});
+                                  selectedAudio = audioList[globalIndex];
+                                  setState(() {});
+                                } else if (globalIndex < audioList.length - 1) {
+                                  globalIndex++;
+                                  setState(() {});
+                                  selectedAudio = audioList[globalIndex];
+                                  setState(() {});
+                                }
+                                skipNext();
+                              },
+                              child: Icon(
+                                Icons.skip_next,
+                                color: Colors.white,
+                                size: 30,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 12,
                             ),
                             // GestureDetector(
                             //   onTap: () {
@@ -441,12 +539,12 @@ class _MusicListState extends State<MusicList> {
                     fontWeight: FontWeight.w400,
                     color: Colors.white,
                   ),
-                  CustomText(
-                    text: selectedAudio.metas.artist,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w800,
-                    color: Colors.white,
-                  ),
+                  // CustomText(
+                  //   text: selectedAudio.metas.artist,
+                  //   fontSize: 12,
+                  //   fontWeight: FontWeight.w800,
+                  //   color: Colors.white,
+                  // ),
                 ],
               ),
               actions: [
@@ -487,12 +585,12 @@ class _MusicListState extends State<MusicList> {
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
                           ),
-                          CustomText(
-                            text: selectedAudio.metas.artist,
-                            color: Colors.grey,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                          ),
+                          // CustomText(
+                          //   text: selectedAudio.metas.artist,
+                          //   color: Colors.grey,
+                          //   fontSize: 15,
+                          //   fontWeight: FontWeight.w600,
+                          // ),
                         ],
                       ),
                       IconButton(
