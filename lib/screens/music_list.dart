@@ -1,7 +1,8 @@
 import 'package:active_ecommerce_flutter/audio_provider/view_model_provider.dart';
 import 'package:active_ecommerce_flutter/custom/play_animation_button.dart';
-import 'package:active_ecommerce_flutter/data_model/mp3_response.dart';
+import 'package:active_ecommerce_flutter/data_model/mp3_response.dart' as mp3;
 import 'package:active_ecommerce_flutter/repositories/audio_repository.dart';
+import 'package:active_ecommerce_flutter/screens/audio_player_file/local_db_helper.dart';
 import 'package:active_ecommerce_flutter/screens/audio_player_file/loop_controll.dart';
 import 'package:active_ecommerce_flutter/screens/audio_player_file/position_seek_widget.dart';
 import 'package:active_ecommerce_flutter/ui_sections/custom_text.dart';
@@ -10,6 +11,8 @@ import 'package:flutter/material.dart';
 import 'dart:math' show Random, pi;
 
 import 'package:provider/provider.dart';
+
+import '../quran_app/database/dbhelper.dart';
 
 class MusicList extends StatefulWidget {
   var id, checker;
@@ -20,7 +23,8 @@ class MusicList extends StatefulWidget {
 }
 
 class _MusicListState extends State<MusicList> {
-  Mp3Response mp3response;
+  mp3.Mp3Response mp3response;
+
   var mp3List = [];
   final AssetsAudioPlayer audioPlayer = AssetsAudioPlayer.withId("0");
   Audio selectedAudio;
@@ -38,6 +42,9 @@ class _MusicListState extends State<MusicList> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    // viewModelProvider.audioListProvider.clear();
+    // setState(() {});
+    // viewModelProvider.setAudioProvider(viewModelProvider.audioListProvider);
     print(widget.id);
     if (widget.checker == 1) {
       getArtistMp3();
@@ -51,18 +58,23 @@ class _MusicListState extends State<MusicList> {
       (Playing playing) {
         print('playlistAudioFinished : $playing');
         if (viewModelProvider.isLoop == false) {
-          if (globalIndex == (audioList.length - 1)) {
-            globalIndex = 0;
-            setState(() {});
-            selectedAudio = audioList[globalIndex];
+          if (viewModelProvider.globalIndexProvider ==
+              (viewModelProvider.audioListProvider.length - 1)) {
+            viewModelProvider.globalIndexProvider = 0;
+            viewModelProvider.setIsGlobalIndexProvider(
+                viewModelProvider.globalIndexProvider);
+            viewModelProvider.selectedAudioProvider = viewModelProvider
+                .audioListProvider[viewModelProvider.globalIndexProvider];
             setState(() {});
             // audioPlayer.playlistPlayAtIndex(globalIndex);
-            setState(() {});
-          } else if (globalIndex < audioList.length - 1) {
-            globalIndex++;
-            setState(() {});
-            selectedAudio = audioList[globalIndex];
-            setState(() {});
+            // setState(() {});
+          } else if (viewModelProvider.globalIndexProvider <
+              viewModelProvider.audioListProvider.length - 1) {
+            viewModelProvider.globalIndexProvider++;
+            viewModelProvider.setIsGlobalIndexProvider(
+                viewModelProvider.globalIndexProvider);
+            viewModelProvider.selectedAudioProvider = viewModelProvider
+                .audioListProvider[viewModelProvider.globalIndexProvider];
             //audioPlayer.playlistPlayAtIndex(globalIndex);
             setState(() {});
           }
@@ -79,38 +91,62 @@ class _MusicListState extends State<MusicList> {
 
   void setUpPlayer() async {
     await audioPlayer.open(
-      Playlist(audios: audioList),
+      Playlist(audios: viewModelProvider.audioListProvider),
       showNotification: true,
       autoStart: false,
       notificationSettings: NotificationSettings(
         customPrevAction: (player) {
-          if (globalIndex > 0) {
-            globalIndex--;
+          if (viewModelProvider.globalIndexProvider > 0) {
+            viewModelProvider.globalIndexProvider--;
+            viewModelProvider.setIsGlobalIndexProvider(
+                viewModelProvider.globalIndexProvider);
+            // setState(() {});
+            viewModelProvider.selectedAudioProvider = viewModelProvider
+                .audioListProvider[viewModelProvider.globalIndexProvider];
+            viewModelProvider.setSelectedAudioProvider(
+                viewModelProvider.selectedAudioProvider);
+            // setState(() {});
+            player.playlistPlayAtIndex(viewModelProvider.globalIndexProvider);
             setState(() {});
-            selectedAudio = audioList[globalIndex];
-            setState(() {});
-            player.playlistPlayAtIndex(globalIndex);
-            setState(() {});
-          } else if (globalIndex == 0) {
-            globalIndex = audioList.length - 1;
-            setState(() {});
-            selectedAudio = audioList[globalIndex];
+          } else if (viewModelProvider.globalIndexProvider == 0) {
+            viewModelProvider.globalIndexProvider =
+                viewModelProvider.audioListProvider.length - 1;
+            viewModelProvider.setIsGlobalIndexProvider(
+                viewModelProvider.globalIndexProvider);
+            // setState(() {});
+            viewModelProvider.selectedAudioProvider = viewModelProvider
+                .audioListProvider[viewModelProvider.globalIndexProvider];
+            viewModelProvider.setSelectedAudioProvider(
+                viewModelProvider.selectedAudioProvider);
             setState(() {});
             // player.previous(keepLoopMode: false);
-            player.playlistPlayAtIndex(globalIndex);
+            player.playlistPlayAtIndex(viewModelProvider.globalIndexProvider);
             setState(() {});
           }
         },
         customNextAction: (player) {
-          if (globalIndex == (audioList.length - 1)) {
-            globalIndex = 0;
+          if (viewModelProvider.globalIndexProvider ==
+              (viewModelProvider.audioListProvider.length - 1)) {
+            viewModelProvider.globalIndexProvider = 0;
+
+            viewModelProvider.setIsGlobalIndexProvider(
+                viewModelProvider.globalIndexProvider);
+            // setState(() {});
+            viewModelProvider.selectedAudioProvider = viewModelProvider
+                .audioListProvider[viewModelProvider.globalIndexProvider];
+            viewModelProvider.setSelectedAudioProvider(
+                viewModelProvider.selectedAudioProvider);
             setState(() {});
-            selectedAudio = audioList[globalIndex];
-            setState(() {});
-          } else if (globalIndex < audioList.length - 1) {
-            globalIndex++;
-            setState(() {});
-            selectedAudio = audioList[globalIndex];
+          } else if (viewModelProvider.globalIndexProvider <
+              viewModelProvider.audioListProvider.length - 1) {
+            viewModelProvider.globalIndexProvider++;
+            viewModelProvider.setIsGlobalIndexProvider(
+                viewModelProvider.globalIndexProvider);
+            // setState(() {});
+            viewModelProvider.selectedAudioProvider = viewModelProvider
+                .audioListProvider[viewModelProvider.globalIndexProvider];
+            viewModelProvider.setSelectedAudioProvider(
+                viewModelProvider.selectedAudioProvider);
             setState(() {});
           }
           player.next();
@@ -121,7 +157,8 @@ class _MusicListState extends State<MusicList> {
 
   playMusic() async {
     // await audioPlayer.play();
-    await audioPlayer.playlistPlayAtIndex(globalIndex);
+    await audioPlayer
+        .playlistPlayAtIndex(viewModelProvider.globalIndexProvider);
   }
 
   pauseMusic() async {
@@ -142,6 +179,7 @@ class _MusicListState extends State<MusicList> {
   getArtistMp3() async {
     mp3List.clear();
     audioList.clear();
+
     mp3response = await AudioRepository().getArtistMp3List(widget.id);
     mp3List.addAll(mp3response.data);
     for (int i = 0; i < mp3List.length; i++) {
@@ -157,8 +195,10 @@ class _MusicListState extends State<MusicList> {
         ),
       );
     }
-
-    setState(() {});
+    viewModelProvider.audioListProvider.addAll(audioList);
+    viewModelProvider.setAudioProvider(viewModelProvider.audioListProvider);
+    //setState(() {});
+    print('p l: ${viewModelProvider.audioListProvider.length}');
     setUpPlayer();
     setState(() {});
   }
@@ -166,6 +206,8 @@ class _MusicListState extends State<MusicList> {
   getGenreMp3() async {
     mp3List.clear();
     audioList.clear();
+    // viewModelProvider.audioListProvider.clear();
+    // viewModelProvider.setAudioProvider(viewModelProvider.audioListProvider);
     mp3response = await AudioRepository().getGenreMp3List(widget.id);
     mp3List.addAll(mp3response.data);
     for (int i = 0; i < mp3List.length; i++) {
@@ -181,8 +223,9 @@ class _MusicListState extends State<MusicList> {
         ),
       );
     }
-
-    setState(() {});
+    viewModelProvider.audioListProvider.addAll(audioList);
+    viewModelProvider.setAudioProvider(viewModelProvider.audioListProvider);
+    // setState(() {});
     setUpPlayer();
     setState(() {});
   }
@@ -190,6 +233,8 @@ class _MusicListState extends State<MusicList> {
   getAlbumMp3() async {
     mp3List.clear();
     audioList.clear();
+    // viewModelProvider.audioListProvider.clear();
+    // viewModelProvider.setAudioProvider(viewModelProvider.audioListProvider);
     mp3response = await AudioRepository().getAlbumMp3List(widget.id);
     mp3List.addAll(mp3response.data);
     for (int i = 0; i < mp3List.length; i++) {
@@ -205,8 +250,9 @@ class _MusicListState extends State<MusicList> {
         ),
       );
     }
-
-    setState(() {});
+    viewModelProvider.audioListProvider.addAll(audioList);
+    viewModelProvider.setAudioProvider(viewModelProvider.audioListProvider);
+    // setState(() {});
     setUpPlayer();
     setState(() {});
   }
@@ -217,15 +263,48 @@ class _MusicListState extends State<MusicList> {
         appBar: AppBar(),
         body: SafeArea(
             child: ListView.builder(
-                itemCount: audioList.length,
+                itemCount: viewModelProvider.audioListProvider.length,
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onTap: () {
-                      globalIndex = index;
+                      viewModelProvider.globalIndexProvider = index;
+                      viewModelProvider.setIsGlobalIndexProvider(
+                          viewModelProvider.globalIndexProvider);
+
+                      viewModelProvider.selectedAudioProvider =
+                          viewModelProvider.audioListProvider[
+                              viewModelProvider.globalIndexProvider];
+                      viewModelProvider.setSelectedAudioProvider(
+                          viewModelProvider.selectedAudioProvider);
+                      viewModelProvider.isNavProvider = true;
+                      viewModelProvider
+                          .setIsNavProvider(viewModelProvider.isNavProvider);
+                      //print(globalIndex);
+                      var mp = mp3List[viewModelProvider.globalIndexProvider];
                       setState(() {});
-                      selectedAudio = audioList[globalIndex];
-                      isNavShow = true;
-                      print(globalIndex);
+                      mp3.Datum datum = mp3.Datum(
+                          id: mp.id,
+                          name: mp.name,
+                          coverArt: mp.coverArt,
+                          file: mp.file,
+                          artistId: mp.artistId,
+                          genreId: mp.genreId,
+                          listens: mp.listens,
+                          isFeatured: mp.isFeatured,
+                          description: mp.description);
+
+                      print(mp.id);
+                      // datum.id = mp.id;
+                      // datum.name = mp.name;
+                      // datum.coverArt = mp.coverArt;
+                      // datum.file = mp.coverArt;
+
+                      // datum.artistId = mp.artistId;
+                      // datum.genreId = mp.genreId;
+                      // datum.listens = mp.listens;
+                      // datum.isFeatured = mp.isFeatured;
+                      // datum.description = mp.description;
+                      DBHelper().saveToRecentList(datum);
                       setState(() {});
                       // isPlaying ? pauseMusic() :
                       playMusic();
@@ -253,7 +332,8 @@ class _MusicListState extends State<MusicList> {
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(4),
                                     child: Image.network(
-                                      audioList[index].metas.id,
+                                      viewModelProvider
+                                          .audioListProvider[index].metas.id,
                                       fit: BoxFit.cover,
                                     ),
                                   ),
@@ -268,7 +348,8 @@ class _MusicListState extends State<MusicList> {
                                       height: 10,
                                     ),
                                     Text(
-                                      audioList[index].metas.title,
+                                      viewModelProvider
+                                          .audioListProvider[index].metas.title,
                                       style: TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.w800,
@@ -293,7 +374,10 @@ class _MusicListState extends State<MusicList> {
                                           width: 5,
                                         ),
                                         Text(
-                                          audioList[index].metas.artist,
+                                          viewModelProvider
+                                              .audioListProvider[index]
+                                              .metas
+                                              .artist,
                                           style: TextStyle(
                                               fontSize: 10,
                                               color: Colors.black54),
@@ -341,7 +425,7 @@ class _MusicListState extends State<MusicList> {
                     ),
                   );
                 })),
-        bottomNavigationBar: isNavShow == false
+        bottomNavigationBar: viewModelProvider.isNavProvider == false
             ? Container(
                 height: 50,
               )
@@ -371,7 +455,8 @@ class _MusicListState extends State<MusicList> {
                                   const EdgeInsets.symmetric(horizontal: 10),
                               child: Image.network(
                                 // selectedMuisc!.imageUrl,
-                                selectedAudio.metas.id,
+                                viewModelProvider
+                                    .selectedAudioProvider.metas.id,
                                 height: 50,
                                 width: 40,
                               ),
@@ -386,7 +471,8 @@ class _MusicListState extends State<MusicList> {
                                   height: 10,
                                 ),
                                 Text(
-                                  selectedAudio.metas.title,
+                                  viewModelProvider
+                                      .selectedAudioProvider.metas.title,
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold),
@@ -419,20 +505,39 @@ class _MusicListState extends State<MusicList> {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                if (globalIndex > 0) {
-                                  globalIndex--;
+                                if (viewModelProvider.globalIndexProvider > 0) {
+                                  viewModelProvider.globalIndexProvider--;
+                                  viewModelProvider.setIsGlobalIndexProvider(
+                                      viewModelProvider.globalIndexProvider);
+                                  // setState(() {});
+                                  viewModelProvider.selectedAudioProvider =
+                                      viewModelProvider.audioListProvider[
+                                          viewModelProvider
+                                              .globalIndexProvider];
+                                  viewModelProvider.setSelectedAudioProvider(
+                                      viewModelProvider.selectedAudioProvider);
+                                  audioPlayer.playlistPlayAtIndex(
+                                      viewModelProvider.globalIndexProvider);
                                   setState(() {});
-                                  selectedAudio = audioList[globalIndex];
-                                  setState(() {});
-                                  audioPlayer.playlistPlayAtIndex(globalIndex);
-                                  setState(() {});
-                                } else if (globalIndex == 0) {
-                                  globalIndex = audioList.length - 1;
-                                  setState(() {});
-                                  selectedAudio = audioList[globalIndex];
-                                  setState(() {});
+                                } else if (viewModelProvider
+                                        .globalIndexProvider ==
+                                    0) {
+                                  viewModelProvider.globalIndexProvider =
+                                      viewModelProvider
+                                              .audioListProvider.length -
+                                          1;
+                                  viewModelProvider.setIsGlobalIndexProvider(
+                                      viewModelProvider.globalIndexProvider);
+                                  // setState(() {});
+                                  viewModelProvider.selectedAudioProvider =
+                                      viewModelProvider.audioListProvider[
+                                          viewModelProvider
+                                              .globalIndexProvider];
+                                  viewModelProvider.setSelectedAudioProvider(
+                                      viewModelProvider.selectedAudioProvider);
                                   // player.previous(keepLoopMode: false);
-                                  audioPlayer.playlistPlayAtIndex(globalIndex);
+                                  audioPlayer.playlistPlayAtIndex(
+                                      viewModelProvider.globalIndexProvider);
                                   setState(() {});
                                 }
                               },
@@ -463,15 +568,35 @@ class _MusicListState extends State<MusicList> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                if (globalIndex == (audioList.length - 1)) {
-                                  globalIndex = 0;
+                                if (viewModelProvider.globalIndexProvider ==
+                                    (viewModelProvider
+                                            .audioListProvider.length -
+                                        1)) {
+                                  viewModelProvider.globalIndexProvider = 0;
+                                  viewModelProvider.setIsGlobalIndexProvider(
+                                      viewModelProvider.globalIndexProvider);
+                                  // setState(() {});
+                                  viewModelProvider.selectedAudioProvider =
+                                      viewModelProvider.audioListProvider[
+                                          viewModelProvider
+                                              .globalIndexProvider];
+                                  viewModelProvider.setSelectedAudioProvider(
+                                      viewModelProvider.selectedAudioProvider);
                                   setState(() {});
-                                  selectedAudio = audioList[globalIndex];
-                                  setState(() {});
-                                } else if (globalIndex < audioList.length - 1) {
-                                  globalIndex++;
-                                  setState(() {});
-                                  selectedAudio = audioList[globalIndex];
+                                } else if (viewModelProvider
+                                        .globalIndexProvider <
+                                    viewModelProvider.audioListProvider.length -
+                                        1) {
+                                  viewModelProvider.globalIndexProvider++;
+                                  viewModelProvider.setIsGlobalIndexProvider(
+                                      viewModelProvider.globalIndexProvider);
+                                  // setState(() {});
+                                  viewModelProvider.selectedAudioProvider =
+                                      viewModelProvider.audioListProvider[
+                                          viewModelProvider
+                                              .globalIndexProvider];
+                                  viewModelProvider.setSelectedAudioProvider(
+                                      viewModelProvider.selectedAudioProvider);
                                   setState(() {});
                                 }
                                 skipNext();
@@ -534,7 +659,7 @@ class _MusicListState extends State<MusicList> {
               title: Column(
                 children: [
                   CustomText(
-                    text: selectedAudio.metas.title,
+                    text: viewModelProvider.selectedAudioProvider.metas.title,
                     fontSize: 12,
                     fontWeight: FontWeight.w400,
                     color: Colors.white,
@@ -566,7 +691,7 @@ class _MusicListState extends State<MusicList> {
                     height: 40,
                   ),
                   Image.network(
-                    selectedAudio.metas.id,
+                    viewModelProvider.selectedAudioProvider.metas.id,
                     height: height * 0.4,
                     width: double.infinity,
                   ),
@@ -580,7 +705,8 @@ class _MusicListState extends State<MusicList> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           CustomText(
-                            text: selectedAudio.metas.title,
+                            text: viewModelProvider
+                                .selectedAudioProvider.metas.title,
                             color: Colors.white,
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
@@ -673,20 +799,35 @@ class _MusicListState extends State<MusicList> {
                                   : Colors.blueGrey)),
                       IconButton(
                           onPressed: () {
-                            if (globalIndex > 0) {
-                              globalIndex--;
+                            if (viewModelProvider.globalIndexProvider > 0) {
+                              viewModelProvider.globalIndexProvider--;
+                              viewModelProvider.setIsGlobalIndexProvider(
+                                  viewModelProvider.globalIndexProvider);
+                              // setState(() {});
+                              viewModelProvider.selectedAudioProvider =
+                                  viewModelProvider.audioListProvider[
+                                      viewModelProvider.globalIndexProvider];
+                              viewModelProvider.setSelectedAudioProvider(
+                                  viewModelProvider.selectedAudioProvider);
+                              audioPlayer.playlistPlayAtIndex(
+                                  viewModelProvider.globalIndexProvider);
                               setState(() {});
-                              selectedAudio = audioList[globalIndex];
-                              setState(() {});
-                              audioPlayer.playlistPlayAtIndex(globalIndex);
-                              setState(() {});
-                            } else if (globalIndex == 0) {
-                              globalIndex = audioList.length - 1;
-                              setState(() {});
-                              selectedAudio = audioList[globalIndex];
-                              setState(() {});
+                            } else if (viewModelProvider.globalIndexProvider ==
+                                0) {
+                              viewModelProvider.globalIndexProvider =
+                                  viewModelProvider.audioListProvider.length -
+                                      1;
+                              viewModelProvider.setIsGlobalIndexProvider(
+                                  viewModelProvider.globalIndexProvider);
+                              // setState(() {});
+                              viewModelProvider.selectedAudioProvider =
+                                  viewModelProvider.audioListProvider[
+                                      viewModelProvider.globalIndexProvider];
+                              viewModelProvider.setSelectedAudioProvider(
+                                  viewModelProvider.selectedAudioProvider);
                               // player.previous(keepLoopMode: false);
-                              audioPlayer.playlistPlayAtIndex(globalIndex);
+                              audioPlayer.playlistPlayAtIndex(
+                                  viewModelProvider.globalIndexProvider);
                               setState(() {});
                             }
                           },
@@ -729,15 +870,31 @@ class _MusicListState extends State<MusicList> {
                       ),
                       IconButton(
                           onPressed: () {
-                            if (globalIndex == (audioList.length - 1)) {
-                              globalIndex = 0;
+                            if (viewModelProvider.globalIndexProvider ==
+                                (viewModelProvider.audioListProvider.length -
+                                    1)) {
+                              viewModelProvider.globalIndexProvider = 0;
+                              viewModelProvider.setIsGlobalIndexProvider(
+                                  viewModelProvider.globalIndexProvider);
+                              // setState(() {});
+                              viewModelProvider.selectedAudioProvider =
+                                  viewModelProvider.audioListProvider[
+                                      viewModelProvider.globalIndexProvider];
+                              viewModelProvider.setSelectedAudioProvider(
+                                  viewModelProvider.selectedAudioProvider);
                               setState(() {});
-                              selectedAudio = audioList[globalIndex];
-                              setState(() {});
-                            } else if (globalIndex < audioList.length - 1) {
-                              globalIndex++;
-                              setState(() {});
-                              selectedAudio = audioList[globalIndex];
+                            } else if (viewModelProvider.globalIndexProvider <
+                                viewModelProvider.audioListProvider.length -
+                                    1) {
+                              viewModelProvider.globalIndexProvider++;
+                              viewModelProvider.setIsGlobalIndexProvider(
+                                  viewModelProvider.globalIndexProvider);
+                              // setState(() {});
+                              viewModelProvider.selectedAudioProvider =
+                                  viewModelProvider.audioListProvider[
+                                      viewModelProvider.globalIndexProvider];
+                              viewModelProvider.setSelectedAudioProvider(
+                                  viewModelProvider.selectedAudioProvider);
                               setState(() {});
                             }
                             skipNext();

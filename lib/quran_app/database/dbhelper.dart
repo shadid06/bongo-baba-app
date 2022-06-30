@@ -150,6 +150,8 @@ import 'package:active_ecommerce_flutter/quran_app/database/last_path_model.dart
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
+import '../../data_model/mp3_response.dart';
+
 class DBHelper {
   static Database _db;
   static const String sura = 'sura';
@@ -158,7 +160,7 @@ class DBHelper {
   static const String sura_name = 'sura_name';
   static const String text = 'text';
   static const String VerseIDAr = 'VerseIDAr';
-
+  static const String RECENTLIST_TABLE = 'Recentlist';
   static const String CARTLIST_TABLE = 'Cartlist';
   static const String ADDRESS_TABLE = 'Addresslist';
   static const String LASTPATH_TABLE = 'lastpath';
@@ -183,6 +185,8 @@ class DBHelper {
         "CREATE TABLE $ADDRESS_TABLE ($sura INTEGER PRIMARY KEY,$ayat TEXT, $sura_name TEXT, $text TEXT, $VerseIDAr INTEGER)");
     await db.execute(
         "CREATE TABLE $LASTPATH_TABLE ($sura INTEGER PRIMARY KEY,$sura_name TEXT, $VerseIDAr INTEGER)");
+    await db.execute(
+        'CREATE TABLE $RECENTLIST_TABLE (id INTEGER PRIMARY KEY,name TEXT,cover_art TEXT,file TEXT,artist_id INTEGER,genre_id INTEGER,listens INTEGER,is_featured INTEGER,description TEXT)');
   }
 
   Future<AddAddressModel> saveToAddressList(
@@ -286,5 +290,53 @@ class DBHelper {
     final db = await initDb();
     await db.delete(LASTPATH_TABLE);
     print("deleted");
+  }
+
+  Future<Datum> saveToRecentList(Datum song) async {
+    var dbClient = await db;
+    song.id = await dbClient.insert(RECENTLIST_TABLE, song.toJson());
+    print(song);
+    return song;
+  }
+  // Future<int> insertTransaction(
+  //     FavoriteModel transactionModel, context) async {
+  //       print(transactionModel);
+  //   Database db = await this.db;
+  //   final int result = await db.insert(FAVORITELIST_TABLE, transactionModel.toJson());
+  //    print('Data added: $result');
+
+  //   return result;
+  // }
+//cover_art TEXT,file TEXT,artist_id INTEGER,genre_id INTEGER,listens INTEGER,is_featured INTEGER,description TEXT
+  Future<List<Datum>> getRecentListSong() async {
+    var dbClient = await db;
+    List<Map> maps = await dbClient.query(RECENTLIST_TABLE, columns: [
+      'id',
+      'name',
+      'cover_art',
+      'file',
+      'artist_id',
+      'genre_id',
+      'listens',
+      'is_featured',
+      'description'
+    ]);
+    //List<Map> maps = await dbClient.rawQuery("SELECT * FROM $TABLE");
+    List<Datum> products = [];
+    if (maps.length > 0) {
+      for (int i = 0; i < maps.length; i++) {
+        products.add(Datum.fromJson(Map.from(maps[i])));
+      }
+    }
+    // ignore: unused_local_variable
+    var v = jsonEncode(products);
+    //print(v);
+    return products;
+  }
+
+  Future<int> deleteRecentProduct(int id) async {
+    var dbClient = await db;
+    return await dbClient
+        .delete(RECENTLIST_TABLE, where: '$id = ?', whereArgs: [id]);
   }
 }
